@@ -1,6 +1,6 @@
 <?php
 
-//definições para o body
+//definiï¿½ï¿½es para o body
 
 $body_info="page-header-fixed page-sidebar-fixed page-footer-fixed";
 
@@ -30,7 +30,7 @@ if(!function_exists('verifica_nome')) {
 
 		$strlogin = $nome;
 
-		$caracteres = array('º','ª','"','“','”','“','”',',',';','/','<','>',':','?','~','^',']','}','´','`','[','{','=','+','-',')','\\','(','*','&','¨','%','$','#','@','!','|','à','è','ì','ò','ù','â','ê','î','ô','û','ä','ë','ï','ö','ü','á','é','í','ó','ú','ã','õ','À','È','Ì','Ò','Ù','Â','Ê','Î','Ô','Û','Ä','Ë','Ï','Ö','Ü','Á','É','Í','Ó','Ú','Ã','Õ','ç','Ç',' ','\'','™','©','®','«','»','ñ','Ñ','Æ','“','”',',','‚','–','’', '\'', '"','…','ø','Ø','Å','å','æ','Æ','•','	');
+		$caracteres = array('ï¿½','ï¿½','"','ï¿½','ï¿½','ï¿½','ï¿½',',',';','/','<','>',':','?','~','^',']','}','ï¿½','`','[','{','=','+','-',')','\\','(','*','&','ï¿½','%','$','#','@','!','|','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½',' ','\'','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½',',','ï¿½','ï¿½','ï¿½', '\'', '"','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','	');
 
 		
 
@@ -38,35 +38,35 @@ if(!function_exists('verifica_nome')) {
 
 			
 
-			if($caracteres[$i]=="á" || $caracteres[$i]=="à" || $caracteres[$i]=="Á" || $caracteres[$i]=="À" || $caracteres[$i]=="ã" || $caracteres[$i]=="Ã" || $caracteres[$i]=="â" || $caracteres[$i]=="Â" || $caracteres[$i]=="å" || $caracteres[$i]=="Å"){
+			if($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "a", $strlogin);
 
-			}elseif($caracteres[$i]=="ó" || $caracteres[$i]=="ò" || $caracteres[$i]=="Ó" || $caracteres[$i]=="Ò" || $caracteres[$i]=="õ" || $caracteres[$i]=="Õ" || $caracteres[$i]=="ô" || $caracteres[$i]=="Ô" || $caracteres[$i]=="ø" || $caracteres[$i]=="Ø"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "o", $strlogin);
 
-			}elseif($caracteres[$i]=="é" || $caracteres[$i]=="É" || $caracteres[$i]=="è" || $caracteres[$i]=="È" || $caracteres[$i]=="ê" || $caracteres[$i]=="Ê"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "e", $strlogin);
 
-			}elseif($caracteres[$i]=="ç" || $caracteres[$i]=="Ç"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "c", $strlogin);
 
-			}elseif($caracteres[$i]=="í" || $caracteres[$i]=="Í"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "i", $strlogin);
 
-			}elseif($caracteres[$i]=="ú" || $caracteres[$i]=="Ú"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "u", $strlogin);
 
-			}elseif($caracteres[$i]=="ñ" || $caracteres[$i]=="Ñ"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "n", $strlogin);
 
-			}elseif($caracteres[$i]=="æ" || $caracteres[$i]=="Æ"){
+			}elseif($caracteres[$i]=="ï¿½" || $caracteres[$i]=="ï¿½"){
 
 				$strlogin=str_replace($caracteres[$i], "ae", $strlogin);
 
@@ -676,7 +676,7 @@ function compressImage($source_url, $destination_url, $quality = 90) {
 
 
 
-	//1 - Optimização com GD library.
+	//1 - Optimizaï¿½ï¿½o com GD library.
 
 	// $info = getimagesize($source_url);
 
@@ -708,7 +708,7 @@ function compressImage($source_url, $destination_url, $quality = 90) {
 
 
 
-	//2 - Optimização com Imagick
+	//2 - Optimizaï¿½ï¿½o com Imagick
 
 	require_once(ROOTPATH_CONSOLA.'assets/netgocio/optimizer/ImageCache/ImageCache.php');
 
@@ -732,7 +732,7 @@ function listaCategorias($cat_mae, $nivel, $nome_cat, $id_categoria, $categoria_
 
   	$nivel++;
 
-  	/* Verificação para que a categoria que esteja a ser editada não aparece na listagem de categorias. */
+  	/* Verificaï¿½ï¿½o para que a categoria que esteja a ser editada nï¿½o aparece na listagem de categorias. */
 
   	if($id_categoria > 0){ 
 
@@ -774,7 +774,7 @@ function listaCategorias($cat_mae, $nivel, $nome_cat, $id_categoria, $categoria_
 
         if($nivel <= CATEGORIAS_NIVEL){
 
-        	listaCategorias($row_rsCat['id'], $nivel, $nome_cat.$row_rsCat['nome']." » ", $id_categoria, $categoria_atual);
+        	listaCategorias($row_rsCat['id'], $nivel, $nome_cat.$row_rsCat['nome']." ï¿½ ", $id_categoria, $categoria_atual);
 
         }
 
@@ -872,7 +872,7 @@ function variasCategoriasPorProd($cat_mae, $id_prod, $fonte) {
 
         while($row_rsCat = $rsCat->fetch()) { 
 
-        	if($id_prod > 0 && $fonte == 1) { //Se $fonte for igual a 1 significa que o pedido vem dos produtos, se for 2 vem dos portes grátis
+        	if($id_prod > 0 && $fonte == 1) { //Se $fonte for igual a 1 significa que o pedido vem dos produtos, se for 2 vem dos portes grï¿½tis
 
 			    	$query_rsTotal = "SELECT id FROM l_pecas_categorias WHERE id_peca=:id_prod AND id_categoria=:id_categoria";
 
@@ -982,7 +982,7 @@ function copiarProduto($id_prod, $nome_prod, $imagens, $relacionados, $quantidad
 
       if(!$nome_prod) {
 
-      	$nome_prod = $row_rsOldProd['nome']." - CÓPIA ".date('Y-m-d H:i:s');
+      	$nome_prod = $row_rsOldProd['nome']." - Cï¿½PIA ".date('Y-m-d H:i:s');
 
       	$nome_url = $row_rsOldProd['nome'];
 
@@ -1090,7 +1090,7 @@ function copiarProduto($id_prod, $nome_prod, $imagens, $relacionados, $quantidad
 
 
 
-      //Copiar Promoção (caso aplicável)
+      //Copiar Promoï¿½ï¿½o (caso aplicï¿½vel)
 
       $promocao_ativa = 0;
 
@@ -1640,7 +1640,7 @@ function copiarProduto($id_prod, $nome_prod, $imagens, $relacionados, $quantidad
 
 
 
-        $query_rsInsert = "INSERT INTO l_pecas_tamanhos (id, peca, ref, car1, op1, car2, op2, car3, op3, car4, op4, car5, op5, preco, preco_old, preco_forn, peso, volume, stock, defeito) VALUES (:id, :peca, :ref, :car1, :op1, :car2, :op2, :car3, :op3, :car4, :op4, :car5, :op5, :preco, :preco_old, :preco_forn, :peso, :volume, :stock, :defeito)";
+        $query_rsInsert = "INSERT INTO l_pecas_tamanhos (id, peca, ref,l_caract_categorias_en_id, l_caract_opcoes_en_id, car1, op1, car2, op2, car3, op3, car4, op4, car5, op5, preco, preco_old, preco_forn, peso, volume, stock, defeito) VALUES (:id, :peca, :ref, :l_caract_categorias_en_id, :l_caract_opcoes_en_id, :car1, :op1, :car2, :op2, :car3, :op3, :car4, :op4, :car5, :op5, :preco, :preco_old, :preco_forn, :peso, :volume, :stock, :defeito)";
 
         $rsInsert = DB::getInstance()->prepare($query_rsInsert);
 
@@ -1649,6 +1649,10 @@ function copiarProduto($id_prod, $nome_prod, $imagens, $relacionados, $quantidad
         $rsInsert->bindParam(':peca', $new_prod, PDO::PARAM_INT);
 
         $rsInsert->bindParam(':ref', $row_rsOldStocks['ref'], PDO::PARAM_STR, 5);
+
+		$rsInsert->bindParam(':l_caract_categorias_en_id', $row_rsOldStocks['l_caract_categorias_en_id'], PDO::PARAM_INT);
+
+        $rsInsert->bindParam(':l_caract_opcoes_en_id', $row_rsOldStocks['l_caract_opcoes_en_id'], PDO::PARAM_INT);
 
         $rsInsert->bindParam(':car1', $row_rsOldStocks['car1'], PDO::PARAM_INT);
 
@@ -1740,7 +1744,7 @@ if(!function_exists('apagaFicheiros')) {
 
 
 
-				//Verificar se o ficheiro está a ser usado noutro idioma
+				//Verificar se o ficheiro estï¿½ a ser usado noutro idioma
 
 				foreach($row_rsLinguas as $linguas) {
 
@@ -1768,7 +1772,7 @@ if(!function_exists('apagaFicheiros')) {
 
 
 
-				//Se a variável for igual a 0, significa que o ficheiro não é usada em mais nenhum registo e podemos apagá-lo
+				//Se a variï¿½vel for igual a 0, significa que o ficheiro nï¿½o ï¿½ usada em mais nenhum registo e podemos apagï¿½-lo
 
 				if($r == 0) {
 

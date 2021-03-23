@@ -1,6 +1,6 @@
 <?php
 ob_start();
-//error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_DEPRECATED & ~E_STRICT);
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_DEPRECATED & ~E_STRICT);
 
 
 # 0 localhost
@@ -36,9 +36,9 @@ define("NTG_PROPO", 0);
 define("DB_HOSTNAME", "localhost");
 if(!in_array($_SERVER['HTTP_HOST'], $array_servidor) && NTG_PROPO==0) { 
 	####LOCAL_BD####
-	define("DB_USERNAME", "ud4owam3mcgig");
-	define("DB_PASSWORD", "ud4owam3mcgig");
-	define("DB_DATABASE", "db7u9msfz8mqrn");
+	define("DB_USERNAME", "root");
+	define("DB_PASSWORD", "");
+	define("DB_DATABASE", "bbakery");
 	define("CAPTCHA_KEY", '6Lcyj2QaAAAAAAzNuFrbhymvPEPIrCaQzjp7u_uu');
 	define("CAPTCHA_SECRET", '6Lcyj2QaAAAAAGoYL3jeevUeU39-HgQUuiWM__dV');
 	define("MAPS_KEY", 'AIzaSyCnjcj-bGomkybPutgzFPg4uvAZ3yHOI9w');
@@ -46,9 +46,9 @@ if(!in_array($_SERVER['HTTP_HOST'], $array_servidor) && NTG_PROPO==0) {
 else { 
 
 	####ONLINE_BD####
-	define("DB_USERNAME", "ud4owam3mcgig");
-	define("DB_PASSWORD", 'ud4owam3mcgig');
-	define("DB_DATABASE", "db7u9msfz8mqrn");
+	define("DB_USERNAME", "root");
+	define("DB_PASSWORD", '');
+	define("DB_DATABASE", "bbakery");
 	define("CAPTCHA_KEY", '6Lcyj2QaAAAAAAzNuFrbhymvPEPIrCaQzjp7u_uu');
 	define("CAPTCHA_SECRET", '6Lcyj2QaAAAAAGoYL3jeevUeU39-HgQUuiWM__dV');
 	define("MAPS_KEY", '');
@@ -97,22 +97,22 @@ if(!in_array($_SERVER['HTTP_HOST'], $array_servidor) && NTG_PROPO==0) {
 	####LOCAL_PATH####
 	if (ENV == 0) {
 
-		define("HTTP_DIR", "http://bbakery.co.uk/beta/"); //Usado nas Newsletters e Encomendas (encomendas-edit.php, newsletter-edit.php e newsletter-processar-envio.php)
+		define("HTTP_DIR", "http://localhost/bbakery/"); //Usado nas Newsletters e Encomendas (encomendas-edit.php, newsletter-edit.php e newsletter-processar-envio.php)
 		define("ROOTPATH", dirname(__DIR__)."/");
-		define("ROOTPATH_HTTP", "http://".$_SERVER["HTTP_HOST"]."/beta/");
+		define("ROOTPATH_HTTP", "http://".$_SERVER["HTTP_HOST"]."/bbakery/");
 	}
 	else{ 
-		define("HTTP_DIR", "http://bbakery.co.uk/beta/"); //Usado nas Newsletters e Encomendas (encomendas-edit.php, newsletter-edit.php e newsletter-processar-envio.php)
+		define("HTTP_DIR", "http://localhost/bbakery/"); //Usado nas Newsletters e Encomendas (encomendas-edit.php, newsletter-edit.php e newsletter-processar-envio.php)
 		define("ROOTPATH", dirname(__DIR__)."/");
-		define("ROOTPATH_HTTP", "http://".$_SERVER["HTTP_HOST"]."/beta/");
+		define("ROOTPATH_HTTP", "http://".$_SERVER["HTTP_HOST"]."/bbakery/");
 	}
 }
 else { 
 
 	####ONLINE_BD####
-	define("HTTP_DIR", "http://bbakery.co.uk/beta/"); //Usado nas Newsletters e Encomendas (encomendas-edit.php, newsletter-edit.php e newsletter-processar-envio.php)
+	define("HTTP_DIR", "http://localhost/bbakery/"); //Usado nas Newsletters e Encomendas (encomendas-edit.php, newsletter-edit.php e newsletter-processar-envio.php)
 	define("ROOTPATH", dirname(__DIR__)."/");
-	define("ROOTPATH_HTTP", "http://".$_SERVER["HTTP_HOST"]."/beta/");
+	define("ROOTPATH_HTTP", "http://".$_SERVER["HTTP_HOST"]."/bbakery/");
 }
 
 define("ROOTPATH_CONSOLA", ROOTPATH."consola/"); 

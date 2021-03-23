@@ -88,12 +88,15 @@ $totalRows_rsList = $rsList->rowCount();
   $car3=$row_rsTamanhos['car3'];
   $car4=$row_rsTamanhos['car4'];
   $car5=$row_rsTamanhos['car5'];  
+  $l_caract_categorias_en_id=$row_rsTamanhos['l_caract_categorias_en_id']
+  
   
   $op1=0;
   $op2=0;
   $op3=0;
   $op4=0;
   $op5=0;
+  $l_caract_opcoes_en_id=0;
 
   if(isset($_POST['opcao_'.$car1]))
     $op1 = $_POST['opcao_'.$car1];
@@ -139,7 +142,7 @@ $totalRows_rsList = $rsList->rowCount();
   }
 
   if($totalRows_rsTamanhos>0) {
-    if(($car1 > 0 && $op1 == 0) || ($car2 > 0 && $op2 == 0) || ($car3 > 0 && $op3 == 0) || ($car4 > 0 && $op4 == 0) || ($car5 > 0 && $op5 == 0))
+    if(($car1 > 0 && $op1 == 0) || ($car2 > 0 && $op2 == 0) || ($car3 > 0 && $op3 == 0) || ($car4 > 0 && $op4 == 0) ||  ($l_caract_opcoes_en_id == 0))
       $erro_validar_insercao=1;
   }
 
@@ -176,7 +179,7 @@ $totalRows_rsList = $rsList->rowCount();
 
   if($erro_validar_insercao==0) {
     //verifica se já existe registo
-    $query_rsProcReg = "SELECT * FROM l_pecas_tamanhos WHERE peca=:id AND car1=:car1 AND op1=:op1 AND car2=:car2 AND op2=:op2 AND car3=:car3 AND op3=:op3 AND car4=:car4 AND op4=:op4 AND car5=:car5 AND op5=:op5";
+    $query_rsProcReg = "SELECT * FROM l_pecas_tamanhos WHERE peca=:id AND car1=:car1 AND op1=:op1 AND car2=:car2 AND op2=:op2 AND car3=:car3 AND op3=:op3 AND car4=:car4 AND op4=:op4 AND car5=:car5 AND op5=:op5 AND l_caract_categorias_en_id=:l_caract_categorias_en_id AND l_caract_opcoes_en_id=:l_caract_opcoes_en_id";
     $rsProcReg = DB::getInstance()->prepare($query_rsProcReg);
     $rsProcReg->bindParam(':id', $id, PDO::PARAM_INT);
     $rsProcReg->bindParam(':car1', $car1, PDO::PARAM_INT);
@@ -189,6 +192,8 @@ $totalRows_rsList = $rsList->rowCount();
     $rsProcReg->bindParam(':op4', $op4, PDO::PARAM_INT);
     $rsProcReg->bindParam(':car5', $car5, PDO::PARAM_INT);
     $rsProcReg->bindParam(':op5', $op5, PDO::PARAM_INT);
+    $rsProcReg->bindParam(':l_caract_categorias_en_id', $l_caract_categorias_en_id, PDO::PARAM_INT);
+    $rsProcReg->bindParam(':l_caract_opcoes_en_id', $l_caract_opcoes_en_id, PDO::PARAM_INT);
     $rsProcReg->execute();
     $totalRows_rsProcReg = $rsProcReg->rowCount();
     
@@ -309,6 +314,7 @@ if($totalRows_rsTamanhos>0) {
   $car3=$row_rsTamanhos['car3'];
   $car4=$row_rsTamanhos['car4'];
   $car5=$row_rsTamanhos['car5'];
+  $l_caract_categorias_en_id=$row_rsTamanhos['l_caract_categorias_en_id'];
 }
 
 /*$query_rsList = "SELECT * FROM l_pecas_store";

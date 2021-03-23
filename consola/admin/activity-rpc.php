@@ -1,6 +1,12 @@
 <?php
-$path = explode("/", dirname(__DIR__));
+// $path = explode("/", dirname(__DIR__));
+// unset($path[count($path) -1]);
+// $path = implode($path, "/");
+
+$path = explode('\\', dirname(__DIR__));
+
 unset($path[count($path) -1]);
+
 $path = implode($path, "/");
 
 require_once($path."/Connections/connADMIN.php");

@@ -90,7 +90,8 @@ if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "produtos_stock_form"
   //     }
   //   }
   // }
-
+  
+  
   $car1=$row_rsTamanhos['car1'];
   $car2=$row_rsTamanhos['car2'];
   $car3=$row_rsTamanhos['car3'];
@@ -102,6 +103,46 @@ if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "produtos_stock_form"
   $op3=0;
   $op4=0;
   $op5=0;
+
+
+  // $categories = "SELECT * FROM TABLE l_pecas_tamanhos";
+  // print_r ($_POST);
+  // exit();
+  $i = 0;
+  foreach($_POST as $key => $value){
+
+    if (preg_match('/opcao_/', $key))
+      { 
+        $results[str_replace('opcao_','',$key)] = $value;
+        // $results[$i]['car'] = ;
+        // $results[$i]['op'] = $value;
+        $i++;
+      }
+    
+    // if($key == 'opcao_'){
+    //   echo "POST field info #". $key ." = ". ${$key}."<br />";
+    //   $a_error[] = $key;
+    //     $results = $key.$value;
+
+    //     exit();
+    // }
+    
+    // else{
+    //     echo 'POST field "'.$key . '" is not empty<br />';
+    // }
+}
+
+$results = serialize($results);
+// echo $test;
+// echo '<pre>';
+// print_r(unserialize($test));
+// echo '</pre>';
+// exit();
+// $results = array();
+// print_r($results);
+//     exit();
+ 
+$categories = "INSERT * FROM TABLE l_pecas_tamanhos";
 
   if(isset($_POST['opcao_'.$car1]))
     $op1 = $_POST['opcao_'.$car1];
@@ -152,20 +193,21 @@ if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "produtos_stock_form"
   }
   
   if($erro_validar_insercao==0) {
-    //verifica se já existe registo
-    $query_rsProcReg = "SELECT * FROM l_pecas_tamanhos WHERE peca=:id AND car1=:car1 AND op1=:op1 AND car2=:car2 AND op2=:op2 AND car3=:car3 AND op3=:op3 AND car4=:car4 AND op4=:op4 AND car5=:car5 AND op5=:op5";
+    //verifica se jï¿½ existe registo
+    $query_rsProcReg = "SELECT * FROM l_pecas_tamanhos WHERE peca=:id AND results:results";
     $rsProcReg = DB::getInstance()->prepare($query_rsProcReg);
     $rsProcReg->bindParam(':id', $id, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':car1', $car1, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':op1', $op1, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':car2', $car2, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':op2', $op2, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':car3', $car3, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':op3', $op3, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':car4', $car4, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':op4', $op4, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':car5', $car5, PDO::PARAM_INT);
-    $rsProcReg->bindParam(':op5', $op5, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':car1', $car1, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':op1', $op1, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':car2', $car2, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':op2', $op2, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':car3', $car3, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':op3', $op3, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':car4', $car4, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':op4', $op4, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':car5', $car5, PDO::PARAM_INT);
+    // $rsProcReg->bindParam(':op5', $op5, PDO::PARAM_INT);
+    $rsProcReg->bindParam(':results',$results, PDO::PARAM_STR, 5);
     $rsProcReg->execute();
     $totalRows_rsProcReg = $rsProcReg->rowCount();
     
@@ -271,7 +313,7 @@ if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "produtos_stock_atual
       $rsInsert->bindParam(':i', $i, PDO::PARAM_INT);   
       $rsInsert->execute();
       
-      //ATUALIZA NO PRODUTO O PREÇO POR DEFEITO
+      //ATUALIZA NO PRODUTO O PREï¿½O POR DEFEITO
       if($defeito==1 && $preco>0) {
         $query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
         $rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
@@ -620,7 +662,7 @@ function carregaCaract(cat){
                           <th><?php echo $RecursosCons->RecursosCons['peso_kg']; ?> </th>
                           <th><?php echo $RecursosCons->RecursosCons['preco']; ?> Customer (&pound;)</th>
                           <th><?php echo $RecursosCons->RecursosCons['preco']; ?> Frenchise (&pound;)</th>
-                          <?php /*?><th><?php echo $RecursosCons->RecursosCons['preco_forn_label']; ?>  (€)</th><?php */?>
+                          <?php /*?><th><?php echo $RecursosCons->RecursosCons['preco_forn_label']; ?>  (ï¿½)</th><?php */?>
                           <th><?php echo $RecursosCons->RecursosCons['stock_uni']; ?> </th>
                           <th><?php echo $RecursosCons->RecursosCons['op_sel']; ?> </th>
                           <th>&nbsp;</th>

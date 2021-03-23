@@ -1,9 +1,13 @@
 <?php
-$path = explode("/", dirname(__DIR__));
+// $path = explode("/", dirname(__DIR__));
+// unset($path[count($path) -1]);
+// $path = implode($path, "/");
+
+$path = explode('\\', dirname(__DIR__));
+
 unset($path[count($path) -1]);
+
 $path = implode($path, "/");
-
-
 
 require_once($path."/Connections/connADMIN.php");
 
@@ -347,7 +351,7 @@ function redirectURL($url_old, $url_new, $lang, $tipo='editar'){
 
 		
 
-		//URL ANTIGO ESTÁ COMO NOVO	
+		//URL ANTIGO ESTï¿½ COMO NOVO	
 
 		$insertSQL = "UPDATE redirects_301 SET url_new='$url_new' WHERE url_new='$url_old' AND lang='$lang'";
 
