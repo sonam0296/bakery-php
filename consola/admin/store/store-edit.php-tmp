@@ -1,0 +1,334 @@
+<?php include_once ('../inc_pages.php');?>
+<?php
+
+$menu_sel     = 'store';
+$menu_sub_sel = '';
+$tab_sel      = 1;
+
+if ($_GET['env'] == 1) {$tab_sel = 1;
+}
+
+if (isset($_GET['tab_sel'])) {
+	$tab_sel = $_GET['tab_sel'];
+}
+
+$id       = $_GET['id'];
+$inserido = 0;
+$erro     = 0;
+
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "categorias_form")) {
+	$manter = $_POST['manter'];
+
+	$tab_sel = $_REQUEST['tab_sel'];
+
+	$query_rsP = "SELECT * FROM store_locater WHERE id=:id";
+	$rsP       = DB::getInstance()->prepare($query_rsP);
+	$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);
+	$rsP->execute();
+	$row_rsP       = $rsP->fetch(PDO::FETCH_ASSOC);
+	$totalRows_rsP = $rsP->rowCount();
+
+	if ($_POST['b_name'] != '' && $tab_sel == 1) {
+		//Só atualiza o URL se a checkbox for selecionada (para não perder os URL's personalizados)
+		//VERIFICA SE O TITULO JÁ ESTÁ PERSONALIZADO
+
+		$insertSQL = "UPDATE store_locater SET b_name=:b_name, Sreet=:Sreet, lat=:lat, lng=:lng, city=:city, country=:country, pincode=:pincode, phone=:phone, email=:email WHERE id=:id";
+		$rsInsert  = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->bindParam(':b_name', $_POST['b_name'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':Sreet', $_POST['Sreet'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':lat', $_POST['lat'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':lng', $_POST['lng'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':city', $_POST['city'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':country', $_POST['country'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':pincode', $_POST['pincode'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':phone', $_POST['phone'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':email', $_POST['email'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);
+		$rsInsert->execute();
+
+		alteraSessions('categorias');
+
+		DB::close();
+
+		if (!$manter) {
+			header("Location: store.php?alt=1");
+		} else {
+
+			header("Location: store-edit.php?id=".$id."&alt=1&tab_sel=1");
+		}
+
+	}
+}
+
+$query_rsP = "SELECT * FROM store_locater WHERE id=:id";
+$rsP       = DB::getInstance()->prepare($query_rsP);
+$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);
+$rsP->execute();
+$row_rsP       = $rsP->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsP = $rsP->rowCount();
+
+DB::close();
+
+?>
+<?php include_once (ROOTPATH_ADMIN.'inc_head_1.php');?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once (ROOTPATH_ADMIN.'inc_head_2.php');?>
+<!--COR-->
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>js/jscolor/jscolor.js"></script>
+<body class="<?php echo $body_info;?>">
+<?php include_once (ROOTPATH_ADMIN.'inc_topo.php');?>
+<div class="clearfix"> </div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<?php include_once (ROOTPATH_ADMIN.'inc_menu.php');?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content">
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> Store <small><?php echo $RecursosCons->RecursosCons['editar_registo'];?></small> </h3>
+			<div class="page-bar">
+				<ul class="page-breadcrumb">
+					<li>
+						<i class="fa fa-home"></i>
+						<a href="../index.php"><?php echo $RecursosCons->RecursosCons['home'];?></a>
+						<i class="fa fa-angle-right"></i>
+					</li>
+					<li>
+						<a href="produtos.php"><?php echo $RecursosCons->RecursosCons['produtos'];?></a>
+						<i class="fa fa-angle-right"></i>
+					</li>
+					<li>
+						<a href="store.php">Store <i class="fa fa-angle-right"></i></a>
+					</li>
+					<li>
+						<a href="javascript:"><?php echo $RecursosCons->RecursosCons['editar_registo'];?></a>
+					</li>
+				</ul>
+			</div>
+      <!-- END PAGE HEADER-->
+      <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h4 class="modal-title"><?php echo $RecursosCons->RecursosCons['eliminar_registo'];?></h4>
+            </div>
+            <div class="modal-body"> <?php echo $RecursosCons->RecursosCons['msg_required'];?> </div>
+            <div class="modal-footer">
+              <button type="button" class="btn blue" onClick="document.location='categorias.php?rem=1&id=<?php echo $row_rsP["id"];?>'"><?php echo $RecursosCons->RecursosCons['txt_ok'];
+?></button>
+              <button type="button" class="btn default" data-dismiss="modal"><?php echo $RecursosCons->RecursosCons['txt_cancelar'];?></button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+        <div class="col-md-12">
+<?php include_once (ROOTPATH_ADMIN.'inc_linguas.php');?>
+          <form id="categorias_form" name="categorias_form" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <input type="hidden" name="manter" id="manter" value="0">
+            <input type="hidden" name="tab_sel" id="tab_sel" value="<?php echo $tab_sel;?>">
+            <input type="hidden" name="img_remover1" id="img_remover1" value="0">
+            <div class="portlet">
+              <div class="portlet-title">
+                <div class="caption"> <i class="fa fa-pencil-square"></i>Store - <?php echo $row_rsP['nome'];?></div>
+                <div class="form-actions actions btn-set">
+                  <button type="button" name="back" class="btn default" onClick="document.location='store.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar'];?></button>
+                  <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar'];?></button>
+                  <button type="submit" class="btn green"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar'];?></button>
+                  <button type="submit" class="btn green" onClick="document.getElementById('manter').value='1';"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar_manter'];
+?></button>
+                  <a href="#modal_delete" data-toggle="modal" class="btn red"><i class="fa fa-remove"></i> <?php echo $RecursosCons->RecursosCons['eliminar'];?></a>
+                </div>
+              </div>
+              <div class="portlet-body">
+              	<div class="tabbable">
+                  <ul class="nav nav-tabs">
+                    <li <?php if ($tab_sel == 1) {echo "class=\"active\"";
+}
+
+?>> <a href="#tab_general" data-toggle="tab" onClick="document.getElementById('tab_sel').value='1'"> <?php echo $RecursosCons->RecursosCons['tab_detalhes'];
+?> </a> </li>
+                  </ul>
+                  <div class="tab-content no-space">
+                    <div class="tab-pane <?php if ($tab_sel == 1) {echo "active";
+}
+?>" id="tab_general">
+                      <div class="form-body">
+<?php if ($_GET['alt'] == 1 && $_GET['tab_sel'] == 1) {?>
+	<div class="alert alert-success display-show">
+		                          <button class="close" data-close="alert"></button>
+	<?php echo $RecursosCons->RecursosCons['alt'];?></div>
+	<?php }?>
+												<?php if ($_GET['env'] == 1) {?><div class="alert alert-success display-show">
+		                          <button class="close" data-close="alert"></button>
+	<?php echo $RecursosCons->RecursosCons['env_config'];?></div>
+	<?php }�?>
+<div class="alert alert-danger display-hide">
+	                        <button class="close" data-close="alert"></button>
+<?php echo $RecursosCons->RecursosCons['msg_required'];?>
+	                      </div>
+	                      <div class="form-group">
+	                        <label class="col-md-2 control-label" for="b_name"><?php echo $RecursosCons->RecursosCons['nome_label'];?>: <span class="required"> * </span></label>
+	                        <div class="col-md-5">
+	                          <input type="text" class="form-control" name="b_name" id="b_name" value="<?php echo $row_rsP['b_name'];?>">
+	                        </div>
+	                      </div>
+		                	<div class="form-group">
+		                    	<label class="col-md-2 control-label" for="Sreet">Address: </label>
+			                    <div class="col-md-6">
+			                      <textarea class="form-control" rows="3" id="Sreet" name="Sreet"><?php echo $row_rsP['Sreet'];?></textarea>
+			                    </div>
+		                  	</div>
+
+		                  	<div class="form-group">
+								<label class="col-md-2 control-label" for="lat">Latitude: <span class="required"> * </span></label>
+									<div class="col-md-3">
+										<input type="text" class="form-control" name="lat" id="lat" value="<?php echo $row_rsP['lat'];?>">
+									</div>
+
+								<label class="col-md-2 control-label" for="lng">Longitude: <span class="required"> * </span></label>
+									<div class="col-md-3">
+										<input type="text" class="form-control" name="lng" id="lng" value="<?php echo $row_rsP['lng'];?>">
+									</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-2 control-label" for="city">City: <span class="required"> * </span></label>
+									<div class="col-md-3">
+										<input type="text" class="form-control" name="city" id="city" value="<?php echo $row_rsP['city'];?>">
+									</div>
+
+									<label class="col-md-2 control-label" for="country">Country: <span class="required"> * </span></label>
+									<div class="col-md-3">
+<?php
+$query_rsP = "SELECT * FROM paises";
+$rsP       = DB::getInstance()->prepare($query_rsP);
+$rsP->execute();
+$row_rsPs      = $rsP->fetchAll();
+$totalRows_rsP = $rsP->rowCount();
+?>
+<select name="country" id="country">
+<?php foreach ($row_rsPs as $value) {?>
+												<option value="<?php echo $value['nome'];?>" <?php if ($value['nome'] == $row_rsP['country']) {echo "selected";}?>><?php echo $value["nome"];
+	?></option>
+	<?php }?>
+										</select>
+									</div>
+							</div>
+
+
+		                  	<div class="form-group">
+			                    <label class="col-md-2 control-label" for="phone">Phone Number: <span class="required"> * </span></label>
+			                    <div class="col-md-3">
+			                      <input type="number" class="form-control" name="phone" id="phone" value="<?php echo $row_rsP['phone'];?>">
+			                    </div>
+			                    <label class="col-md-2 control-label" for="city">Pincode: <span class="required"> * </span></label>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="pincode" id="pincode" value="<?php echo $row_rsP['pincode'];?>">
+								</div>
+			                </div>
+
+			                <div class="form-group">
+			                    <label class="col-md-2 control-label" for="email">Email Id: <span class="required"> * </span></label>
+			                    <div class="col-md-3">
+			                      <input type="email" class="form-control" name="email" id="email" value="<?php echo $row_rsP['email'];?>">
+			                    </div>
+			                </div>
+                    	</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="MM_insert" value="categorias_form" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT-->
+    </div>
+  </div>
+  <!-- END CONTENT -->
+<?php include_once (ROOTPATH_ADMIN.'inc_quick_sidebar.php');?>
+</div>
+<!-- END CONTAINER -->
+<?php include_once (ROOTPATH_ADMIN.'inc_footer_1.php');?>
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/fancybox/jquery.fancybox.min.js"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/plupload/js/plupload.full.min.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once (ROOTPATH_ADMIN.'inc_footer_2.php');?>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/ckfinder.js"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="form-validation.js"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+<script>
+jQuery(document).ready(function() {
+   Metronic.init(); // init metronic core components
+   Layout.init(); // init current layout
+   QuickSidebar.init(); // init quick sidebar
+   Demo.init(); // init demo features
+   FormValidation.init();
+});
+</script>
+<script type="text/javascript">
+document.ready=carregaPreview();
+</script>
+<script type="text/javascript">
+CKEDITOR.replace('Sreet', {
+  filebrowserBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/ckfinder.html',
+  filebrowserImageBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/ckfinder.html?Type=Images',
+  filebrowserFlashBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/ckfinder.html?Type=Flash',
+  filebrowserUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+  filebrowserImageUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+  filebrowserFlashUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA;?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+  toolbar : "Basic2"
+});
+</script>
+
+<script type="text/javascript">
+		$('.bg-type-main .radio').click(function(event) {
+			/* Act on the event */
+			var checked_val = $(this).find('input:checked').val();
+			bg_type_hide_show(checked_val);
+		});
+
+		jQuery(document).ready(function($) {
+			var checked_val = $('.bg-type-main .radio').find('input:checked').val();
+			bg_type_hide_show(checked_val);
+		});
+
+		function bg_type_hide_show(checked_val) {
+			$('.data-bg').each(function(index, el) {
+				if ($(this).attr('data-bg-type') == checked_val) {
+					$(this).show();
+				}else{
+					$(this).hide();
+				}
+			});
+		}
+	</script>
+</body>
+<!-- END BODY -->
+</html>

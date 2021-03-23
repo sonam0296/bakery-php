@@ -1,0 +1,2148 @@
+<?php require_once ('../../../Connections/connADMIN.php');
+
+//LARGURA DAS IMAGENS
+function tamanho_imagem($imagem, $largura_disp, $altura_disp) {
+	$tamanho                            = "";
+	list($width, $height, $type, $attr) = getimagesize($imagem);
+
+	if ($width > $largura_disp || $height > $altura_disp) {
+		if (($largura_disp/$width) < ($altura_disp/$height)) {
+			$tamanho = "width=\"$largura_disp\"";
+		} else {
+			$tamanho = "height=\"$altura_disp\"";
+		}
+	}
+
+	return $tamanho;
+}
+
+function getBetween($var1 = "", $var2 = "", $pool) {
+	$temp1  = strpos($pool, $var1)+strlen($var1);
+	$result = substr($pool, $temp1, strlen($pool));
+	$dd     = strpos($result, $var2);
+
+	if ($dd == 0) {
+		$dd = strlen($result);
+	}
+
+	return substr($result, 0, $dd);
+}
+
+function replaceBetween($str, $needle_start, $needle_end, $replacement) {
+	$pos   = strpos($str, $needle_start);
+	$start = $pos === false?0:$pos+strlen($needle_start);
+
+	$pos = strpos($str, $needle_end, $start);
+	$end = $start === false?strlen($str):$pos;
+
+	return substr_replace($str, $replacement, $start, $end-$start);
+}
+
+function replaceLinksText($texto, $newsletter_id_historico, $codigo) {
+	if ($newsletter_id_historico > 0 && $codigo != '') {
+		$links = preg_replace_callback('~<a\s+href="(.*?)"(.*?)>(.*?)</a>~i', function ($res) use (&$texto, $newsletter_id_historico, $codigo) {
+				$link = $res['1'];
+				$tipo_link = 0;
+				if (strpos($link, 'mailto:') !== false) {$tipo_link = 2;
+				}
+
+				$query_rsExiste = "SELECT id FROM news_links WHERE url=:url AND newsletter_id_historico=:newsletter_id_historico AND codigo=:codigo";
+				$rsExiste = DB::getInstance()->prepare($query_rsExiste);
+				$rsExiste->bindParam(':url', $link, PDO::PARAM_STR, 5);
+				$rsExiste->bindParam(':newsletter_id_historico', $newsletter_id_historico, PDO::PARAM_INT);
+				$rsExiste->bindParam(':codigo', $codigo, PDO::PARAM_STR, 5);
+				$rsExiste->execute();
+				$totalRows_rsExiste = $rsExiste->rowCount();
+				$row_rsExiste = $rsExiste->fetch(PDO::FETCH_ASSOC);
+				DB::close();
+
+				if ($totalRows_rsExiste == 0) {
+					$query_rsMaxId = "SELECT MAX(id) FROM news_links";
+					$rsMaxId = DB::getInstance()->prepare($query_rsMaxId);
+					$rsMaxId->execute();
+					$row_rsMaxId = $rsMaxId->fetch(PDO::FETCH_ASSOC);
+					DB::close();
+
+					$max_id = $row_rsMaxId['MAX(id)']+1;
+
+					$query_rsInsert = "INSERT INTO news_links (id, newsletter_id_historico, codigo, url, tipo_link) VALUES (:id, :newsletter_id_historico, :codigo, :url, :tipo_link)";
+					$rsInsert = DB::getInstance()->prepare($query_rsInsert);
+					$rsInsert->bindParam(':id', $max_id, PDO::PARAM_INT);
+					$rsInsert->bindParam(':newsletter_id_historico', $newsletter_id_historico, PDO::PARAM_INT);
+					$rsInsert->bindParam(':codigo', $codigo, PDO::PARAM_STR, 5);
+					$rsInsert->bindParam(':url', $link, PDO::PARAM_STR, 5);
+					$rsInsert->bindParam(':tipo_link', $tipo_link, PDO::PARAM_INT);
+					$rsInsert->execute();
+					DB::close();
+
+					$novo_link = HTTP_DIR.'/consola/admin/newsletter/newsletter-proceder-links.php?id='.$max_id;
+				} else {
+					$novo_link = HTTP_DIR.'/consola/admin/newsletter/newsletter-proceder-links.php?id='.$row_rsExiste['id'];
+				}
+
+				$texto = str_replace($link, $novo_link, $texto);
+
+			}, $texto);
+
+		return $texto;
+	} else {
+		return $texto;
+	}
+}
+
+function replaceLinks($link, $newsletter_id_historico, $codigo, $tipo_link = 0) {
+	if ($newsletter_id_historico > 0 && $codigo != '') {
+		//verificar se já existe o link inserido para estes registos
+		$query_rsExiste = "SELECT id FROM news_links WHERE url=:url AND newsletter_id_historico=:newsletter_id_historico AND codigo=:codigo";
+		$rsExiste       = DB::getInstance()->prepare($query_rsExiste);
+		$rsExiste->bindParam(':url', $link, PDO::PARAM_STR, 5);
+		$rsExiste->bindParam(':newsletter_id_historico', $newsletter_id_historico, PDO::PARAM_INT);
+		$rsExiste->bindParam(':codigo', $codigo, PDO::PARAM_STR, 5);
+		$rsExiste->execute();
+		$totalRows_rsExiste = $rsExiste->rowCount();
+		$row_rsExiste       = $rsExiste->fetch(PDO::FETCH_ASSOC);
+		DB::close();
+
+		if ($totalRows_rsExiste == 0) {
+			$query_rsMaxId = "SELECT MAX(id) FROM news_links";
+			$rsMaxId       = DB::getInstance()->prepare($query_rsMaxId);
+			$rsMaxId->execute();
+			$row_rsMaxId = $rsMaxId->fetch(PDO::FETCH_ASSOC);
+			DB::close();
+
+			$max_id = $row_rsMaxId['MAX(id)']+1;
+
+			$query_rsInsert = "INSERT INTO news_links (id, newsletter_id_historico, codigo, url, tipo_link) VALUES (:id, :newsletter_id_historico, :codigo, :url, :tipo_link)";
+			$rsInsert       = DB::getInstance()->prepare($query_rsInsert);
+			$rsInsert->bindParam(':id', $max_id, PDO::PARAM_INT);
+			$rsInsert->bindParam(':newsletter_id_historico', $newsletter_id_historico, PDO::PARAM_INT);
+			$rsInsert->bindParam(':codigo', $codigo, PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':url', $link, PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':tipo_link', $tipo_link, PDO::PARAM_INT);
+			$rsInsert->execute();
+			DB::close();
+
+			$novo_link = HTTP_DIR.'/consola/admin/newsletter/newsletter-proceder-links.php?id='.$max_id;
+
+			return $novo_link;
+		} else {
+			$novo_link = HTTP_DIR.'/consola/admin/newsletter/newsletter-proceder-links.php?id='.$row_rsExiste['id'];
+
+			return $novo_link;
+		}
+	} else {
+		if ($tipo_link == 2) {
+			return "mailto:".$link;
+		} else {
+
+			return $link;
+		}
+	}
+}
+
+$id = $_GET['id'];
+
+$newsletter_id_historico = 0;
+$codigo                  = '';
+
+if (isset($_GET['hist'])) {
+	$newsletter_id_historico = $_GET['hist'];
+}
+
+if (isset($_GET['codigo'])) {
+	$codigo = $_GET['codigo'];
+}
+
+$query_rsP = "SELECT * FROM newsletters WHERE id=:id";
+$rsP       = DB::getInstance()->prepare($query_rsP);
+$rsP->bindParam(':id', $id, PDO::PARAM_INT);
+$rsP->execute();
+$row_rsP       = $rsP->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsP = $rsP->rowCount();
+DB::close();
+
+$query_rsNewsNot = "SELECT * FROM news_conteudo WHERE id='".$row_rsP['conteudo']."'";
+$rsNewsNot       = DB::getInstance()->prepare($query_rsNewsNot);
+$rsNewsNot->execute();
+$row_rsNewsNot       = $rsNewsNot->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsNewsNot = $rsNewsNot->rowCount();
+DB::close();
+
+$id_conteudo = $row_rsNewsNot['id'];
+// $id_topo = 0;
+// $imagem_topo = '';
+// $link_topo = '';
+$mes_topo        = '';
+$ano_topo        = '';
+$link_rodape     = '';
+$texto_rodape    = '';
+$contacto_rodape = '';
+$cor_news        = '#2fad49';
+$cor_botao       = '#2fad49';
+$texto_email1    = '';
+$email1          = '';
+$texto_email2    = '';
+$email2          = '';
+$texto_email3    = '';
+$email3          = '';
+$texto_email4    = '';
+$email4          = '';
+
+if ($row_rsNewsNot['mes'] != '') {
+	$mes_topo = $row_rsNewsNot['mes'];
+}
+if ($row_rsNewsNot['ano'] != '') {
+	$ano_topo = $row_rsNewsNot['ano'];
+}
+if ($row_rsNewsNot['url'] != '') {
+	$link_rodape = $row_rsNewsNot['url'];
+}
+if ($row_rsNewsNot['texto_link'] != '') {
+	$texto_rodape = $row_rsNewsNot['texto_link'];
+}
+if ($row_rsNewsNot['telefone'] != '') {
+	$contacto_rodape = $row_rsNewsNot['telefone'];
+}
+if ($row_rsNewsNot['texto_email1'] != '') {
+	$texto_email1 = $row_rsNewsNot['texto_email1'];
+}
+if ($row_rsNewsNot['email1'] != '') {
+	$email1 = $row_rsNewsNot['email1'];
+}
+if ($row_rsNewsNot['texto_email2'] != '') {
+	$texto_email2 = $row_rsNewsNot['texto_email2'];
+}
+if ($row_rsNewsNot['email2'] != '') {
+	$email2 = $row_rsNewsNot['email2'];
+}
+if ($row_rsNewsNot['texto_email3'] != '') {
+	$texto_email3 = $row_rsNewsNot['texto_email3'];
+}
+if ($row_rsNewsNot['email3'] != '') {
+	$email3 = $row_rsNewsNot['email3'];
+}
+if ($row_rsNewsNot['texto_email4'] != '') {
+	$texto_email4 = $row_rsNewsNot['texto_email4'];
+}
+if ($row_rsNewsNot['email4'] != '') {
+	$email4 = $row_rsNewsNot['email4'];
+}
+
+// if($row_rsNewsNot['topo'] > 0) {
+//   $id_topo = $row_rsNewsNot['topo'];
+
+//   $query_rsNewsTopo = "SELECT * FROM news_topos WHERE id='$id_topo'";
+//   $rsNewsTopo = DB::getInstance()->prepare($query_rsNewsTopo);
+//   $rsNewsTopo->execute();
+//   $row_rsNewsTopo = $rsNewsTopo->fetch(PDO::FETCH_ASSOC);
+//   $totalRows_rsNewsTopo = $rsNewsTopo->rowCount();
+//   DB::close();
+
+//   if($totalRows_rsNewsTopo > 0) {
+//     if($row_rsNewsTopo['imagem1'] && file_exists(ROOTPATH."imgs/imgs_news/".$row_rsNewsTopo['imagem1'])) {
+//       $imagem_topo = $row_rsNewsTopo['imagem1'];
+//     }
+
+//     if($row_rsNewsTopo['link']) {
+//       $link_topo = $row_rsNewsTopo['link'];
+//     }
+//   }
+// }
+
+$query_rsTemas = "SELECT * FROM news_temas WHERE conteudo='$id_conteudo' AND visivel='1' ORDER BY ordem ASC, id DESC";
+$rsTemas       = DB::getInstance()->prepare($query_rsTemas);
+$rsTemas->execute();
+$totalRows_rsTemas = $rsTemas->rowCount();
+DB::close();
+
+$url_site = ROOTPATH_HTTP;
+
+$pasta_imagens = 'newsletter/news_files/imagens/';
+$url_site_file = '../../../';
+
+$query_rsRedesS = "SELECT * FROM redes_sociais ORDER BY id ASC";
+$rsRedesS       = DB::getInstance()->prepare($query_rsRedesS);
+$rsRedesS->execute();
+$totalRows_rsRedesS = $rsRedesS->rowCount();
+DB::close();
+
+$facebook       = 0;
+$link_facebook  = "";
+$instagram      = 0;
+$link_instagram = "";
+$google         = 0;
+$link_google    = "";
+$pinterest      = 0;
+$link_pinterest = "";
+
+while ($row_rsRedesS = $rsRedesS->fetch()) {
+	if ($row_rsRedesS['id'] == 1 && $row_rsRedesS['link'] != "") {
+		$facebook      = 1;
+		$link_facebook = $row_rsRedesS['link'];
+	}
+	if ($row_rsRedesS['id'] == 4 && $row_rsRedesS['link'] != "") {
+		$pinterest      = 1;
+		$link_pinterest = $row_rsRedesS['link'];
+	}
+	if ($row_rsRedesS['id'] == 5 && $row_rsRedesS['link'] != "") {
+		$instagram      = 1;
+		$link_instagram = $row_rsRedesS['link'];
+	}
+	if ($row_rsRedesS['id'] == 6 && $row_rsRedesS['link'] != "") {
+		$google      = 1;
+		$link_google = $row_rsRedesS['link'];
+	}
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+    /* What it does: Remove spaces around the email design added by some email clients. */
+    /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+    html,
+    body {
+      margin: 0 auto !important;
+      padding: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+    }
+
+    /* What it does: Stops email clients resizing small text. */
+    * {
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* What it does: Centers email on Android 4.4 */
+    div[style*="margin: 16px 0"] {
+      margin:0 !important;
+    }
+
+    /* What it does: Stops Outlook from adding extra spacing to tables. */
+    table,
+    td {
+      mso-table-lspace: 0pt !important;
+      mso-table-rspace: 0pt !important;
+    }
+
+    /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+    table {
+      border-spacing: 0 !important;
+      border-collapse: collapse !important;
+      table-layout: fixed !important;
+      margin: 0 auto !important;
+    }
+    table table table {
+      table-layout: auto;
+    }
+
+    /* What it does: Uses a better rendering method when resizing images in IE. */
+    img {
+      -ms-interpolation-mode:bicubic;
+    }
+
+    /* What it does: A work-around for iOS meddling in triggered links. */
+    .mobile-link--footer a,
+    a[x-apple-data-detectors] {
+      color:inherit !important;
+      text-decoration: underline !important;
+    }
+
+    /* What it does: Prevents underlining the button text in Windows 10 */
+    .button-link {
+      text-decoration: none !important;
+    }
+
+    .check_list ul li{
+    	list-style-image: url("<?php echo $url_site;?>imgs/imgs_news/list_style.jpg");
+
+    	padding-left: 15px;
+    }
+
+  </style>
+  <!-- Progressive Enhancements -->
+  <style>
+
+    /* What it does: Hover styles for buttons */
+    .button-td,
+    .button-a {
+      transition: all 100ms ease-in;
+    }
+    .button-td:hover,
+    .button-a:hover {
+      background: #555555 !important;
+      border-color: #555555 !important;
+    }
+
+    .div-0-2-3,
+    .div-1-2-3,
+    .div-0-2-2,
+    .div-1-2-2,
+    .div-0-1-1{
+      border-right: 2px solid #ffffff;
+    }
+
+    @media screen and (max-width: 750px) {
+
+      .div-1-2-3,
+      .div-0-2-2,
+      .div-0-1-1{
+        border-right: 0px !important;
+      }
+      .div-2-2-3{
+        border-right: 2px solid #ffffff;
+      }
+
+      .div-0-2-3,
+      .div-1-2-3,
+      .div-2-2-3,
+      .div-0-2-2,
+      .div-1-2-2,
+      .div-2-2-2{
+        width: 50% !important;
+      }
+
+
+    }
+
+    /* Media Queries */
+    @media screen and (max-width: 616px) {
+      .imgs2, .imgs1 {
+        width: 100% !important;
+        min-width: auto !important;
+      }
+
+      .imgs2 td {
+        border-top: 2px solid #fff !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+      }
+
+      .imgs1 td {
+        border-right: 0px !important;
+      }
+
+      .imgs1 {
+        max-width: 350px !important;
+      }
+      .imgs1_margin {
+        display: none !important;
+      }
+      .imgs1_resp {
+        padding-bottom: 30px !important;
+      }
+      .depart_logo {
+        text-align: right !important;
+        padding-right: 0 !important;
+      }
+      .depart_logo img {
+        margin: auto !important;
+        margin-right: 0 !important;
+      }
+      .depart_logo2 {
+        text-align: left !important;
+        padding-left: 0 !important;
+      }
+      .depart_logo2 img {
+        margin: auto !important;
+        margin-left: 0 !important;
+      }
+
+      #change_order{
+      	display: flex;
+      	flex-direction: column;
+      }
+
+      #order_1{
+      	order: 1;
+      }
+
+      #order_1 img{
+      	padding-bottom: 30px !important;
+      }
+
+      #order_2{
+      	order: 2;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .news_table td{
+        display: block;
+        margin: auto;
+      }
+
+      .line_mobile {
+        display: none !important;
+      }
+    }
+
+    @media screen and (max-width: 570px) {
+      .block-column {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        direction: ltr !important;
+      }
+
+      /*.mobile_title{
+        font-size: 22px !important  ;
+      }
+      */
+      .border-td-1,
+      .border-td-2{
+        border-bottom: 2px solid #323232 !important;
+      }
+
+      .border-td-2,
+      .border-td-3{
+        border-top: 2px solid #323232 !important;
+      }
+
+      .border-td-1,
+      .border-td-2,
+      .border-td-3{
+        border-left: 4px solid #323232 !important;
+        border-right: 4px solid #323232 !important;
+      }
+
+      .btn_noticias_1{
+        max-width: 350px !important;
+        width: 100% !important;
+        float: none !important;
+      }
+
+      .btn_noticias_2{
+        max-width: 100% !important;
+        width: 100% !important;
+        float: none !important;
+      }
+
+      .hide-content{
+        display: none !important;
+      }
+
+      .footer_mobile {
+        display: block;
+      }
+      .footer_mobile2 {
+        display: block;
+        margin-left: 40px;
+        margin-top: 70px;
+      }
+
+      .center-on-narrow {
+        text-align: center !important;
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        float: none !important;
+      }
+    }
+
+    @media screen and (max-width: 540px) {
+		/*.mobile-title{
+        font-size: 32px !important;
+      }*/
+
+      .mobile-text{
+        font-size:14px !important;
+      }
+      .more-margin{
+        height: 20px !important;
+      }
+
+      .go_title{
+      	width: 120px !important;
+      }
+
+      .check_list ul li{
+        line-height: 25px !important;
+        margin-bottom: 10px !important;
+      }
+    }
+
+    @media screen and (max-width: 514px){
+      .no-border-right{
+        border-right: 0px !important;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      /* What it does: Forces elements to resize to the full width of their container. Useful for resizing images beyond their max-width. */
+      .fluid {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      /* What it does: Forces table cells into full-width rows. */
+      .stack-column,
+      .stack-column-center {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        direction: ltr !important;
+      }
+      /* And center justify these ones. */
+      .stack-column-center {
+        text-align: center !important;
+      }
+
+      /* What it does: Generic utility class for centering. Useful for images, buttons, and nested tables. */
+      .center-on-narrow {
+        width: 100% !important;
+      }
+
+      .block_mobile {
+        display: block !important;
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .title{
+      	width: 100% !important;
+      }
+
+      .mobile-text{
+        font-size:12px !important;
+        padding-right: 8px !important;
+      }
+
+      .test_description{
+        line-height: 13px !important;
+      }
+
+    }
+
+    @media screen and (max-width: 560px) {
+      .div_emails {
+        width: 50% !important;
+        display: inline-block !important;
+        margin-top: 20px !important;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .div_emails {
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body width="100%" bgcolor="#ebebed" style="margin: 0; mso-line-height-rule: exactly;">
+  <center style="width: 100%; background: #ebebed;">
+    <div style="max-width: 600px; margin: auto;">
+    	<!--[if mso]>
+      <table cellspacing="0" cellpadding="0" border="0" width="600" align="center">
+        <tr>
+          <td>
+      <![endif]-->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;">
+<?php if (!isset($_GET['ver'])) {?>
+		        <tr>
+		          <td align="center" valign="top" bgcolor="#ebebed" width="100%">
+		            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		              <tr>
+		                <td align="center" >
+		                  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		                    <tr>
+		                      <td height="">
+		                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display: block;" border="0" height="10">
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td align="center"><a href="<?php if ($newsletter_id_historico > 0 && $codigo != '') {echo $url_site."ver-news.php?id=".$id."&hist=".$newsletter_id_historico."&codigo=".$codigo;
+	} else {
+		echo $url_site."ver-news.php?id=".$id;
+	}
+	?>" target="_blank" style="font-family: Tahoma, Arial, sans-serif; color: #3d3d3d; font-size:12px; line-height: 16px; text-decoration:none;">Clique <span style=" color: #a7d345; ">aqui</span> se não conseguir visualizar correctamente este email.</a></td>
+		                    </tr>
+		                  </table>
+		                </td>
+		              </tr>
+		            </table>
+		          </td>
+		        </tr>
+	<?php }?>
+        <tr>
+          <td align="center" valign="top" bgcolor="#ebebed" width="100%" height="10">
+            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display: block;" border="0" height="10">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <!--[if mso]>
+            <table cellspacing="0" cellpadding="0" border="0" width="600" align="center">
+              <tr>
+                <td>
+            <![endif]-->
+            <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;">
+              <tr>
+                <td>
+                <!--[if mso]>
+                <table cellspacing="0" cellpadding="0" border="0" width="600" align="left">
+                <tr>
+                <td>
+                <![endif]-->
+                <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;">
+                  <tr>
+                    <td>
+                      <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                        <tr>
+                          <td width="10" height="20">
+                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="20" style="display: block:" border="0" />
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <!--[if mso]>
+                      <table cellspacing="0" cellpadding="0" border="0" width="600" align="left" valign="top">
+                      <tr>
+                      <td align="left" valign="top">
+                      <![endif]-->
+                      <table align="left" valign="top" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;" bgcolor="#eeeeee">
+                        <tr>
+                          <!--[if mso]>
+                          <td width="300" align="left" valign="top">
+                          <table cellspacing="0" cellpadding="0" border="0" width="300" align="left" valign="top" bgcolor="#eeeeee">
+                          <![endif]-->
+                          <td width="100%" align="center" valign="top">
+                            <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                              <tr>
+                                <!-- <td width="39" height="50" align="left">
+                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="39" height="50" style="display:block" border="0" />
+                                </td> -->
+                                <td width="100%" height="50" align="center">
+                                  <a href="<?php echo replaceLinks(ROOTPATH_HTTP, $newsletter_id_historico, $codigo);?>" target="_blank">
+                                    <img src="<?php echo $url_site;?>imgs/imgs_news/logo.png" height="50" style="display:block" border="0" />
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <!--[if mso]>
+                          </table>
+                          </td>
+                          <![endif]-->
+                          <!--[if mso]>
+                          <td width="300" align="left" valign="top">
+                          <table cellspacing="0" cellpadding="0" border="0" width="300" align="left" valign="top" bgcolor="#eeeeee">
+                          <![endif]-->
+                          <!-- <td width="50%" align="right" valign="top" class="hide-content">
+                            <table align="right" valign="top" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#eeeeee">
+                              <tr>
+                                <td height="22" align="right" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; color: #1d1d1b; font-size: 22px; line-height: 22px; letter-spacing: 0.8px;">
+<?php if ($mes_topo != '') {
+	echo $mes_topo;
+} else {?>
+	                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="22" style="display:block" border="0" />
+	<?php }?>
+                                </td>
+                                <td width="32" height="22" align="right">
+                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="32" height="22" style="display:block" border="0" />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td height="22" align="right" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 400; color: #2fad49; font-size: 22px; line-height: 22px; letter-spacing: 0.8px;">
+<?php if ($ano_topo != '') {
+	echo $ano_topo;
+} else {?>
+	                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="22" style="display:block" border="0" />
+	<?php }?>
+                                </td>
+                                <td width="32" height="22" align="right">
+                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="32" height="22" style="display:block" border="0" />
+                                </td>
+                              </tr>
+                            </table>
+                          </td> -->
+                          <!--[if mso]>
+                          </table>
+                          </td>
+                          <![endif]-->
+                        </tr>
+                      </table>
+                      <!--[if mso]>
+                      </td>
+                      </tr>
+                      </table>
+                      <![endif]-->
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                        <tr>
+                          <td width="10" height="25">
+                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="25" style="display:block" border="0" />
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <!--[if mso]>
+                </td>
+                </tr>
+                </table>
+                <![endif]-->
+                </td>
+              </tr>
+            </table>
+            <!--[if mso]>
+                </td>
+              </tr>
+            </table>
+            <![endif]-->
+          </td>
+        </tr>
+			  <tr>
+  		    <td align="center" valign="top">
+<?php if ($totalRows_rsTemas > 0) {?>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+					        <tr>
+					        	<td align="center" valign="top">
+	<?php
+	$t = 1;
+	while ($row_rsTemas = $rsTemas->fetch()) {
+		$query_rsProdutos = "SELECT *  FROM news_produtos n WHERE id_tema='".$row_rsTemas['id']."' AND visivel='1' ORDER BY ordem ASC, id ASC";
+		$rsProdutos       = DB::getInstance()->prepare($query_rsProdutos);
+		$rsProdutos->execute();
+		$row_rsProdutos       = $rsProdutos->fetch(PDO::FETCH_ASSOC);
+		$totalRows_rsProdutos = $rsProdutos->rowCount();
+		DB::close();
+
+		//Produtos em grelha
+		if ($row_rsTemas['tipo'] == 1) {
+			if ($totalRows_rsProdutos > 0) {
+				$rsProdutos->execute();
+				$totalProdutos = $totalRows_rsProdutos;
+				$l             = 0;
+				$linhas        = $totalProdutos/2;?>
+				<!--[if mso]>
+				                          <table border="0" cellspacing="0" cellpadding="0" align="center" width="600">
+				                            <tr>
+				                              <td align="center" valign="top" width="600">
+				                          <![endif]-->
+				<?php if ($row_rsTemas['titulo'] != '') {?>
+					                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+					                              <tr>
+					                                <td height="80">
+					                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif"height="20" border="0" style="display:block" />
+					                                </td>
+					                              </tr>
+					                            </table>
+					                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+					                              <tr>
+					                                <td width="40"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="40"></td>
+					                                <td valign="top" align="center" height="50" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 20px; color: <?php echo $cor_news;?>; line-height: 25px;">
+					<?php echo $row_rsTemas['titulo'];?>
+					                                </td>
+					                                <td width="40"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="40"></td>
+					                              </tr>
+					                            </table>
+					                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+					                              <tr>
+					                                <td height="20">
+					                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+					                                </td>
+					                              </tr>
+					                            </table>
+					<?php }?>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+				                            <tr>
+				                              <td width="100%" align="center">
+				<?php
+				$check_view_more = 0;
+				while ($linhas > 0) {
+					$row_rsProdutos = $rsProdutos->fetch(PDO::FETCH_ASSOC);
+
+					if ($totalProdutos > 0) {
+						if ($l == 0) {?>
+							                                      <!--[if mso]>
+							                                      <table border="0" cellspacing="0" cellpadding="0" align="center" width="600">
+							                                        <tr>
+							                                          <td width="15" height="15">
+							                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="15" height="15">
+							                                          </td>
+							                                          <td align="left" valign="top" width="180">
+							                                      <![endif]-->
+							<?php } else {?>
+							<!--[if mso]>
+							                                          </td>
+							                                          <td align="left" valign="top" width="180">
+							                                    <![endif]-->
+							<?php }
+						$totalProdutos--;?>
+						<!--[if mso]>
+						                                    <table border="0" cellspacing="0" cellpadding="0" align="center" width="180">
+						                                      <tr>
+						                                        <td align="left" valign="top" width="180">
+						                                    <![endif]-->
+						                                    <div style="display: inline-block; width: 100%; padding: 0 15px; max-width: 255px; vertical-align: top;">
+						                                      <table width="255" border="0" cellspacing="0" cellpadding="0">
+						                                        <tr>
+						                                          <td height="161" align="center" valign="top">
+						                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<?php if ($row_rsProdutos['preco_ant'] > $row_rsProdutos['preco']) {
+							/*Calcular percentagem de desconto*/
+							$percentagem = round(100-(($row_rsProdutos['preco']*100)/$row_rsProdutos['preco_ant']));
+							?>
+							                                                <!-- <tr>
+							                                                  <td>
+							                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+							                                                      <tr>
+							                                                        <td width="89" align="left">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/promocao.jpg" width="89" border="0" style="display:block" />
+							                                                        </td>
+							                                                        <td width="30" align="right" style="color: <?php echo $cor_botao;?>; font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 11px; line-height: 15px; text-align: center; letter-spacing: 0.1px; border: 1px solid <?php echo $cor_botao;?>; border-bottom: 0;">
+							                                                          -<?php echo $percentagem;?>%
+							                                                        </td>
+							                                                      </tr>
+							                                                    </table>
+							                                                  </td>
+							                                                </tr> -->
+							<?php } else if ($row_rsProdutos['novidade'] == 1) {?>
+							                                                <!-- <tr>
+							                                                  <td width="89" align="left">
+							                                                    <img src="<?php echo $url_site;?>imgs/imgs_news/novidade.jpg" width="89" border="0" style="display:block" />
+							                                                  </td>
+							                                                </tr> -->
+							<?php } else {?>
+							                                                <!-- <tr>
+							                                                  <td height="15" align="right">
+							                                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="15" border="0" style="display:block" />
+							                                                  </td>
+							                                                </tr> -->
+							<?php }?>
+						<tr>
+						                                                <td>
+						<?php if ($row_rsProdutos['link'] != '') {?>
+							                                                    <a href="<?php echo replaceLinks($url_site.$row_rsProdutos['link'], $newsletter_id_historico, $codigo);?>" target="_blank">
+							<?php }?>
+						                                                    <?php if ($row_rsProdutos['imagem1'] != "" && file_exists('../../../imgs/imgs_news/produtos/'.$row_rsProdutos['imagem1'])) {?>
+							                                                      <?php $tamanho = tamanho_imagem("../../../imgs/imgs_news/produtos/".$row_rsProdutos['imagem1'], 255, 255);?>
+							                                                      <img src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem1'];?>" <?php echo $tamanho;
+							?>border="0" style="display: block; max-width: 255px;" />
+							<?php
+							if ($_GET['gera_imagens'] == 1) {
+								if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem1'])) {
+									@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem1'], $pasta_imagens.'/'.$row_rsProdutos['imagem1']);
+								}
+							}
+							?>
+							                                                    <?php }?>
+						                                                  <?php if ($row_rsProdutos['link'] != '') {?>
+							</a>
+							<?php }?>
+						                                                </td>
+						                                              </tr>
+						                                            </table>
+						                                          </td>
+						                                        </tr>
+						                                      </table>
+						                                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                      	<tr>
+						                                          <td>
+						                                        		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                              <tr>
+						                                                <td height="30">
+						                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" height="30">
+						                                                </td>
+						                                              </tr>
+						                                              <!-- <tr>
+						                                                <td align="center" height="22" style="font-family: Tahoma, Arial, sans-serif; font-weight: 400; font-size: 10px; color: <?php echo $cor_botao;?>; line-height: 22px; text-transform: uppercase;">
+						<?php
+						$query_rsCategoria = "SELECT nome FROM l_categorias_en WHERE id = '".$row_rsProdutos['categoria_id']."'";
+						$rsCategoria       = DB::getInstance()->prepare($query_rsCategoria);
+						$rsCategoria->execute();
+						$row_rsCategoria = $rsCategoria->fetch(PDO::FETCH_ASSOC);
+						DB::close();
+
+						echo $row_rsCategoria['nome']?>
+						                                                </td>
+						                                              </tr> -->
+						                                              <tr>
+						                                                <td width="100%" colspan="2" height="50" align="left" valign="top">
+						                                                  <a href="<?php if ($row_rsProdutos['link'] != '') {echo replaceLinks($url_site.$row_rsProdutos['link'], $newsletter_id_historico, $codigo);
+						} else {
+							echo 'javascript:;'?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; padding-right: 50px; font-weight: 800; font-size: 13px; color: #000000; line-height: 17px; width: 100%;"><?php echo $row_rsProdutos['nome']?></a>
+							                                                </td>
+							                                              </tr>
+							<?php if ($row_rsProdutos['descricao'] != '') {?>
+								<!-- <tr>
+								                                                  <td height="22" align="center" style="font-family: Tahoma, Arial, sans-serif; font-weight: 300; font-size: 10px; color: #949494; line-height: 22px;">
+								<?php echo $row_rsProdutos['descricao'];?>
+								</td>
+								                                                </tr> -->
+								<?php }
+						} else {?>
+							                                                <!-- <tr>
+							                                                  <td height="20">
+							                                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" height="20">
+							                                                  </td>
+							                                                </tr> -->
+							<?php }?>
+						                                              <!-- <tr>
+						                                                <td height="15">
+						                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" height="15">
+						                                                </td>
+						                                              </tr> -->
+
+						                                              <!-- <tr>
+						                                                <td height="20">
+						                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" height="20">
+						                                                </td>
+						                                              </tr> -->
+						                                              <tr align="left">
+						                                                <td>
+						<?php if (!empty($row_rsProdutos['preco_ant']) && !empty(intval($row_rsProdutos['preco_ant']))) {
+							$price_color = 'color: #FF0000;';
+
+						} else {
+							$price_color = 'color: #000000;';
+
+						}
+						?>
+						                                                    <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                      <tr>
+						                                                        <td height="20" align="left" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 15px; <?php echo $price_color;?>line-height: 20px;">
+						<?php echo number_format($row_rsProdutos['preco'], 2, ",", ".");
+						?>&pound;
+
+						                                                        </td>
+						                                                      </tr>
+						<?php if ($row_rsProdutos['preco_ant'] > $row_rsProdutos['preco']) {?>
+							<tr>
+							                                                          <td height="20" align="left" style="font-family: Tahoma, Arial, sans-serif; font-weight: 300; font-size: 12px; color: #000000; line-height: 20px; text-decoration: line-through;">
+							<?php echo number_format($row_rsProdutos['preco_ant'], 2, ",", ".");
+							?>&pound;
+
+							                                                          </td>
+							                                                        </tr>
+							<?php } else {?>
+							                                                        <tr>
+							                                                          <td height="20">
+							                                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" height="20">
+							                                                          </td>
+							                                                        </tr>
+							<?php }?>
+						                                                    </table>
+						                                                </td>
+
+						                                                <td align="center">
+						                                                  <a href="<?php echo replaceLinks($url_site.$row_rsProdutos['link'], $newsletter_id_historico, $codigo);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+						                                                    <table align="center" border="0" cellpadding="0" cellspacing="0">
+						                                                      <tr>
+						                                                        <td style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 12px; line-height: 12px; padding: 12px 20px 12px 20px; letter-spacing: 0.8px; text-transform: uppercase; border: 1px solid <?php echo $cor_botao;?>">
+						                                                          <a href="<?php echo replaceLinks($url_site.$row_rsProdutos['link'], $newsletter_id_historico, $codigo);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>">
+						                                                            Comprar
+						                                                          </a>
+						                                                        </td>
+						                                                      </tr>
+						                                                    </table>
+						                                                  </a>
+						                                                </td>
+						                                              </tr>
+						                                              <tr>
+						                                                <td height="30">
+						                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" height="30">
+						                                                </td>
+						                                              </tr>
+						                                            </table>
+						                                          </td>
+						                                        </tr>
+						                                      </table>
+						                                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                        <tr>
+						                                          <td width="10" height="25">
+						                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="10" height="25">
+						                                          </td>
+						                                        </tr>
+						                                      </table>
+						                                    </div>
+						                                    <!--[if mso]>
+						                                        </td>
+						                                      </tr>
+						                                    </table>
+						                                    <![endif]-->
+						<?php
+					}
+
+					$l++;
+					if ($l == 3) {?>
+						                                    <!--[if mso]>
+						                                        </td>
+						                                        <td width="15" height="15">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="15" height="15">
+						                                        </td>
+						                                      </tr>
+						                                    </table>
+						                                    <![endif]-->
+						<?php
+						$l = 0;
+						$linhas--;
+					}
+					$check_view_more++;
+				}?>
+				</td>
+				<?php //if ($l < 0): ?>
+
+				<?php //endif ?>
+				</tr>
+				<?php //if($row_rsTemas['espacamento'] == 1) { ?>
+				                              <!-- <tr>
+				                                <td height="60" bgcolor="#FFFFFF">
+				                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+				                                </td>
+				                              </tr> -->
+				<?php //} ?>
+				</table>
+				<?php if ($check_view_more > 0):?>
+				                            <table  width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+				                                <tr>
+				                                  <td width="100%">
+				                                      <table align="center" border="0" cellpadding="0" cellspacing="0">
+				                                        <tr>
+				                                          <td style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 12px; line-height: 12px; padding: 12px 25px 12px 25px; background: #f8f8f8; letter-spacing: 0.8px; text-transform: uppercase;">
+				                                            <a href="<?php echo $url_site;?>loja" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>">
+				                                              VER MAIS PRODUTOS
+				                                            </a>
+				                                          </td>
+				                                        </tr>
+				                                      </table>
+				                                  </td>
+				                                </tr>
+				                                <tr>
+				                                  <td height="60" bgcolor="#FFFFFF">
+				                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+				                                  </td>
+				                                </tr>
+				                            </table>
+				<?php endif?>
+				<!--[if mso]>
+				                              </td>
+				                            </tr>
+				                          </table>
+				                          <![endif]-->
+				<?php }
+			//Texto e/ou Imagens
+		} else {?>
+							            		<?php
+			$blocos = 0;
+			if ($row_rsTemas['titulo']) {?>
+										              <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+											              <tr>
+											              	<td width="40"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="40"></td>
+											                <td align="center" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 25px; color: <?php echo $cor_news;?>; line-height: 25px;"><?php echo $row_rsTemas['titulo'];
+				?></td>
+											                <td width="40"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" style="display:block" border="0" width="40"></td>
+											              </tr>
+				                            <tr>
+				                              <td height="20" colspan="3">
+				                                <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+				                              </td>
+				                            </tr>
+										            	</table>
+				<?php }?>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									              <tr>
+									                <td align="left" valign="top">
+			<?php if ($totalRows_rsProdutos > 0) {
+				$texto_principal = 1;
+				$prod            = 1;
+				$rsProdutos->execute();
+
+				while ($row_rsProdutos = $rsProdutos->fetch()) {
+					//Texto
+					if ($row_rsProdutos["tipo2"] == 2) {
+
+						//por causa do outlook que não aparecem as imagens quando são inseridas no ckeditor
+						$style_text = "font-family: Tahoma, Arial, sans-serif; font-size: 14px; color: #3d3d3d; line-height: 23px;";
+
+						if (strpos($row_rsProdutos["descricao"], "/imgs/uploads/images/") !== false) {
+							$style_text = "font-family: Tahoma, Arial, sans-serif; font-size: normal; color: #3d3d3d; line-height: normal;";
+
+						}
+
+						?>
+												                  			<!--[if mso]>
+																                  <table cellspacing="0" cellpadding="0" border="0" width="600">
+																                    <tr>
+																                      <td  align="left" valign="top" width="600">
+															                  <![endif]-->
+															                  <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+						                                      <tr>
+						                                        <td>
+						                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                            <tr>
+						                                              <td width="40"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" border="0" style="display:block;" /></td>
+						                                              <td width="100%" align="left" valign="top">
+						                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                  <!-- <tr>
+						                                                    <td width="30" height="30">
+						                                                      <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="30" height="30" border="0" style="display:block" />
+						                                                    </td>
+						                                                  </tr> -->
+						<?php if ($row_rsProdutos['titulo'] != "") {?>
+							                                                    <tr>
+							                                                      <td align="left" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 20px; color: <?php echo $cor_news;?>; line-height: 25px;"><?php echo $row_rsProdutos["titulo"];
+							?></td>
+							                                                    </tr>
+							                                                    <tr>
+							                                                      <td height="10"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="10" border="0" style="display:block" /></td>
+							                                                    </tr>
+							<?php }?>
+						                                                  <tr>
+						                                                    <td width="520" align="left" style="<?php echo $style_text;?>"><?php echo $row_rsProdutos["descricao"];
+						?></td>
+						                                                  </tr>
+						<?php if ($row_rsProdutos['link'] != "" && $row_rsProdutos["texto_botao"] != "") {?>
+							                                                    <tr>
+							                                                      <td height="30">
+							                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="30" border="0" style="display:block" />
+							                                                      </td>
+							                                                    </tr>
+							                                                    <tr>
+							                                                      <td align="center">
+							                                                        <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							                                                          <table align="center" border="0" cellpadding="0" cellspacing="0">
+							                                                            <tr>
+							                                                              <td style="color: <?php echo $cor_botao;?>; font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 12px; line-height: 12px; padding: 10px 30px 10px 30px; letter-spacing: 0.1px; text-transform: uppercase; border: 1px solid <?php echo $cor_botao;?>">
+							                                                                <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							<?php echo $row_rsProdutos["texto_botao"];?>
+							</a>
+							                                                              </td>
+							                                                            </tr>
+							                                                          </table>
+							                                                        </a>
+							                                                      </td>
+							                                                    </tr>
+							<?php }?>
+						                                                </table>
+						                                              </td>
+						                                              <td width="40"><img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" border="0" style="display:block" /></td>
+						                                            </tr>
+						                                          </table>
+						                                        </td>
+						                                      </tr>
+						<?php //if($row_rsTemas['espacamento'] == 1) { ?>
+						                                        <tr>
+						                                          <td height="60" bgcolor="#FFFFFF">
+						                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+						                                          </td>
+						                                        </tr>
+						<?php //} ?>
+						</table>
+															                  <!--[if mso]>
+															                      </td>
+															                    </tr>
+															                  </table>
+															                  <![endif]-->
+						<?php }
+					//2 Textos/Imagens
+					 elseif ($row_rsProdutos['tipo2'] == 4) {
+						$blocos++;?>
+						                                    <table width="100%" border="0" align="center" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" class="news_table">
+						                                      <tr>
+						                                        <td width="15" class="line_mobile">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display: block;"/>
+						                                        </td>
+						                                        <td width="280" align="center" valign="top">
+						                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                            <tr>
+						                                              <td width="280" align="left" valign="top">
+						<?php
+						if ($_GET['gera_imagens'] == 1) {
+							if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem1'])) {
+								@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem1'], $pasta_imagens.'/'.$row_rsProdutos['imagem1']);
+							}
+						}
+						?>
+						                                                <?php if ($row_rsProdutos['link'] != "") {?>
+							                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank">
+							<?php }?>
+						                                                  <img width="280" src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem1'];?>" border="0" style="display:block" />
+						<?php if ($row_rsProdutos['link'] != "") {?>
+							</a>
+							<?php }?>
+						                                              </td>
+						                                            </tr>
+						                                            <tr>
+						                                              <td width="280" align="left" valign="top">
+						                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                  <tbody>
+						                                                    <tr>
+						                                                      <td height="20">
+						                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="280" height="20" border="0" style="display:block" />
+						                                                      </td>
+						                                                    </tr>
+						<?php if ($row_rsProdutos["titulo"] != "") {?>
+							                                                      <tr>
+							                                                        <td width="280" height="36" align="left" valign="top">
+							                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+							                                                            <tbody>
+							                                                              <tr>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                                <td width="216" height="36" align="center" valign="top" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 15px; color: #3d3d3d; line-height: 17px;">
+							<?php echo $row_rsProdutos["titulo"];?>
+							                                                                </td>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                              </tr>
+							                                                            </tbody>
+							                                                          </table>
+							                                                        </td>
+							                                                      </tr>
+							<?php } else {?>
+							                                                      <tr>
+							                                                        <td height="36">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="36" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							<?php }?>
+						                                                    <?php if ($row_rsProdutos['descricao'] != "") {?>
+							                                                      <tr>
+							                                                        <td height="5">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="5" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							                                                      <tr>
+							                                                        <td width="280" height="85" align="left" valign="top">
+							                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+							                                                            <tbody>
+							                                                              <tr>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                                <td width="216" height="85" align="center" valign="top" style="font-family: Tahoma, Arial, sans-serif; font-weight: 400; font-size: 13px; color: #3d3d3d; line-height: 23px;">
+							<?php echo $row_rsProdutos["descricao"];?>
+							                                                                </td>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                              </tr>
+							                                                            </tbody>
+							                                                          </table>
+							                                                        </td>
+							                                                      </tr>
+							<?php }?>
+						                                                    <?php if ($row_rsProdutos['link'] != "" && $row_rsProdutos["texto_botao"] != "") {?>
+							                                                      <tr>
+							                                                        <td height="20">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							                                                      <tr>
+							                                                        <td width="280" height="25" align="center" valign="top">
+							<?php /*<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+							<tr>
+							<td width="75" align="center">
+							<a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']); ?>" target="_blank"><img src="<?php echo $url_site; ?>imgs/imgs_news/ler_mais.png" width="75" border="0" style="display:block" /></a>
+							</td>
+							</tr>
+							</tbody>
+							</table> */?>
+							                                                          <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: initial !important;">
+							                                                              <tr>
+							                                                                <td style="color: <?php echo $cor_botao;?>; font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 10px; line-height: 12px; padding: 6px 12px 6px 12px; letter-spacing: 0.1px; text-transform: uppercase; border: 1px solid <?php echo $cor_botao;?>;">
+							                                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							<?php echo $row_rsProdutos["texto_botao"];?>
+							</a>
+							                                                                </td>
+							                                                              </tr>
+							                                                            </table>
+							                                                          </a>
+							                                                        </td>
+							                                                      </tr>
+							<?php } else {?>
+							                                                      <tr>
+							                                                        <td width="20">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="20" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							<?php }?>
+						                                                    <tr>
+						                                                      <td height="20">
+						                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+						                                                      </td>
+						                                                    </tr>
+						                                                  </tbody>
+						                                                </table>
+						                                              </td>
+						                                            </tr>
+						                                          </table>
+						                                        </td>
+						                                        <td width="10">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" border="0" style="display: block;"/>
+						                                        </td>
+						                                        <td width="280" align="center" valign="top">
+						                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                            <tr>
+						                                              <td width="280" align="left" valign="top">
+						<?php
+						if ($_GET['gera_imagens'] == 1) {
+							if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem2'])) {
+								@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem2'], $pasta_imagens.'/'.$row_rsProdutos['imagem2']);
+							}
+						}
+						?>
+						                                                <?php if ($row_rsProdutos['link2'] != "") {?>
+							                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link2'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link2']);?>" target="_blank">
+							<?php }?>
+						                                                  <img width="280" src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem2'];?>" border="0" style="display: block;"/>
+						<?php if ($row_rsProdutos['link2'] != "") {?>
+							</a>
+							<?php }?>
+						                                              </td>
+						                                            </tr>
+						                                            <tr>
+						                                              <td width="280" align="left" valign="top">
+						                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                  <tbody>
+						                                                    <tr>
+						                                                      <td height="20">
+						                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="280" height="20" border="0" style="display: block;"/>
+						                                                      </td>
+						                                                    </tr>
+						<?php if ($row_rsProdutos["titulo2"] != "") {?>
+							                                                      <tr>
+							                                                        <td width="280" height="36" align="left" valign="top">
+							                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+							                                                            <tbody>
+							                                                              <tr>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                                <td width="216" height="36" align="center" valign="top" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 15px; color: #3d3d3d; line-height: 17px;">
+							<?php echo $row_rsProdutos["titulo2"];?>
+							                                                                </td>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                              </tr>
+							                                                            </tbody>
+							                                                          </table>
+							                                                        </td>
+							                                                      </tr>
+							<?php } else {?>
+							                                                      <tr>
+							                                                        <td height="36">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="36" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							<?php }?>
+						                                                    <?php if ($row_rsProdutos['descricao2'] != "") {?>
+							                                                      <tr>
+							                                                        <td height="20">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							                                                      <tr>
+							                                                        <td width="280" height="85" align="left" valign="top">
+							                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+							                                                            <tbody>
+							                                                              <tr>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                                <td width="216" height="85" align="center" valign="top" style="font-family: Tahoma, Arial, sans-serif; font-weight: 400; font-size: 12px; color: #3d3d3d; line-height: 23px;">
+							<?php echo $row_rsProdutos["descricao2"];?>
+							                                                                </td>
+							                                                                <td width="15">
+							                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+							                                                                </td>
+							                                                              </tr>
+							                                                            </tbody>
+							                                                          </table>
+							                                                        </td>
+							                                                      </tr>
+							<?php }?>
+						                                                    <?php if ($row_rsProdutos['link2'] != "" && $row_rsProdutos["texto_botao2"] != "") {?>
+							                                                      <tr>
+							                                                        <td height="20">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							                                                      <tr>
+							                                                        <td width="280" height="25" align="center" valign="top">
+							<?php /*<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+							<tr>
+							<td width="75" align="center">
+							<a href="<?php echo replaceLinks($row_rsProdutos['link2'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link2']); ?>" target="_blank"><img src="<?php echo $url_site; ?>imgs/imgs_news/ler_mais.png" width="75" border="0" style="display:block" /></a>
+							</td>
+							</tr>
+							</tbody>
+							</table> */?>
+							                                                          <a href="<?php echo replaceLinks($row_rsProdutos['link2'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link2']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: initial !important;">
+							                                                              <tr>
+							                                                                <td style="color: <?php echo $cor_botao;?>; font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 10px; line-height: 12px; padding: 6px 12px 6px 12px; letter-spacing: 0.1px; text-transform: uppercase; border: 1px solid <?php echo $cor_botao;?>;">
+							                                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link2'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link2']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							<?php echo $row_rsProdutos["texto_botao2"];?>
+							</a>
+							                                                                </td>
+							                                                              </tr>
+							                                                            </table>
+							                                                          </a>
+							                                                        </td>
+							                                                      </tr>
+							<?php } else {?>
+							                                                      <tr>
+							                                                        <td width="20">
+							                                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="20" border="0" style="display:block" />
+							                                                        </td>
+							                                                      </tr>
+							<?php }?>
+						                                                    <tr>
+						                                                      <td height="20">
+						                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="20" border="0" style="display:block" />
+						                                                      </td>
+						                                                    </tr>
+						                                                  </tbody>
+						                                                </table>
+						                                              </td>
+						                                            </tr>
+						                                          </table>
+						                                        </td>
+						                                        <td width="15" class="line_mobile">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+						                                        </td>
+						                                      </tr>
+						<?php //if($row_rsTemas['espacamento'] == 1) { ?>
+						                                        <tr>
+						                                          <td height="60" colspan="5">
+						                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+						                                          </td>
+						                                        </tr>
+						<?php //} ?>
+						</table>
+						<?php }
+					//Texto e Imagem
+					 elseif ($row_rsProdutos["tipo2"] == 1) {
+
+						//por causa do outlook que não aparecem as imagens quando são inseridas no ckeditor
+						$style_text = "font-family: Tahoma, Arial, sans-serif; font-size: 14px; color: #3d3d3d; line-height: 23px;";
+
+						if (strpos($row_rsProdutos["descricao"], "/imgs/uploads/images/") !== false) {
+							$style_text = "font-family: Tahoma, Arial, sans-serif; font-size: normal; color: #6d6e71; line-height: normal;";
+
+						}
+
+						$blocos++;?>
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+						                                      <tr>
+						                                        <td>
+						                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                            <tr>
+						                                              <td align="left" valign="top">
+						                                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+						                                                  <tr>
+						                                                    <td align="left" valign="top">
+						                                                      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+						                                                        <tr>
+						                                                          <td align="left">
+						                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                              <tr>
+						                                                                <td align="left" valign="top">
+						<?php
+						if ($_GET['gera_imagens'] == 1) {
+							if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem1'])) {
+								@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem1'], $pasta_imagens.'/'.$row_rsProdutos['imagem1']);
+							}
+						}
+						?>
+						                                                                  <?php if ($row_rsProdutos['link'] != "") {?>
+							                                                                    <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank">
+							<?php }?>
+						                                                                    <img width="100%" src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem1'];?>" border="0" style="display: block; max-width: 600px;" />
+						<?php if ($row_rsProdutos['link'] != "") {?>
+							</a>
+							<?php }?>
+						                                                                </td>
+						                                                              </tr>
+						                                                              <tr>
+						                                                                <td align="left">
+						                                                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                                    <tr>
+						                                                                      <td width="40">
+						                                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" border="0" style="display:block" />
+						                                                                      </td>
+						                                                                      <td align="left" valign="top">
+						                                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                                                          <tbody>
+						                                                                            <tr>
+						                                                                              <td height="30">
+						                                                                                <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="30" border="0" style="display:block" />
+						                                                                              </td>
+						                                                                            </tr>
+						<?php if ($row_rsProdutos['titulo']) {?>
+							                                                                              <tr>
+							                                                                                <td align="left" valign="top">
+							                                                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 20px; color: <?php echo $cor_news;?>; line-height: 25px; text-decoration: none"><?php echo $row_rsProdutos["titulo"];
+							?></a>
+							                                                                                </td>
+							                                                                              </tr>
+							                                                                              <tr>
+							                                                                                <td height="10">
+							                                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="10" border="0" style="display:block" />
+							                                                                                </td>
+							                                                                              </tr>
+							<?php }?>
+						                                                                            <tr >
+						                                                                              <td align="left" valign="top" style="<?php echo $style_text;?>">
+						<?php echo $row_rsProdutos["descricao"];?>
+						</td>
+						                                                                            </tr>
+						<?php if ($row_rsProdutos['link'] != "" && $row_rsProdutos["texto_botao"] != "") {?>
+							                                                                              <tr>
+							                                                                                <td height="30">
+							                                                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="30" border="0" style="display:block" />
+							                                                                                </td>
+							                                                                              </tr>
+							                                                                              <tr>
+							                                                                                <td align="left">
+							                                                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							                                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0">
+							                                                                                      <tr>
+							                                                                                        <td style="color: <?php echo $cor_botao;?>; font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 12px; line-height: 12px; padding: 10px 30px 10px 30px; letter-spacing: 0.1px; text-transform: uppercase; border: 1px solid <?php echo $cor_botao;?>">
+							                                                                                          <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; color: <?php echo $cor_botao;?>;">
+							<?php echo $row_rsProdutos["texto_botao"];?>
+							</a>
+							                                                                                        </td>
+							                                                                                      </tr>
+							                                                                                    </table>
+							                                                                                  </a>
+							                                                                                </td>
+							                                                                              </tr>
+							<?php }?>
+						                                                                          </tbody>
+						                                                                        </table>
+						                                                                      </td>
+						                                                                      <td width="40" height="40">
+						                                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" height="40" border="0" style="display:block" />
+						                                                                      </td>
+						                                                                    </tr>
+						                                                                  </table>
+						                                                                </td>
+						                                                              </tr>
+						<?php //if($row_rsTemas['espacamento'] == 1) { ?>
+						                                                                <tr>
+						                                                                  <td height="60" bgcolor="#FFFFFF">
+						                                                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+						                                                                  </td>
+						                                                                </tr>
+						<?php //} ?>
+						                                                            </table>
+						                                                          </td>
+						                                                        </tr>
+						                                                      </table>
+						                                                    </td>
+						                                                  </tr>
+						                                                </table>
+						                                              </td>
+						                                            </tr>
+						                                          </table>
+						                                        </td>
+						                                      </tr>
+						                                      <!-- <tr>
+						                                        <td width="40" height="40">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" height="40" border="0" style="display:block" />
+						                                        </td>
+						                                      </tr> -->
+						                                    </table>
+						<?php }
+					// Botão
+					 elseif ($row_rsProdutos["tipo2"] == 6) {
+						$blocos++;?>
+						                                    <?php if ($row_rsProdutos['titulo'] != '') {?>
+							                                      <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+							                                        <tr>
+							                                          <td width="30">
+							                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="30" border="0" style="display:block" />
+							                                          </td>
+							                                          <td align="center">
+							                                            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+							                                              <tr>
+							                                                <td height="40">
+							                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="100%" height="40" border="0" style="display:block" />
+							                                                </td>
+							                                              </tr>
+							                                              <tr>
+							                                                <td width="100%" align="left">
+							                                                  <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+							                                                    <tr>
+							                                                      <!-- <td width="40" >
+							                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" height="40" border="0" style="display:block" />
+							                                                      </td> -->
+							                                                      <td width="100%" style="font-family: Tahoma, Arial, sans-serif; font-weight: 600; font-size: 20px;color: #000000; text-align: center; line-height: 25px;">
+							<?php echo $row_rsProdutos['titulo'];?>
+							                                                      </td>
+							                                                      <!-- <td width="40">
+							                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="40" height="40" border="0" style="display:block" />
+							                                                      </td> -->
+							                                                    </tr>
+							                                                  </table>
+							                                                </td>
+							                                              </tr>
+							                                              <tr>
+							                                                <td height="40">
+							                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="100%" height="40" border="0" style="display:block" />
+							                                                </td>
+							                                              </tr>
+							                                              <tr>
+							                                                <td align="center" width="100%" height="40">
+							                                                  <table>
+							                                                    <tr>
+							                                                      <td height="10" width="40">
+							                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="10" border="0" style="display:block" />
+							                                                      </td>
+							                                                      <td align="center">
+							                                                        <table align="center" border="0" cellspacing="0" cellpadding="0">
+							                                                          <tr>
+							                                                            <td align="center" bgcolor="<?php echo $cor_news;?>" height="40" style="padding: 0 20px; border: 1px solid <?php echo $cor_news;?>;">
+							                                                              <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; text-align: center; color: #ffffff; font-size: 12px; line-height: 15px; letter-spacing: 0.1px; text-transform: uppercase;">
+							<?php echo $row_rsProdutos['texto_botao'];?>
+							                                                              </a>
+							                                                            </td>
+							                                                          </tr>
+							                                                        </table>
+							                                                      </td>
+							                                                      <td height="10" width="40">
+							                                                        <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="10" border="0" style="display:block" />
+							                                                      </td>
+							                                                    </tr>
+							                                                  </table>
+							                                                </td>
+							                                              </tr>
+							                                              <tr>
+							                                                <td height="60">
+							                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="100%" height="60" border="0" style="display:block" />
+							                                                </td>
+							                                              </tr>
+							                                            </table>
+							                                          </td>
+							                                          <td width="30">
+							                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="30" border="0" style="display:block" />
+							                                          </td>
+							                                        </tr>
+							                                      </table>
+							<?php } else {?>
+							                                      <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+							                                        <tr>
+							                                          <td align="center" width="100%">
+							                                            <table>
+							                                              <tr>
+							                                                <td height="10" width="40">
+							                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="10" border="0" style="display:block" />
+							                                                </td>
+							                                                <td align="center" height="40">
+							                                                  <table align="center" border="0" cellspacing="0" cellpadding="0">
+							                                                    <tr>
+							                                                      <td align="center" height="40" style="padding: 0 20px; border: 1px solid <?php echo $cor_botao;?>;">
+							                                                        <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; text-align: center; color: <?php echo $cor_botao;?>; font-size: 12px; line-height: 15px; letter-spacing: 0.1px; text-transform: uppercase;">
+							<?php echo $row_rsProdutos['texto_botao'];?>
+							                                                        </a>
+							                                                      </td>
+							                                                    </tr>
+							                                                  </table>
+							                                                </td>
+							                                                <td height="10" width="40">
+							                                                  <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="10" border="0" style="display:block" />
+							                                                </td>
+							                                              </tr>
+							                                            </table>
+							                                          </td>
+							                                        </tr>
+							                                        <tr>
+							                                          <td height="60">
+							                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="100%" height="60" border="0" style="display:block" />
+							                                          </td>
+							                                        </tr>
+							                                      </table>
+							<?php }?>
+						                                    <?php if ($row_rsTemas['espacamento'] == 1) {?>
+							                                      <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+							                                        <tr>
+							                                          <td height="50" bgcolor="#FFFFFF">
+							                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="50" border="0" style="display:block" />
+							                                          </td>
+							                                        </tr>
+							                                      </table>
+							<?php }?>
+						                                  <?php }
+					//2 Imagens
+					 elseif ($row_rsProdutos['tipo2'] == 5) {
+						$blocos++;?>
+						                                    <table width="100%" border="0" align="center" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" class="news_table">
+						                                      <tr>
+						                                        <td width="15" class="line_mobile">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block"/>
+						                                        </td>
+						                                        <td width="280" align="center" valign="top">
+						                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                            <tr>
+						                                              <td width="280" align="left" valign="top">
+						<?php
+						if ($_GET['gera_imagens'] == 1) {
+							if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem1'])) {
+								@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem1'], $pasta_imagens.'/'.$row_rsProdutos['imagem1']);
+							}
+						}
+						?>
+						                                                <?php if ($row_rsProdutos['link'] != "") {?>
+							                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank">
+							<?php }?>
+						                                                  <img width="280" src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem1'];?>" border="0" style="display:block" />
+						<?php if ($row_rsProdutos['link'] != "") {?>
+							</a>
+							<?php }?>
+						                                              </td>
+						                                            </tr>
+						                                          </table>
+						                                        </td>
+						                                        <td width="10">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" border="0" style="display:block" />
+						                                        </td>
+						                                        <td width="280" align="center" valign="top">
+						                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                                            <tr>
+						                                              <td width="280" align="left" valign="top">
+						<?php
+						if ($_GET['gera_imagens'] == 1) {
+							if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem2'])) {
+								@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem2'], $pasta_imagens.'/'.$row_rsProdutos['imagem2']);
+							}
+						}
+						?>
+						                                                <?php if ($row_rsProdutos['link2'] != "") {?>
+							                                                  <a href="<?php echo replaceLinks($row_rsProdutos['link2'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link2']);?>" target="_blank">
+							<?php }?>
+						                                                  <img width="280" src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem2'];?>" border="0" style="display:block" />
+						<?php if ($row_rsProdutos['link2'] != "") {?>
+							</a>
+							<?php }?>
+						                                              </td>
+						                                            </tr>
+						                                          </table>
+						                                        </td>
+						                                        <td width="15" class="line_mobile">
+						                                          <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="15" border="0" style="display:block" />
+						                                        </td>
+						                                      </tr>
+						<?php //if($row_rsTemas['espacamento'] == 1) { ?>
+						                                        <tr>
+						                                          <td height="60" colspan="5">
+						                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+						                                          </td>
+						                                        </tr>
+						<?php //} ?>
+						</table>
+						<?php } else {//Imagem ?>
+						<table style="border-left: 0; border-right: 0" width="100%" border="0" cellspacing="0" cellpadding="0" >
+						                                      <tr>
+						                                        <td align="center" valign="middle">
+						<?php
+						if ($_GET['gera_imagens'] == 1) {
+							if (!file_exists($pasta_imagens.'/'.$row_rsProdutos['imagem1'])) {
+								@copy($url_site_file.'imgs/imgs_news/produtos/'.$row_rsProdutos['imagem1'], $pasta_imagens.'/'.$row_rsProdutos['imagem1']);
+							}
+						}
+						?>
+						                                          <?php if ($row_rsProdutos['link'] != "") {?>
+							                                            <a href="<?php echo replaceLinks($row_rsProdutos['link'], $newsletter_id_historico, $codigo, $row_rsProdutos['tipo_link1']);?>" target="_blank">
+							<?php }?>
+						                                            <img width="100%" src="<?php echo $url_site;?>imgs/imgs_news/produtos/<?php echo $row_rsProdutos['imagem1'];?>" border="0" style="display: block; max-width:600px;" />
+						<?php if ($row_rsProdutos['link'] != "") {?>
+							</a>
+							<?php }?>
+						</td>
+						                                      </tr>
+						<?php //if($row_rsTemas['espacamento'] == 1) { ?>
+						                                        <tr>
+						                                          <td height="60" bgcolor="#FFFFFF">
+						                                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="60" border="0" style="display:block" />
+						                                          </td>
+						                                        </tr>
+						<?php //} ?>
+						</table>
+						<?php }
+					$prod++;
+				}
+			}?>
+									                </td>
+									              </tr>
+									              <!-- <tr>
+			                            <td height="40" bgcolor="#FFFFFF">
+			                              <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" height="40" border="0" style="display:block" />
+			                            </td>
+			                          </tr> -->
+									            </table>
+			<?php }
+		$t++;
+	}?>
+	</td>
+	                </tr>
+	              </table>
+	<?php }?>
+          </td>
+        </tr>
+      </table>
+      <!--[if mso]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+      <table align="left" width="100%" border="0" cellspacing="0" bgcolor="#f8f8f8" cellpadding="0" style="max-width: 600px;">
+        <tr>
+          <td>
+          <!--[if mso]>
+          <table cellspacing="0" cellpadding="0" border="0" width="600" align="left">
+          <tr>
+          <td>
+          <![endif]-->
+          <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8" style="max-width: 600px;">
+            <tr>
+              <td>
+                <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td width="10" height="18">
+                      <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="18" style="display:block" border="0" />
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <!--[if mso]>
+                <table cellspacing="0" cellpadding="0" border="0" width="600" align="left" valign="top">
+                <tr>
+                <td align="left" valign="top">
+                <![endif]-->
+
+                <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td height="25" align="center">
+<?php if ($link_rodape != '' && $texto_rodape != '') {?>
+	                        <a href="<?php echo replaceLinks($link_rodape, $newsletter_id_historico, $codigo);?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; color: #2fad49; font-size: 15px; line-height: 25px; letter-spacing: 0.8px;"><?php echo $texto_rodape;
+	?></a>
+	<?php }?>
+</td>
+                  </tr>
+                </table>
+
+                <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td height="25" align="center">
+<?php if ($contacto_rodape != '') {?>
+	                        <a href="tel:<?php echo str_replace(array(' ', '(', ')'), '', $contacto_rodape);?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 400; color: #a5a5a5; font-size: 15px; line-height: 25px; letter-spacing: 0.5px;">Apoio ao Cliente: <?php echo $contacto_rodape;
+	?></a>
+	<?php }?>
+                    </td>
+                  </tr>
+                </table>
+
+                <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td width="10" height="18">
+                      <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="18" style="display:block" border="0" />
+                    </td>
+                  </tr>
+                </table>
+
+                <table align="center" valign="top" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td height="25" align="center" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; color: #000000; font-size: 13px; line-height: 15px; letter-spacing: 0.5px;">
+                      Sign-nos
+                    </td>
+                  </tr>
+                </table>
+                <table align="center" valign="bottom" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td height="25" align="center" valign="bottom">
+                      <table align="center" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                        <tr>
+<?php if ($facebook == 1) {?>
+	                            <td height="17" align="center">
+	                              <a href="<?php echo replaceLinks($link_facebook, $newsletter_id_historico, $codigo);?>" target="_blank">
+	                                <img src="<?php echo $url_site;?>imgs/imgs_news/facebook-icon.png" height="17" style="display:block" border="0" />
+	                              </a>
+	                            </td>
+	<?php }?>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <table align="left" valign="top" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;" bgcolor="#f8f8f8">
+                  <tr>
+                    <!--[if mso]>
+                    <td width="300" align="left" valign="top">
+                    <table cellspacing="0" cellpadding="0" border="0" width="300" align="left" valign="top" bgcolor="#3d3d3d">
+                    <![endif]-->
+                    <!-- <td width="50%" align="left" valign="top" class="footer_mobile">
+                      <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#3d3d3d">
+                        <tr>
+                          <td width="39" height="25" align="left">
+                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="39" height="25" style="display:block" border="0" />
+                          </td>
+                          <td height="25" align="left">
+<?php if ($link_rodape != '' && $texto_rodape != '') {?>
+	                              <a href="<?php echo replaceLinks($link_rodape, $newsletter_id_historico, $codigo);?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; color: #ffffff; font-size: 15px; line-height: 25px; letter-spacing: 0.8px;"><?php echo $texto_rodape;
+	?></a>
+	<?php }?>
+                          </td>
+                        </tr>
+                      </table>
+                      <table align="left" border="0" cellspacing="0" cellpadding="0" bgcolor="#3d3d3d">
+                        <tr>
+                          <td width="39" height="3" align="left">
+                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="39" height="3" style="display:block" border="0" />
+                          </td>
+                          <td width="25" height="3" align="left" style="background-color: #2fad49;">
+                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="25" height="3" style="display:block" border="0" />
+                          </td>
+                        </tr>
+                      </table>
+                      <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#3d3d3d">
+                        <tr>
+                          <td width="39" height="25" align="left">
+                            <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="39" height="25" style="display:block" border="0"/>
+                          </td>
+                          <td height="25" align="left">
+<?php if ($contacto_rodape != '') {?>
+	                              <a href="tel:<?php echo str_replace(array(' ', '(', ')'), '', $contacto_rodape);?>" target="_blank" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 400; color: #ffffff; font-size: 15px; line-height: 25px; letter-spacing: 0.5px;"><?php echo $contacto_rodape;
+	?></a>
+	<?php }?>
+</td>
+                        </tr>
+                      </table>
+                    </td> -->
+                    <!--[if mso]>
+                    </table>
+                    </td>
+                    <![endif]-->
+                    <!--[if mso]>
+                    <td width="300" align="left" valign="top">
+                    <table cellspacing="0" cellpadding="0" border="0" width="300" align="left" valign="top" bgcolor="#3d3d3d">
+                    <![endif]-->
+                    <!-- <td width="50%" align="left" valign="top" class="footer_mobile2">
+                      <table align="left" valign="top" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#3d3d3d">
+                        <tr>
+                          <td height="25" align="left" style="text-decoration: none; font-family: Tahoma, Arial, sans-serif; font-weight: 600; color: #ffffff; font-size: 13px; line-height: 15px; letter-spacing: 0.5px;">
+                            SIGA-NOS
+                          </td>
+                        </tr>
+                      </table>
+                      <table align="left" valign="bottom" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#3d3d3d">
+                        <tr>
+                          <td height="25" align="left" valign="bottom">
+                            <table align="left" border="0" cellspacing="0" cellpadding="0" bgcolor="#3d3d3d">
+                              <tr>
+<?php if ($facebook == 1) {?>
+	                                  <td height="17" align="left">
+	                                    <a href="<?php echo replaceLinks($link_facebook, $newsletter_id_historico, $codigo);?>" target="_blank">
+	                                      <img src="<?php echo $url_site;?>imgs/imgs_news/facebook.png" height="17" style="display:block" border="0" />
+	                                    </a>
+	                                  </td>
+	<?php }?>
+                                <?php if ($instagram == 1) {?>
+	                                  <td height="17" align="left">
+	                                    <a href="<?php echo replaceLinks($link_instagram, $newsletter_id_historico, $codigo);?>" target="_blank">
+	                                      <img src="<?php echo $url_site;?>imgs/imgs_news/instagram.png" height="17" style="display:block" border="0" />
+	                                    </a>
+	                                  </td>
+	                                  <td width="20" align="left">
+	                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="20" style="display:block" border="0" />
+	                                  </td>
+	<?php }?>
+                                <?php if ($google == 1) {?>
+	                                  <td height="17" align="left">
+	                                    <a href="<?php echo replaceLinks($link_google, $newsletter_id_historico, $codigo);?>" target="_blank">
+	                                      <img src="<?php echo $url_site;?>imgs/imgs_news/google.png" height="17" style="display:block" border="0" />
+	                                    </a>
+	                                  </td>
+	                                  <td width="20" align="left">
+	                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="20" style="display:block" border="0" />
+	                                  </td>
+	<?php }?>
+                                <?php if ($pinterest == 1) {?>
+	                                  <td height="17" align="left">
+	                                    <a href="<?php echo replaceLinks($link_pinterest, $newsletter_id_historico, $codigo);?>" target="_blank">
+	                                      <img src="<?php echo $url_site;?>imgs/imgs_news/pinterest.png" height="17" style="display:block" border="0" />
+	                                    </a>
+	                                  </td>
+	                                  <td width="20" align="left">
+	                                    <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="20" style="display:block" border="0" />
+	                                  </td>
+	<?php }?>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td> -->
+                    <!--[if mso]>
+                    </table>
+                    </td>
+                    <![endif]-->
+                  </tr>
+                  <tr>
+                    <td width="10" height="25">
+                      <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="25" style="display:block" border="0" />
+                    </td>
+                  </tr>
+                </table>
+                <!--[if mso]>
+                </td>
+                </tr>
+                </table>
+                <![endif]-->
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table align="left" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f8f8f8">
+                  <tr>
+                    <td width="10" height="25">
+                      <img src="<?php echo $url_site;?>imgs/imgs_news/fill.gif" width="10" height="25" style="display:block" border="0" />
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!--[if mso]>
+          </td>
+          </tr>
+          </table>
+          <![endif]-->
+          </td>
+        </tr>
+      </table>
+      <!--[if mso]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+		</div>
+	</center>
+</body>
+</html>

@@ -1,0 +1,196 @@
+[08-Aug-2020 15:53:06 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file, expecting ',' or ')' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 133
+[08-Aug-2020 15:53:23 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id=3' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:66
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(66): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 66
+[08-Aug-2020 15:54:05 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'bg_color' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:66
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(66): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 66
+[08-Aug-2020 15:54:08 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'bg_color' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:66
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(66): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 66
+[31-Aug-2020 07:16:47 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'transition_time' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:67
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(67): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 67
+[31-Aug-2020 07:16:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'transition_time' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:67
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(67): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 67
+[16-Sep-2020 12:45:04 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file, expecting ',' or ';' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 619
+[16-Sep-2020 13:24:33 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(311): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:24:44 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(311): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:24:54 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(311): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:25:48 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(311): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:29:26 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(311): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:38:56 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(312): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:44:32 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 416
+[16-Sep-2020 13:44:36 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 416
+[16-Sep-2020 13:44:38 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 416
+[16-Sep-2020 13:44:39 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 416
+[16-Sep-2020 13:44:39 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 416
+[16-Sep-2020 13:44:39 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 416
+[16-Sep-2020 13:46:09 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(312): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[16-Sep-2020 13:47:23 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 434
+[16-Sep-2020 13:47:50 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:252
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(252): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 252
+[16-Sep-2020 13:47:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:252
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(252): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 252
+[16-Sep-2020 14:02:50 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 378
+[16-Sep-2020 14:02:53 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 378
+[16-Sep-2020 14:03:35 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 375
+[16-Sep-2020 14:03:37 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 375
+[16-Sep-2020 14:03:38 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 375
+[16-Sep-2020 14:07:51 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.banners_h_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:385
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(385): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 385
+[16-Sep-2020 14:07:53 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.banners_h_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:385
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(385): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 385
+[16-Sep-2020 14:07:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.banners_h_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:385
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(385): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 385
+[16-Sep-2020 14:07:57 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.banners_h_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:385
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(385): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 385
+[16-Sep-2020 14:36:15 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 48
+[16-Sep-2020 14:37:53 Europe/Lisbon] PHP Parse error:  syntax error, unexpected ''o' (T_ENCAPSED_AND_WHITESPACE), expecting ']' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 822
+[16-Sep-2020 14:48:35 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '{' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 37
+[16-Sep-2020 14:48:37 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '{' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 37
+[16-Sep-2020 14:48:38 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '{' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 37
+[16-Sep-2020 15:10:35 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php:23
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(23): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 23
+[16-Sep-2020 15:17:02 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 628
+[16-Sep-2020 15:19:33 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 37
+[16-Sep-2020 15:19:40 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 37
+[17-Sep-2020 13:08:15 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 13:08:50 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 13:14:32 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 15:17:41 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 15:19:13 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 15:22:32 Europe/Lisbon] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function compressImage(), 1 passed in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 375 and at least 2 expected in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:335
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 335
+[17-Sep-2020 15:22:57 Europe/Lisbon] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function compressImage(), 1 passed in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 375 and at least 2 expected in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:335
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 335
+[17-Sep-2020 15:24:38 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(376): compressImage('../../../imgs/b...', '../../../imgs/b...', 80)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 15:31:13 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 15:32:15 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: The path is a directory: ../../../imgs/banners/ in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(358): Imagick->__construct('../../../imgs/b...')
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...', '../../../imgs/b...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 358
+[17-Sep-2020 15:34:37 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file, expecting ']' in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 840
+[17-Sep-2020 15:44:12 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 431
+[17-Sep-2020 15:47:05 Europe/Lisbon] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function compressImage(), 1 passed in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 375 and at least 2 expected in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:335
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php(375): compressImage('../../../imgs/b...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 335
+[18-Sep-2020 10:58:05 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 1104
+[18-Sep-2020 10:58:09 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 1104
+[18-Sep-2020 10:58:11 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow/slideshow-edit.php on line 1104

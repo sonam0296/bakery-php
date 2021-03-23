@@ -1,0 +1,25 @@
+[15-Feb-2021 04:52:11 UTC] PHP Fatal error:  require_once(): Failed opening required '/Connections/connADMIN.php' (include_path='.:/usr/local/php73/pear') in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/inc_pages.php on line 8
+[03-Mar-2021 11:49:06 UTC] PHP Fatal error:  require_once(): Failed opening required 'estatisticas/analytics/GoogleAnalyticsServiceHandler.php' (include_path='.:/usr/local/php73/pear') in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 178
+[03-Mar-2021 11:49:08 UTC] PHP Fatal error:  require_once(): Failed opening required 'estatisticas/analytics/GoogleAnalyticsServiceHandler.php' (include_path='.:/usr/local/php73/pear') in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 178
+[03-Mar-2021 12:29:49 UTC] PHP Fatal error:  require_once(): Failed opening required 'estatisticas/analytics/GoogleAnalyticsServiceHandler.php' (include_path='.:/usr/local/php73/pear') in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 182
+[03-Mar-2021 12:29:50 UTC] PHP Fatal error:  require_once(): Failed opening required 'estatisticas/analytics/GoogleAnalyticsServiceHandler.php' (include_path='.:/usr/local/php73/pear') in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 182
+[03-Mar-2021 12:30:12 UTC] PHP Fatal error:  Uncaught Error: Class 'GoogleAnalyticsServiceHandler' not found in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php:187
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 187
+[03-Mar-2021 12:30:15 UTC] PHP Fatal error:  Uncaught Error: Class 'GoogleAnalyticsServiceHandler' not found in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php:187
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 187
+[03-Mar-2021 12:30:38 UTC] PHP Fatal error:  Uncaught Error: Call to a member function set_analytics_start_date() on null in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php:219
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 219
+[03-Mar-2021 12:30:42 UTC] PHP Fatal error:  Uncaught Error: Call to a member function set_analytics_start_date() on null in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php:219
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 219
+[03-Mar-2021 12:30:58 UTC] PHP Fatal error:  Uncaught Error: Call to a member function set_analytics_start_date() on null in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php:309
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/index.php on line 309

@@ -1,0 +1,111 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0,maximum-scale=10.0,user-scalable=no, shrink-to-fit=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="site_name" content="<?php echo NOME_SITE; ?>" />
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="application-name" content="<?php echo NOME_SITE; ?>">
+<meta name="apple-mobile-web-app-title" content="<?php echo NOME_SITE; ?>">
+<meta name="theme-color" content="<?php echo COR_SITE; ?>">
+<meta name="msapplication-navbutton-color" content="<?php echo COR_SITE; ?>">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="msapplication-starturl" content="http<?php echo SERVIDOR; ?>">
+
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/mstile-310x310.png" />
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="<?php echo ROOTPATH_HTTP; ?>imgs/favicon/favicon-128.png" sizes="128x128" />
+
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Yesteryear&display=swap" rel="stylesheet">
+
+<link href='<?php echo ROOTPATH_HTTP; ?>css/netgocio.main.css' rel='stylesheet' type='text/css'>
+<link href='<?php echo ROOTPATH_HTTP; ?>css/modelo.css' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.css" /> -->
+<!-- <link href='<?php echo ROOTPATH_HTTP; ?>css/rv-style-temp.css' rel='stylesheet' type='text/css'> -->
+
+
+
+<link href='<?php echo ROOTPATH_HTTP; ?>css/magicscroll.css' rel='stylesheet' type='text/css'>
+<link href='<?php echo ROOTPATH_HTTP; ?>css/style.css' rel='stylesheet' type='text/css'>
+<link href='<?php echo ROOTPATH_HTTP; ?>css/media.css' rel='stylesheet' type='text/css'>
+<link rel="manifest" href="<?php echo ROOTPATH_HTTP; ?>manifest.json">
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP; ?>css/lightslider.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+<link rel="stylesheet" type="text/css" href="http://fancyapps.com/fancybox/3/examples.css?v=1603375140">
+<!--Jquery-->
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP; ?>js/JQuery3.3.1.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP; ?>js/lightslider.js"></script>
+
+<?php
+if(!$array_servidor) {
+	$array_servidor = unserialize(SERVIDOR_ARRAY);
+} 
+if(in_array($_SERVER['HTTP_HOST'], $array_servidor) && !strstr($_SERVER['REQUEST_URI'],"/proposta/")) {
+	if($pagina_pt) {
+		$pagina_pt2 = $pagina_pt;
+		$pagina_en2 = $pagina_en;
+
+		if(!$_SERVER['QUERY_STRING']) {
+			$pagina_pt2 = str_replace("?","",$pagina_pt2);
+			$pagina_en2 = str_replace("?","",$pagina_en2);
+		}
+	 	
+	 	if($pagina_pt2) { ?><link rel="alternate" hreflang="pt" href="http://<?php echo $_SERVER["HTTP_HOST"].$pagina_pt2;?>" /><?php }
+		if($pagina_en2) { ?><link rel="alternate" hreflang="en" href="http://<?php echo $_SERVER["HTTP_HOST"].$pagina_en2;?>" /><?php }
+	}
+} ?>
+
+<?php if($tem_share == 1 && $share_img != "") { ?>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="<?php echo addslashes(htmlspecialchars($share_title, ENT_COMPAT, 'UTF-8')); ?>">
+	<meta property="og:url" content="<?php echo ROOTPATH_HTTP.$share_url; ?>">
+	<meta property="og:image" content="<?php echo ROOTPATH_HTTP."imgs/".$share_img; ?>">
+	<meta property="og:description" content="<?php echo addslashes(htmlspecialchars($share_desc, ENT_COMPAT, 'UTF-8'));?>">
+	<meta property="og:site_name" content="<?php echo NOME_SITE; ?>" />
+<?php } else { ?>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="<?php echo addslashes(htmlspecialchars($title, ENT_COMPAT, 'UTF-8')); ?>">
+	<meta property="og:image" content="<?php echo ROOTPATH_HTTP; ?>imgs/elem/intro.jpg" />
+	<meta property="og:description" content="<?php echo addslashes(htmlspecialchars($description, ENT_COMPAT, 'UTF-8'));?>">
+	<meta property="og:site_name" content="<?php echo NOME_SITE; ?>" />
+<?php } ?>
+
+<?php
+if(!$array_servidor) {
+  $array_servidor = unserialize(SERVIDOR_ARRAY);
+}
+if(in_array($_SERVER['HTTP_HOST'], $array_servidor) && !strstr($_SERVER['REQUEST_URI'],"/proposta/")) { ?> 
+  <script>
+    if(navigator.userAgent.indexOf("Speed Insights") == -1) { // com esta verificação não lança o aviso no pageinsights da colocação em cache do script da google
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', '<?php echo ANALYTICS; ?>', 'auto');
+      ga('require', 'displayfeatures');
+      ga('send', 'pageview');
+    }
+  </script>
+<?php } ?>

@@ -1,0 +1,580 @@
+[29-May-2020 09:54:05 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:77
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(77): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 77
+[01-Jun-2020 19:22:21 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 512
+[01-Jun-2020 19:22:22 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 512
+[01-Jun-2020 19:23:06 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:91
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(91): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 91
+[01-Jun-2020 19:24:30 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:95
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(95): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 95
+[01-Jun-2020 19:24:33 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:95
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(95): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 95
+[01-Jun-2020 19:24:40 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:95
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(95): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 95
+[01-Jun-2020 19:27:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:99
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(99): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 99
+[01-Jun-2020 19:28:40 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:94
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(94): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 94
+[01-Jun-2020 19:33:28 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:99
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(99): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 99
+[01-Jun-2020 19:40:55 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php:99
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php(99): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit.php on line 99
+[29-Jun-2020 18:43:32 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos.php on line 166
+[29-Jun-2020 18:43:34 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos.php on line 166
+[29-Jun-2020 21:04:59 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:229
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(229): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 229
+[29-Jun-2020 21:13:42 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:229
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(229): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 229
+[29-Jun-2020 21:15:41 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:229
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(229): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 229
+[29-Jun-2020 21:19:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:20:14 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:21:43 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:21:47 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:21:56 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:22:17 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:22:20 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:23:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:23:58 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:230
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(230): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 230
+[29-Jun-2020 21:24:13 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:229
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(229): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 229
+[29-Jun-2020 21:24:19 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:229
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(229): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 229
+[29-Jun-2020 21:25:31 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:234
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(234): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 234
+[29-Jun-2020 21:26:29 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:234
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(234): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 234
+[29-Jun-2020 21:28:42 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+                  novidade,
+                  destaque,
+               ' at line 21 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:208
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(208): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 208
+[29-Jun-2020 21:29:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+                  ) VALUES (
+                  '102',
+                 ' at line 21 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:147
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(147): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 147
+[29-Jun-2020 21:30:53 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                  '102',
+                  'Massa Spaghetti Biológic' at line 19 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:140
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(140): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 140
+[29-Jun-2020 21:33:04 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'imagem4,
+
+                  novidade,
+                  destaque,
+              ' at line 25 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:231
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(231): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 231
+[29-Jun-2020 21:47:35 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.l_pecas_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:253
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(253): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 253
+[29-Jun-2020 21:51:52 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.l_pecas_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:380
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(380): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 380
+[21-Jul-2020 11:58:00 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:110
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(110): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 110
+[21-Jul-2020 12:00:12 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            `02.M.PENNE.500`,
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:110
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(110): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 110
+[21-Jul-2020 12:00:48 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            02.M.PENNE.500',
+                        ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:110
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(110): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 110
+[21-Jul-2020 12:01:02 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:110
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(110): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 110
+[21-Jul-2020 12:11:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:12:30 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '123',
+                            'test ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:18:10 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '123',
+                            'test ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:18:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:20:16 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:20:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:116
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(116): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 116
+[21-Jul-2020 12:34:02 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            '02.M.PENNE.500',
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:112
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(112): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 112
+[21-Jul-2020 12:35:06 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            'Test',
+                            'desi' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:112
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(112): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 112
+[21-Jul-2020 12:35:39 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            'Test',
+                            'desi' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:112
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(112): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 112
+[21-Jul-2020 12:39:34 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            "02.M.PENNE.500",
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:40:24 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            "test",
+                            "desi' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:40:37 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            "02.M.PENNE.500",
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:41:39 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            "02.M.PENNE.500",
+                       ' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:42:06 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                            "test",
+                            "new"' at line 11 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:117
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(117): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 117
+[21-Jul-2020 12:43:37 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                        '12',
+                        '02.M.PENNE.500' at line 5 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:167
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 167
+[21-Jul-2020 12:46:28 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') VALUES (
+                        '13',
+                        '02.M.PENNE.500' at line 5 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:147
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(147): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 147
+[21-Jul-2020 13:57:32 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.l_categorias_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 89
+[21-Jul-2020 14:36:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 132
+[21-Jul-2020 14:37:51 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 132
+[21-Jul-2020 14:37:54 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 132
+[21-Jul-2020 14:38:22 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 132
+[21-Jul-2020 14:38:50 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"url") VALUES ( "02.M.PENNE.500", "designa&ccedil;&atilde;o produto", "38", "", ' at line 2 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 132
+[21-Jul-2020 14:39:28 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"url") VALUES ( "02.M.PENNE.500", "designa&ccedil;&atilde;o produto", "38", "", ' at line 2 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 132
+[21-Jul-2020 15:46:59 Europe/Lisbon] PHP Parse error:  syntax error, unexpected ';' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 35
+[21-Jul-2020 17:15:43 Europe/Lisbon] PHP Parse error:  syntax error, unexpected ''","'' (T_CONSTANT_ENCAPSED_STRING) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 173
+[21-Jul-2020 17:28:29 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:178
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(178): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 178
+[21-Jul-2020 18:57:05 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:26
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(26): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(114): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 26
+[21-Jul-2020 18:59:25 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:26
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(26): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(114): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 26
+[21-Jul-2020 19:04:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '50" 50 CAPSULAS", "0", "", "33984011205", "COMPLEXO B "100" 50 CAPSULAS, para um' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:178
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(178): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 178
+[21-Jul-2020 19:21:18 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '50" 50 CAPSULAS", "0", "", "33984011205", "COMPLEXO B '100' 50 CAPSULAS, para um' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:187
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(187): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 187
+[21-Jul-2020 19:23:30 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '50" 50 CAPSULAS", "0", "", "33984011205", "COMPLEXO B `100` 50 CAPSULAS, para um' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:187
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(187): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 187
+[21-Jul-2020 19:27:32 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '50" 50 CAPSULAS", "0", "", "33984011205", "COMPLEXO B `100` 50 CAPSULAS, para um' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:187
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(187): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 187
+[21-Jul-2020 19:35:07 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column '$categoria_name' in 'where clause' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:26
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(26): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(127): brand_get('Biotop')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 26
+[21-Jul-2020 19:51:25 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '50" 50 CAPSULAS", "0", "22", "33984011205", "COMPLEXO B 100 50 CAPSULAS, para um' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:207
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(207): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 207
+[21-Jul-2020 22:01:56 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(29): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(138): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 29
+[21-Jul-2020 22:02:36 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(29): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(138): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 29
+[21-Jul-2020 22:02:59 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(29): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(138): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 29
+[21-Jul-2020 22:03:11 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(29): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(138): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 29
+[21-Jul-2020 22:17:06 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(29): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(142): brand_get('Esential'ar\xF4ms')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 29
+[27-Jul-2020 17:29:52 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'category' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/import-categoery.php:105
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/import-categoery.php(105): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/import-categoery.php on line 105
+[13-Aug-2020 12:11:34 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'type' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:367
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(367): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 367
+[13-Aug-2020 14:48:45 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cat_mae' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:45
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(45): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(348): brand_get('Biotop')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 45
+[13-Aug-2020 15:02:34 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'S'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:15
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(15): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(78): categoria_get('BCAA'S')
+#2 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(259): import_cate('BCAA'S', 'Amino\xE1cidos e P...')
+#3 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 15
+[13-Aug-2020 15:45:41 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'S'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:15
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(15): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(78): categoria_get('BCAA'S')
+#2 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(259): import_cate('BCAA'S', 'Amino\xE1cidos e P...')
+#3 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 15
+[13-Aug-2020 15:58:33 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'S'' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:15
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(15): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(78): categoria_get('BCAA'S')
+#2 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(259): import_cate('BCAA'S', 'Amino\xE1cidos e P...')
+#3 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 15
+[13-Aug-2020 17:13:24 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Nervoso WHERE id=8' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:38
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 38
+[13-Aug-2020 17:15:03 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:15:05 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:15:30 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:15:32 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:17:33 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:17:37 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:17:45 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 32
+[13-Aug-2020 17:23:18 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'PRIMARY' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:163
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(163): PDOStatement->execute()
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(203): import_cate('Suplementa\xE7\xE3o A...', 0)
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 163
+[13-Aug-2020 17:27:25 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cate_mae_name' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php:39
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php(39): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import.php on line 39
+[13-Aug-2020 17:51:17 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:341
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(341): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 341
+[13-Aug-2020 17:52:37 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:341
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(341): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 341
+[13-Aug-2020 17:54:37 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:341
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(341): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 341
+[13-Aug-2020 17:55:31 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':nome' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:341
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(341): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 341
+[13-Aug-2020 17:57:26 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.l_categorias_' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php:341
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php(341): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/productos-import-new.php on line 341
+[25-Aug-2020 11:20:33 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '$insertSQL' (T_VARIABLE) in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/update-brand.php on line 158
+[25-Aug-2020 11:29:09 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Call to a member function fetchAll() on null in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/update-brand.php:162
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/update-brand.php on line 162
+[02-Sep-2020 09:18:06 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Call to undefined function pre() in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit-imagens.php:96
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/produtos/produtos-edit-imagens.php on line 96

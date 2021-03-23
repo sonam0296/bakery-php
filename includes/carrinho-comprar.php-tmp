@@ -1,0 +1,993 @@
+<?php require_once ('Connections/connADMIN.php');?>
+<?php
+
+if (ECOMMERCE_ATIVO == 0) {
+	header("Location: ".ROOTPATH_HTTP."carrinho-contacto.php");
+	exit();
+}
+
+$query_rsCar = "SELECT * FROM carrinho LEFT JOIN l_pecas_en AS pecas ON (carrinho.produto = pecas.id AND pecas.visivel = 1)";
+$rsCar       = DB::getInstance()->prepare($query_rsCar);
+$rsCar->execute();
+$row_rsCar       = $rsCar->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsCar = $rsCar->rowCount();
+
+$query_rsMeta = "SELECT * FROM metatags".$extensao." WHERE id = '1'";
+$rsMeta       = DB::getInstance()->prepare($query_rsMeta);
+$rsMeta->execute();
+$row_rsMeta       = $rsMeta->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsMeta = $rsMeta->rowCount();
+
+$title       = $row_rsMeta["title"];
+$description = $row_rsMeta["description"];
+$keywords    = $row_rsMeta["keywords"];
+
+$carrinho_session = $_COOKIE[CARRINHO_SESSION];
+$empty            = $class_carrinho->isEmpty();
+$total            = $portes_pag            = $portes_env            = 0;
+
+if ($empty == 0 || ($row_rsCliente == 0 && CARRINHO_LOGIN == 1)) {
+	header("Location: ".ROOTPATH_HTTP."carrinho.php");
+	exit();
+}
+
+//Verificar se apenas existe um Cheque Prenda no carrinho ou se também existem produtos.
+$verifica_carrinho = $class_carrinho->verificaCarrinho();
+
+$query_rsPaises = "SELECT * FROM paises WHERE visivel='1' ORDER BY nome ASC";
+$rsPaises       = DB::getInstance()->prepare($query_rsPaises);
+$rsPaises->execute();
+$row_rsPaises       = $rsPaises->fetchAll();
+$totalRows_rsPaises = $rsPaises->rowCount();
+
+if ($row_rsCliente != 0 && $row_rsCliente['pais'] > 0) {
+	$pais         = $row_rsCliente['pais'];
+	$query_rsPais = "SELECT * FROM paises WHERE visivel='1' AND id = '$pais'";
+	$rsPais       = DB::getInstance()->prepare($query_rsPais);
+	$rsPais->execute();
+	$row_rsPais       = $rsPais->fetch(PDO::FETCH_ASSOC);
+	$totalRows_rsPais = $rsPais->rowCount();
+}
+
+$totalRows_rsOutrasMoradas = 0;
+if ($row_rsCliente != 0) {
+	$query_rsOutrasMoradas = "SELECT * FROM clientes_moradas WHERE id_cliente = '".$row_rsCliente['id']."'";
+	$rsOutrasMoradas       = DB::getInstance()->prepare($query_rsOutrasMoradas);
+	$rsOutrasMoradas->execute();
+	$totalRows_rsOutrasMoradas = $rsOutrasMoradas->rowCount();
+}
+
+$morada      = "<p>".nl2br($row_rsCliente['morada'])."</p>"."<p>".$row_rsCliente['cod_postal']." ".$row_rsCliente['localidade']."</p>";
+$morada_inpt = $row_rsCliente['morada'];
+
+$dados_facturacao = '<p><span style="font-weight: 700">'.$Recursos->Resources["comprar_nome"].': </span> <span>'.$row_rsCliente['nome'].'</span></p>
+  <p><span style="font-weight: 700">'.$Recursos->Resources["morada"].': </span> <span>'.$morada.'</span></p>
+  <p><span style="font-weight: 700">'.$Recursos->Resources["pais"].': </span> <span>'.$row_rsPais['nome'].'</span></p>
+
+  <p class="marg"><span style="font-weight: 700">'.$Recursos->Resources["comprar_email"].': </span> <span>'.$row_rsCliente['email'].'</span></p>
+  <p><span style="font-weight: 700">'.$Recursos->Resources["comprar_nif"].': </span> <span>'.$row_rsCliente['nif'].'</span></p>';
+
+$dados_envio = '<p><span style="font-weight: 700">'.$Recursos->Resources["comprar_nome"].': </span> <span>'.$row_rsCliente['nome'].'</span></p>
+  <p><span style="font-weight: 700">'.$Recursos->Resources["morada"].': </span> <span>'.$morada.'</span></p>
+  <p><span style="font-weight: 700">'.$Recursos->Resources["pais"].': </span> <span>'.$row_rsPais['nome'].'</p>
+
+  <p class="marg"><span style="font-weight: 700">'.$Recursos->Resources["comprar_contacto"].':</span> <span>'.$row_rsCliente['telemovel'].'</span></p>';
+
+$menu_sel = "carrinho";
+
+DB::close();
+
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $lang;?>"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame - Remove this if you use the .htaccess -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>
+<?php if ($title) {echo addslashes(htmlspecialchars($title, ENT_COMPAT, 'UTF-8'));} else {echo $Recursos->Resources["pag_title"];}?>
+</title>
+<?php if ($description) {?>
+	<META NAME="description" CONTENT="<?php echo addslashes(htmlspecialchars($description, ENT_COMPAT, 'UTF-8'));?>" />
+	<?php }?>
+<?php if ($keywords != "") {?>
+	<META NAME="keywords" CONTENT="<?php echo addslashes(htmlspecialchars($keywords, ENT_COMPAT, 'UTF-8'));?>" />
+	<?php }?>
+<?php include_once ('codigo_antes_head.php');?>
+<?php include_once ('funcoes.php');?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<style type="text/css">
+  input#datepicker {
+    background: #f2f2f2;
+    padding: 15px 20px;
+}
+.form_group_main .form_group p {
+    width: 100%;
+    margin: 0 0 10px;
+    font-size: 14px;
+}
+.form_group_main .form_group input {
+    width: 100%;
+    height: 40px;
+    padding: 0 20px !important;
+    border-radius: 5px !important;
+    background: #f2f2f2;
+    margin: 0 0 10px;
+}
+</style>
+
+
+</head>
+<body>
+<!--Preloader-->
+<div class="mask">
+  <div id="loader">
+
+  </div>
+</div>
+
+<div class="mainDiv">
+  <div class="row1">
+    <div class="div_table_cell">
+<?php include_once ('header.php');?>
+      <div class="row collapse content">
+        <div class="column">
+          <div class="div_100 carrinho">
+            <nav class="row" aria-label="You are here:" role="navigation">
+              <div class="column">
+                <ul class="row collapse carrinho_nav">
+                  <li class="uppercase column"><?php echo $Recursos->Resources["carrinho_passo1"];?></li><!--
+                  --><li class="uppercase column active"><?php echo $Recursos->Resources["carrinho_passo2"];?></li><!--
+                  --><li class="uppercase column"><?php echo $Recursos->Resources["carrinho_passo3"];?></li>
+                </ul>
+              </div>
+            </nav>
+
+            <div class="row comprar">
+              <div class="column">
+                <form action="carrinho-comprar2.php" id="comprar" name="comprar" method="post" onSubmit="return validaPasso()" autocomplete="off" novalidate>
+                  <div class="row collapse align-strecht">
+                    <div class="small-12 medium-8 column">
+                      <div class="row collapse align-strecht info_cont">
+                        <div class="small-12 xxsmall-6 column">
+                          <div class="head">
+                            <h3 class="comprar_tit"><?php echo $Recursos->Resources["dados_faturacao"];?></h3><!--
+                            --><a href="javascript:;" class="edit_btn cart-edit" data-open="form_facturacao">
+<?php echo $Recursos->Resources["comprar_edit"];?>
+                              <i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117.8 115.6"><g id="Camada_2" data-name="Camada 2"><g id="Camada_1-2" data-name="Camada 1"><path class="cls-1" d="M113.6,107.4H4.2a4.12,4.12,0,0,0-4.1,4.1,4.19,4.19,0,0,0,4.1,4.1H113.7a4.12,4.12,0,0,0,4.1-4.1A4.21,4.21,0,0,0,113.6,107.4Z"/><path class="cls-1" d="M.1,71.1,0,90.6a4.23,4.23,0,0,0,1.2,3,4,4,0,0,0,2.9,1.2l19.4-.1a4,4,0,0,0,2.9-1.2l67-67a4.23,4.23,0,0,0,0-5.9L74.2,1.2a4.23,4.23,0,0,0-5.9,0L54.9,14.7,1.3,68.2A4.45,4.45,0,0,0,.1,71.1ZM71.3,10,84.8,23.5l-7.6,7.6L63.7,17.6ZM8.4,72.9,57.8,23.5,71.3,37,21.9,86.3l-13.6.1Z"/></g></g></svg></i>
+                            </a>
+                          </div>
+                          <div class="div_100 dados" id="dados_facturacao"><?php echo $dados_facturacao;?></div>
+                          <div class="carrinho_modal" id="form_facturacao">
+                            <div class="modal">
+                              <button class="close-button" aria-label="Close reveal" type="button">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              <div class="div_100 edit_modal">
+                                <h3 class="comprar_tit marg"><?php echo $Recursos->Resources["dados_faturacao"];?></h3>
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_nome"];?> *" type="text" name="nome" id="nome" value="<?php echo $row_rsCliente['nome'];?>" />
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_email"];?> *" type="email" name="email" id="email" value="<?php echo $row_rsCliente['email'];?>" />
+                                <input class="carrinho_inpt" placeholder="<?php echo $Recursos->Resources["comprar_nif"];?>" type="text" name="nif" id="nif" value="<?php echo $row_rsCliente['nif'];?>" />
+                                <textarea class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_morada_fat"];?> *" name="morada_factura" id="morada_factura"><?php echo $morada_inpt;
+?></textarea>
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_postal"];?> *" type="text" name="cod_postal" id="cod_postal" value="<?php echo $row_rsCliente['cod_postal'];?>" />
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_localidade"];?> *" type="text" name="localidade" id="localidade" value="<?php echo $row_rsCliente['localidade'];?>" />
+                                <div class="select_holder">
+                                  <select name="pais_factura" id="pais_factura" class="carrinho_inpt">
+                                    <option value="0"><?php echo $Recursos->Resources["comprar_sel_pais2"];?>*</option>
+<?php foreach ($row_rsPaises as $paises) {?>
+	                                      <option data-name="<?php echo $paises['nome'];?>" value="<?php echo $paises['id'];?>"<?php if ($paises['id'] == $row_rsCliente['pais'] || (!empty($row_rsCliente['pais']) && $paises["id"] == 197)) {echo "selected=\"selected\"";}?>><?php echo $paises['nome']?></option>
+	<?php }?>
+</select>
+                                </div>
+
+                                <div class="div_100" id="aviso_faturacao">
+<?php echo $Recursos->Resources["comprar_preencher_obrigatorios"];?>
+                                </div>
+                                <button type="button" onClick="guarda_faturacao()"><span><?php echo $Recursos->Resources["comprar_guardar"];?></span></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="small-12 xxsmall-6 column">
+                          <div class="head">
+                            <h3 class="comprar_tit"><?php echo $Recursos->Resources["dados_envio"];?></h3><!--
+                            --><a href="javascript:;" class="edit_btn cart-edit" data-open="form_envio">
+<?php echo $Recursos->Resources["comprar_edit"];?>
+                              <i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117.8 115.6"><g id="Camada_2" data-name="Camada 2"><g id="Camada_1-2" data-name="Camada 1"><path class="cls-1" d="M113.6,107.4H4.2a4.12,4.12,0,0,0-4.1,4.1,4.19,4.19,0,0,0,4.1,4.1H113.7a4.12,4.12,0,0,0,4.1-4.1A4.21,4.21,0,0,0,113.6,107.4Z"/><path class="cls-1" d="M.1,71.1,0,90.6a4.23,4.23,0,0,0,1.2,3,4,4,0,0,0,2.9,1.2l19.4-.1a4,4,0,0,0,2.9-1.2l67-67a4.23,4.23,0,0,0,0-5.9L74.2,1.2a4.23,4.23,0,0,0-5.9,0L54.9,14.7,1.3,68.2A4.45,4.45,0,0,0,.1,71.1ZM71.3,10,84.8,23.5l-7.6,7.6L63.7,17.6ZM8.4,72.9,57.8,23.5,71.3,37,21.9,86.3l-13.6.1Z"/></g></g></svg></i>
+                            </a>
+                          </div>
+                          <div class="div_100 dados" id="dados_envio"><?php echo $dados_envio;?></div>
+                          <div class="carrinho_modal" id="form_envio">
+                            <div class="modal">
+                              <button class="close-button" aria-label="Close reveal" type="button">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              <div class="div_100 edit_modal">
+                                <h3 class="comprar_tit marg"><?php echo $Recursos->Resources["dados_envio"];?></h3>
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_nome"];?> *" type="text" name="nome2" id="nome2" value="<?php echo $row_rsCliente['nome'];?>" />
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_contacto"];?> *" type="text" name="contacto" id="contacto" value="<?php echo $row_rsCliente['telemovel'];?>" />
+                                <h1 class="comprar_morada_envio"><?php echo $Recursos->Resources["selecione_morada"];?></h1>
+                                <div class="select_holder" style="margin-bottom: 2.5rem;">
+                                  <select name="morada_envio_select" class="carrinho_inpt" id="morada_envio_select" onChange="carregaMorada(this.value);">
+                                    <option value="0"><?php echo $Recursos->Resources["morada_principal"];?></option>
+<?php if ($totalRows_rsOutrasMoradas > 0) {?>
+	                                      <?php while ($row_rsOutrasMoradas = $rsOutrasMoradas->fetch()) {?>
+		                                        <option value="<?php echo $row_rsOutrasMoradas['id'];?>"><?php echo $row_rsOutrasMoradas['nome'];
+		?></option>
+		<?php }?>
+	                                    <?php }?>
+                                  </select>
+                                </div>
+                                <textarea class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["morada_envio"];?> *" name="morada_envio" id="morada_envio"><?php echo $morada_inpt;
+?></textarea>
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_postal"];?> *" type="text" name="cod_postal2" id="cod_postal2" value="<?php echo $row_rsCliente['cod_postal'];?>" />
+                                <input class="carrinho_inpt" required placeholder="<?php echo $Recursos->Resources["comprar_localidade"];?> *" type="text" name="localidade2" id="localidade2" value="<?php echo $row_rsCliente['localidade'];?>" />
+                                <div class="select_holder">
+                                  <select name="pais" id="pais" class="carrinho_inpt" onchange="carrega_metodos();">
+                                    <option value="0"><?php echo $Recursos->Resources["comprar_sel_pais2"];?>*</option>
+<?php foreach ($row_rsPaises as $paises) {?>
+	                                      <option data-name="<?php echo $paises['nome'];?>" value="<?php echo $paises['id'];?>"<?php if ($paises['id'] == $row_rsCliente['pais'] || (!empty($row_rsCliente['pais']) && $paises["id"] == 197)) {echo "selected=\"selected\"";}?>><?php echo $paises['nome']?></option>
+	<?php }?>
+                                  </select>
+                                </div>
+                                <input type="hidden" name="nome_envio_hid" id="nome_envio_hid" value="<?php echo $row_rsCliente['nome'];?>"/>
+                                <input type="hidden" name="morada_envio_hid" id="morada_envio_hid" value="<?php echo $morada_inpt;?>"/>
+                                <input type="hidden" name="cod_postal_envio_hid" id="cod_postal_envio_hid" value="<?php echo $row_rsCliente['cod_postal'];?>"/>
+                                <input type="hidden" name="localidade_envio_hid" id="localidade_envio_hid" value="<?php echo $row_rsCliente['localidade'];?>"/>
+                                <div class="div_100" id="aviso_envio">
+<?php echo $Recursos->Resources["comprar_preencher_obrigatorios"];?>
+                                </div>
+                                <button type="button" onClick="guarda_envio()"><span><?php echo $Recursos->Resources["comprar_guardar"];?></span></button>
+                              </div>
+                            </div>
+                          </div>
+
+
+<?php $date = date('Y-m-d', strtotime($Date.' + '.$row_rsCar['prepare'].' day'))?>
+                            <label for="datepicker">Select date:</label>
+                            <input type="text" name="selDate" id="datepicker" value="<?php echo $date;?>">
+
+                        <br><Br>
+
+                        <label id="miless"></label>
+                        <div class="shipping">
+                         <form method='POST' action="">
+                          <input id="miless" type="hidden"  />
+                        <div class="form_group_main">
+                          <input id="miless" type="hidden"  />
+                          <div class="form_group">
+                            <p>Enter your address</p>
+                            <div id="locationField">
+                                <input
+                                  id="autocomplete"
+
+                                  onFocus="geolocate()"
+                                  type="text"
+                                 onFocus = "getval();"/>
+                              </div>
+                          </div>
+
+                            <table id="address">
+                              <div class="form_group">
+                                <p>Street address</p>
+                                  <input class="field" id="street_number" disabled="true" />
+                                <td class="wideField" colspan="2">
+                                  <input class="field" id="route" disabled="true" />
+                                </td>
+                              </div>
+                              <div class="form_group">
+                                <p>City</p>
+                                  <input class="field" id="locality" disabled="true" />
+                              </div>
+                              <div class="form_group">
+                                <p>State<p>
+                                  <input
+                                    class="field"
+                                    id="administrative_area_level_1"
+                                    disabled="true"
+                                  />
+                                <p>Zip code</p>
+                                  <input class="field" id="postal_code" disabled="true" onblur = "getval();"/>
+                              </div>
+                              <div class="form_group">
+                                <p>Country</p>
+                                  <input class="field" id="country" disabled="true" />
+                              </div>
+                            </table>
+                          </div>
+                        </form>
+                      </div>
+
+                        </div>
+                        <div class="small-12 xxsmall-6 column">
+                          <div class="head">
+                            <h3 class="comprar_tit"><?php echo $Recursos->Resources["comprar_pagamento"];?></h3>
+                          </div>
+                          <div class="div_100" id="div_pagamentos"></div>
+                        </div>
+<?php if ($empty > 0 && $verifica_carrinho == 1) {?>
+	                          <div class="small-12 xxsmall-6 column">
+	                            <div class="head">
+	                              <h3 class="comprar_tit"><?php echo $Recursos->Resources["comprar_entrega"];?></h3>
+	                            </div>
+	                            <div class="div_100" id="div_entregas"></div>
+	                          </div>
+	<?php }?>
+                        <div class="small-12 column">
+                          <div class="head">
+                            <h3 class="comprar_tit marg"><?php echo $Recursos->Resources["obs_encomenda"];?></h3>
+                          </div>
+                          <textarea class="carrinho_inpt" name="observacoes" id="observacoes"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="small-12 medium-4 column">
+<?php echo $class_carrinho->carrinhoResumo(1);?>
+</div>
+                  </div>
+<?php $total_str = $class_carrinho->mostraPreco($total);?>
+                  <div class="row collapse buttons_marg">
+                    <div class="small-12 medium-8 column">
+                      <button class="carrinho_btn icon_carrinho" type="submit"><span style="position: relative;"><?php echo $Recursos->Resources["comprar_seguinte"]." <span class='total_update'>".$total_str."</span>";
+?> <i class="icon-right-carrinho"></i></span></button>
+                      <a class="carrinho_btn reverse" href="<?php echo CARRINHO_VOLTAR;?>"><?php echo $Recursos->Resources["carrinho_btn_prev"];
+?></a>
+                    </div>
+                    <div class="small-12 medium-4 column">
+                      <a class="carrinho_btn disabled" href="carrinho.php"><?php echo $Recursos->Resources["comprar_voltar"];?></a>
+                    </div>
+                  </div>
+                  <input type="hidden" name="total_inpt" id="total_inpt" value="<?php echo $class_carrinho->mostraPreco($total, 2);?>" />
+                  <input type="hidden" name="total_final" id="total_final" value="<?php echo $class_carrinho->mostraPreco($total, 2);?>" />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: none;" id="animatedModal" class="animated-modal text-center p-5">
+
+ </div>
+
+<?php include_once ('footer.php');?>
+
+  <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</div>
+<input type="hidden" name="menu_sel" id="menu_sel" value="carrinho" />
+<script>
+$('.edit_btn').click(function(e) {
+  $('#'+$(this).attr('data-open')).addClass('active');
+  $('body').addClass('overHidden');
+});
+
+$('.modal .close-button').click(function(e) {
+  $(this).parents('.carrinho_modal').removeClass('active');
+  $('body').removeClass('overHidden');
+});
+
+function carregaMorada(id) {
+  $.post(_includes_path+"rpc.php", {op:"carrega_morada", id:id}, function(data) {
+    var parts = data.split("##");
+
+    $('#morada_envio').val(parts['1']);
+    $('#localidade2').val(parts['2']);
+    $('#cod_postal2').val(parts['4']);
+    $('#pais').val(parts['5']).trigger('change');
+  });
+}
+
+function validaPasso() {
+  var mensagem = '';
+
+  /* Dados de Faturação */
+  var _nome = 0;
+  var _email = 0;
+  var _morada_factura = 0;
+  var _cod_postal = 0;
+  var _localidade = 0;
+  var _nif = 0;
+  var _pais_factura = 0;
+
+  if(document.getElementById('nome')) {
+    _nome = document.getElementById('nome').value;
+  }
+  if(document.getElementById('email')) {
+    _email = document.getElementById('email').value;
+  }
+  if(document.getElementById('morada_factura')) {
+    _morada_factura = document.getElementById('morada_factura').value;
+  }
+  if(document.getElementById('cod_postal')) {
+    _cod_postal = document.getElementById('cod_postal').value;
+  }
+  if(document.getElementById('localidade')) {
+    _localidade = document.getElementById('localidade').value;
+  }
+  if(document.getElementById('nif')) {
+    _nif = document.getElementById('nif').value;
+  }
+  if(document.getElementById('pais_factura')) {
+    _pais_factura = document.getElementById('pais_factura').value;
+  }
+
+  if(_nome == 0) {
+    mensagem = '<?php echo $Recursos->Resources["erro_nome_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_email == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_email_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_morada_factura == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_morada_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_cod_postal == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_cod_postal_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_localidade == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_localidade_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_nif == 0 && '<?php echo $row_rsCliente['tipo'];?>' == '2') {
+    mensagem += '<?php echo $Recursos->Resources["erro_nif_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_pais_factura == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_pais_fatura"]."<br>";?>';
+
+    valid = 0;
+  }
+
+  /* Dados de Envio */
+  if(mensagem != '') {
+    mensagem += '<br>';
+  }
+
+  var _nome2 = 0;
+  var _morada_envio = 0;
+  var _cod_postal2 = 0;
+  var _localidade2 = 0;
+  var _pais = 0;
+  var _telefone = 0;
+
+  if(document.getElementById('nome2')) {
+    _nome2 = document.getElementById('nome2').value;
+  }
+  if(document.getElementById('morada_envio')) {
+    _morada_envio = document.getElementById('morada_envio').value;
+  }
+  if(document.getElementById('cod_postal2')) {
+    _cod_postal2 = document.getElementById('cod_postal2').value;
+  }
+  if(document.getElementById('localidade2')) {
+    _localidade2 = document.getElementById('localidade2').value;
+  }
+  if(document.getElementById('pais')) {
+    _pais = document.getElementById('pais').value;
+  }
+  if(document.getElementById('contacto')) {
+    _telefone = document.getElementById('contacto').value;
+  }
+
+  if(_nome2 == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_nome_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_morada_envio == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_morada_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_cod_postal2 == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_cod_postal_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_localidade2 == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_localidade_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_pais == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_pais_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(_telefone == 0) {
+    mensagem += '<?php echo $Recursos->Resources["erro_contacto_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+
+  /* Métodos de Envio e Pagamento */
+  if(mensagem != '') {
+    mensagem += '<br>';
+  }
+
+  var _pag = $('input[name=pagamento]:checked').val();
+  var _env = $('input[name=entrega]:checked').val();
+
+  if(!_pag) {
+    mensagem += '<?php echo $Recursos->Resources["erro_pagamento"]."<br>";?>';
+
+    valid = 0;
+  }
+  if(!_env && '<?php echo $verifica_carrinho;?>' == '1') {
+    mensagem += '<?php echo $Recursos->Resources["erro_envio"]."<br>";?>';
+
+    valid = 0;
+  }
+
+  var valid = 0;
+
+  /* Caso seleciona o Pickup temos de validar se selecionar um ponto ou não */
+  if(_env == 5) {
+    if(!$('#localidade_pm').val() || $('#localidade_pm').val() == 0) {
+      mensagem += '<?php echo $Recursos->Resources["erro_pickup"]."<br>";?>';
+
+      valid = 0;
+    }
+    else if($('#localidade_pm').val() != 0) {
+      if(!$('input[name=ponto_pickme]:checked').val() || $('input[name=ponto_pickme]:checked').val() == 0) {
+        mensagem += '<?php echo $Recursos->Resources["erro_pickup"]."<br>";?>';
+
+        valid = 0;
+      }
+      else {
+        valid = validaForm('comprar');
+      }
+    }
+    else {
+      valid = validaForm('comprar');
+    }
+  }
+  else {
+    valid = validaForm('comprar');
+  }
+
+  if(!valid) {
+    ntg_error('<?php echo "<strong>".$Recursos->Resources["comprar_preencher"]."</strong><br><br>";?>'+mensagem);
+
+
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+function guarda_faturacao() {
+  var valid = validaForm('form_facturacao');
+  if(!valid) {
+    $('#aviso_faturacao').fadeIn();
+    return false;
+  }
+  else {
+    $('#aviso_faturacao').fadeOut();
+
+    var pais = $('#pais_factura option:selected').attr('data-name');
+    // var data = '<p>'+$('#nome').val()+'</p><p>'+nl2br($('#morada_factura').val(), 0)+'</p><p>'+$('#cod_postal').val()+'</p><p>'+$('#localidade').val()+'</p><p>'+pais+'</p><p class="marg"><span style="font-weight: 500"><?php echo $Recursos->Resources["comprar_email"];?></span> <span>'+$('#email').val()+'</span></p><p><span style="font-weight: 500"><?php echo $Recursos->Resources["comprar_nif"];?></span> <span>'+$('#nif').val()+'</span></p>';
+
+    var data = '<p><span style="font-weight: 700"><?php echo $Recursos->Resources["comprar_nome"];?>: </span> <span>'+$('#nome').val()+'</span></p><p><span style="font-weight: 700"><?php echo $Recursos->Resources["morada"];?>: </span><span>'+nl2br($('#morada_factura').val(), 0)+'</span></p><p>'+$('#cod_postal').val()+'</p><p>'+$('#localidade').val()+'</p><p><span style="font-weight: 700"><?php echo $Recursos->Resources["pais"];?>: </span> <span>'+pais+'</span></p><p class="marg"><span style="font-weight: 700"><?php echo "Store Name"?>: </span> <span><?php if ($_SESSION["store_update_name"] != "") {echo $_SESSION["store_update_name"];} elseif ($_SESSION["last_store"] != "") {echo $_SESSION["store_name"];}?><a href="" class="store_name button-small uppercase">  Confirm</a> </span></p><p class="marg"><span style="font-weight: 700"><?php echo $Recursos->Resources["comprar_email"];?></span> <span>'+$('#email').val()+'</span></p><p><span style="font-weight: 700"><?php echo $Recursos->Resources["comprar_nif"];?></span> <span>'+$('#nif').val()+'</span></p>';
+
+
+    $('#dados_facturacao').html(data);
+    $('#form_facturacao .close-button').click();
+  }
+}
+guarda_faturacao();
+
+function guarda_envio() {
+  var valid = validaForm('form_envio');
+  if(!valid) {
+    $('#aviso_envio').fadeIn();
+    return false;
+  }
+  else {
+    $('#aviso_envio').fadeOut();
+
+    var pais = $('#pais option:selected').attr('data-name');
+    // var data = '<p>'+$('#nome2').val()+'</p><p>'+nl2br($('#morada_envio').val(), 0)+'</p><p>'+$('#cod_postal2').val()+'</p><p>'+$('#localidade2').val()+'</p><p>'+pais+'</p><p class="marg"><span style="font-weight: 500"><?php echo $Recursos->Resources["comprar_contacto"];?></span> <span>'+$('#contacto').val()+'</span></p>';
+
+    var data = '<p><span style="font-weight: 700"><?php echo $Recursos->Resources["comprar_nome"];?>: </span> <span>'+$('#nome2').val()+'</span></p><p><span style="font-weight: 700"><?php echo $Recursos->Resources["morada"];?>: </span><span>'+nl2br($('#morada_envio').val(), 0)+'</span></p><p>'+$('#cod_postal2').val()+'</p><p>'+$('#localidade2').val()+'</p><p><span style="font-weight: 700"><?php echo $Recursos->Resources["pais"];?>: </span> <span>'+pais+'</span></p><p class="marg"><span style="font-weight: 700"><?php echo $Recursos->Resources["comprar_contacto"];?>:</span> <span>'+$('#contacto').val()+'</span></p>';
+
+
+    if($('input[name="entrega"]:checked').val() != 5) {
+      $('#nome_envio_hid').val($('#nome2').val());
+      $('#morada_envio_hid').val(nl2br($('#morada_envio').val()));
+      $('#cod_postal_envio_hid').val($('#cod_postal2').val());
+      $('#localidade_envio_hid').val($('#localidade2').val());
+    }
+
+    $('#dados_envio').html(data);
+    $('#form_envio .close-button').click();
+  }
+}
+
+guarda_envio();
+
+function carrega_metodos() {
+  var pais = 0;
+  var empty = '<?php echo $empty;?>';
+
+  var preco = $('#total_inpt').val();
+  var send = send;
+   var miless = $('#miless').text();
+
+  if($('#pais').length > 0) {
+    $('#morada_envio').removeAttr('readonly');
+    $('#pickme').fadeOut('slow');
+
+
+    pais = $('#pais').val();
+
+    if('<?php echo $verifica_carrinho;?>' == '1') {
+      if(empty > 0) {
+        $.post("<?php echo ROOTPATH_HTTP;?>includes/carrinho-rpc.php", {op:"carregaEntregas", pais:pais, preco:preco, send:send,miless:miless}, function(data) {
+          $('#div_entregas').html(data);
+
+          $('input[name="entrega"]:checked').trigger('click');
+        });
+      }
+    }
+  }
+  else {
+    pais = 197;
+  }
+
+  $.post("<?php echo ROOTPATH_HTTP;?>includes/carrinho-rpc.php", {op:"carregaPagamentos", pais:pais}, function(data) {
+    $('#div_pagamentos').html(data);
+
+    $('input[name="pagamento"]:checked').trigger('click');
+  });
+}
+
+function verifica_pag(id) {
+
+//  var miless = $('#miless').val();
+   var miless = $('#miless').text();
+
+
+  $('input[name="pagamento"]').removeClass('has-error');
+
+  var pais = $('#pais').val();
+  var empty = '<?php echo $empty;?>';
+
+  if(empty > 0 && pais > 0) {
+    var met_envio = $('input[name="entrega"]:checked').val();
+    var localidade_pm = $('#localidade_pm').val();
+    var ponto_pm = hasSelectedOption('ponto_pickme');
+
+    var preco = $('#total_inpt').val();
+     var miless = $('#miless').text();
+
+
+
+    precoPortes(1, id);
+
+    if('<?php echo $verifica_carrinho;?>' == '1') {
+      $.post("<?php echo ROOTPATH_HTTP;?>includes/carrinho-rpc.php", {op:"carregaEntregas", pais:pais, met_pag:id,miless:miless, met_envio:met_envio, preco:preco, localidade_pm:localidade_pm, ponto_pm:ponto_pm}, function(data) {
+        $('#div_entregas').html(data);
+
+        $('input[name="entrega"]:checked').trigger('click');
+
+        if(ponto_pm > 0 && localidade_pm != '') {
+          carrega_pickme(ponto_pm);
+        }
+      });
+    }
+  }
+}
+
+function verifica_entrega(id, portes) {
+  var met_pagamento = $('input[name="pagamento"]:checked').val();
+  var pais = $('#pais').val();
+ // var miless = document.getElementById('miless').value;
+  var miless = $('#miless').text();
+
+  $.post("<?php echo ROOTPATH_HTTP;?>includes/carrinho-rpc.php", {op:"carregaPagamentos", pais:pais, portes:portes, miless:miless, met_pagamento:met_pagamento}, function(data) {
+    $('#div_pagamentos').html(data);
+
+    precoPortes(2, id);
+  });
+}
+
+function alterar_met_envio(id, portes) {
+  $('input[name="entrega"]').removeClass('has-error');
+
+  if(id == 5) {
+    $('#morada_envio').attr('readonly', 'readonly');
+    $('#cod_postal2').attr('readonly', 'readonly');
+    $('#localidade2').attr('readonly', 'readonly');
+
+    $('#localidade_pm').attr('required', 'required');
+    $('#pickme').fadeIn('slow');
+    $('#div_pickme_local').fadeIn('slow');
+
+    if(document.getElementById('span_mesma')) {
+      $("#span_mesma").fadeOut();
+    }
+  }
+  else {
+    altera_morada();
+
+    $('#morada_envio').removeAttr('readonly');
+    $('#cod_postal2').removeAttr('readonly');
+    $('#localidade2').removeAttr('readonly');
+
+    $('#localidade_pm').removeAttr('required');
+    $('#pickme').fadeOut('slow');
+    $('#div_pickme_local').fadeOut('slow');
+
+    if(document.getElementById('span_mesma')) {
+      $("#span_mesma").fadeIn();
+    }
+  }
+
+  verifica_entrega(id, portes);
+}
+
+function carrega_pickme(ponto_pm) {
+  if($('#localidade_pm').length > 0) {
+    var localidade_pm = $('#localidade_pm').val();
+
+    $.post("<?php echo ROOTPATH_HTTP;?>includes/carrinho-rpc.php", {op:"carregaPickMe", localidade_pm:localidade_pm, ponto_pm:ponto_pm}, function(data) {
+      $('#div_pickme_local').html(data);
+    });
+  }
+}
+
+//Ao selecionar um ponto do Chronopost Pick Me a morada muda para o ponto selecionado. Mas se trocarmos de método de envio depois temos de voltar a colocar a morada inicial do cliente
+function altera_morada() {
+  $('#nome2').val($('#nome_envio_hid').val());
+  $('#morada_envio').val($('#morada_envio_hid').val());
+  $('#cod_postal2').val($('#cod_postal_envio_hid').val());
+  $('#localidade2').val($('#localidade_envio_hid').val());
+
+  $('#localidade_pm').val(0);
+  $('#div_pickme_local').html('');
+
+  guarda_envio();
+}
+
+function altera_ponto_pickme(id) {
+  $('#morada_envio').attr('readonly', 'readonly');
+  $('#cod_postal2').attr('readonly', 'readonly');
+  $('#localidade2').attr('readonly', 'readonly');
+
+  $.post("<?php echo ROOTPATH_HTTP;?>includes/carrinho-rpc.php", {op:"carregaPickMeMorada", ponto:id}, function(data) {
+    data = data.split("###");
+    $('#nome2').val(data[0].trim());
+    $('#morada_envio').val(data[1].trim());
+    $('#cod_postal2').val(data[2].trim());
+    $('#localidade2').val(data[3].trim());
+
+    guarda_envio();
+  });
+}
+
+function precoPortes(tipo, id) {
+  var total = $('#total_inpt').val();
+  var porte_el;
+  var porte_inpt;
+  var portes = 0;
+
+  if(tipo == 1) {
+    portes = $('#pagamento_'+id).attr('data-preco');
+    porte_el = $('#portes_pag_html');
+    porte_inpt = $('#portes_pag');
+
+    $('#pagamento').val(id);
+
+    if($('#portes_env').val()) {
+      total = parseFloat(total) + parseFloat($('#portes_env').val());
+    }
+  }
+  else if(tipo==2) {
+    //Ao mudar o método de envio, verificar novamente o preço do método de pagamento que pode variar (caso seja definido por %)
+    if($('#pagamento').val() > 0) {
+      portes = $('#pagamento_'+$('#pagamento').val()).attr('data-preco');
+      porte_el = $('#portes_pag_html');
+      porte_inpt = $('#portes_pag');
+
+      if(porte_inpt.val() > 0) {
+        porte_inpt.val(portes);
+
+        portes = number_format(portes, 2, ',', '.');
+        porte_el.html('+ <?php echo $moeda_simbolo;?> '+portes);
+
+      }
+    }
+
+    portes = $('#entrega_'+id).attr('data-preco');
+    porte_el = $('#portes_env_html');
+    porte_inpt = $('#portes_env');
+
+    $('#entrega').val(id);
+
+    if($('#portes_pag').val()) {
+      total = parseFloat(total) + parseFloat($('#portes_pag').val());
+;
+
+    }
+  }
+
+
+  porte_inpt.val(portes);
+
+  total = parseFloat(total) + parseFloat(portes);
+  $('#total_final').val(total);
+
+  total = number_format(total, 2, ',', '.');
+  $('.total_update').html('<?php echo $moeda_simbolo;?> '+total);
+
+
+  portes = number_format(portes, 2, ',', '.');
+  porte_el.html('+ <?php echo $moeda_simbolo;?> '+portes);
+
+}
+
+carrega_metodos();
+
+</script>
+
+<script type="text/javascript">
+  $(document).on('click', '.store_name', function(event) {
+  event.preventDefault();
+
+  var data_id = $(this).attr('id');
+  $.ajax({
+    url: 'store_popup.php',
+    type: 'get',
+    dataType: 'html',
+    data: {data_id: data_id},
+  })
+  .done(function(html) {
+    console.log("success");
+    $("#animatedModal").html(html);
+    $.fancybox.open($('#animatedModal'));
+    console.log(data_id);
+
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+  });
+
+});
+</script>
+
+ <script>
+      $(function () {
+        $("#datepicker").datepicker(
+        {
+          language: 'en',
+          minDate: 'yy/mm/dd <?php if ($row_rsCar['prepare'] == "") {echo "";} else {echo $row_rsCar['prepare'];}?>'
+        });
+      });
+  </script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+<script>
+  function getval() {
+  var postal_code = document.getElementById('postal_code').value;
+
+
+   $.ajax({
+      url: "distancemile.php",
+      type: 'post',
+      dataType: 'json',
+      data: {postal_code:postal_code},
+      //contentType: 'application/json',
+      success: function (data) {
+        //alert(JSON.stringify(data.lag_key));
+        $("#miless").html(data.lag_key);
+    }
+  });
+
+   verifica_pag(id)
+}
+
+</script>
+
+<script type="text/javascript">
+// This sample uses the Autocomplete widget to help the user select a
+      // place, then it retrieves the address components associated with that
+      // place, and then it populates the form fields with those details.
+      // This sample requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script
+      // src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+      let placeSearch;
+      let autocomplete;
+      const componentForm = {
+        street_number: "short_name",
+        route: "long_name",
+        locality: "long_name",
+        administrative_area_level_1: "short_name",
+        country: "long_name",
+        postal_code: "short_name",
+      };
+
+      function initAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+          document.getElementById("autocomplete"),
+          { types: ["geocode"] }
+        );
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete.setFields(["address_component"]);
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete.addListener("place_changed", fillInAddress);
+      }
+
+      function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        const place = autocomplete.getPlace();
+
+        for (const component in componentForm) {
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
+
+        // Get each component of the address from the place details,
+        // and then fill-in the corresponding field on the form.
+        for (const component of place.address_components) {
+          const addressType = component.types[0];
+
+          if (componentForm[addressType]) {
+            const val = component[componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+          }
+        }
+      }
+
+      // Bias the autocomplete object to the user's geographical location,
+      // as supplied by the browser's 'navigator.geolocation' object.
+      function geolocate() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const geolocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            const circle = new google.maps.Circle({
+              center: geolocation,
+              radius: position.coords.accuracy,
+            });
+            autocomplete.setBounds(circle.getBounds());
+          });
+        }
+      }
+</script>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYw1qIZUqAK4lfkB8dLIOK0XOVU9e66xE&libraries=places&callback=initAutocomplete" async defer></script>
+
+
+
+<?php include_once ('codigo_antes_body.php');?>
+</body>
+</html>

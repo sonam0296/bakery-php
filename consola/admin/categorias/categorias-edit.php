@@ -1,0 +1,1636 @@
+<?php include_once('../inc_pages.php'); ?>
+
+<?php
+
+
+
+$menu_sel='ec_produtos_categorias';
+
+$menu_sub_sel='';
+
+$tab_sel=1;
+
+
+
+if($_GET['env']==1) $tab_sel=1;
+
+if(isset($_GET['tab_sel']))
+
+	$tab_sel = $_GET['tab_sel'];
+
+
+
+$id=$_GET['id'];
+
+$inserido=0;
+
+$erro = 0;
+
+
+
+//Atualiza o URL dos Produtos associados � categoria onde o URL foi atualizado.
+
+function produtos_URL($id_categoria, $url_antigo, $novo_url,$extensao){
+
+	$query_rsProdutos = "SELECT id, url FROM l_pecas".$extensao." WHERE categoria=:id";
+
+	$rsProdutos = DB::getInstance()->prepare($query_rsProdutos);
+
+	$rsProdutos->bindParam(':id', $id_categoria, PDO::PARAM_INT, 5);
+
+	$rsProdutos->execute();
+
+	$totalRows_rsProdutos = $rsProdutos->rowCount();
+
+
+
+	if($totalRows_rsProdutos > 0) {
+
+		while($row_rsProd = $rsProdutos->fetch()) {
+
+			$id_produto = $row_rsProd['id'];
+
+			$url_updated = str_replace($url_antigo, $novo_url, $row_rsProd['url']);
+
+			
+
+			//REDIRECT 301
+
+			if($row_rsProd['url']!=$url_updated) redirectURL($row_rsProd['url'], $url_updated, substr($extensao,1));
+
+
+
+			$updateSQL = "UPDATE l_pecas".$extensao." SET url=:url WHERE id=:id";
+
+			$rsUpdateUrl = DB::getInstance()->prepare($updateSQL);
+
+			$rsUpdateUrl->bindParam(':url', $url_updated, PDO::PARAM_STR, 5);
+
+			$rsUpdateUrl->bindParam(':id', $id_produto, PDO::PARAM_INT, 5);	
+
+			$rsUpdateUrl->execute();
+
+		}
+
+	}
+
+}
+
+
+
+$tamanho_imagens1 = getFillSize('Categorias', 'imagem1');
+
+
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "categorias_form")) {
+
+	$manter = $_POST['manter'];
+
+		
+
+	$tab_sel = $_REQUEST['tab_sel'];	
+
+
+
+	$query_rsP = "SELECT * FROM l_categorias".$extensao." WHERE id=:id";
+
+	$rsP = DB::getInstance()->prepare($query_rsP);
+
+	$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);
+
+	$rsP->execute();
+
+	$row_rsP = $rsP->fetch(PDO::FETCH_ASSOC);
+
+	$totalRows_rsP = $rsP->rowCount();
+
+
+
+	$query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+
+	$rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
+
+	$rsLinguas->execute();
+
+	$row_rsLinguas = $rsLinguas->fetchAll();
+
+	$totalRows_rsLinguas = $rsLinguas->rowCount();
+
+	
+
+	if($_POST['nome']!='' && $tab_sel==1) {
+
+		//Só atualiza o URL se a checkbox for selecionada (para não perder os URL's personalizados)
+
+    if(isset($_POST['atualizar_url'])) {
+
+			$query_rsCatMae = "SELECT url FROM l_categorias".$extensao." WHERE id=:categoria";
+
+			$rsCatMae = DB::getInstance()->prepare($query_rsCatMae);
+
+			$rsCatMae->bindParam(':categoria', $_POST['categoria'], PDO::PARAM_INT);
+
+			$rsCatMae->execute();
+
+			$row_rsCatMae = $rsCatMae->fetch(PDO::FETCH_ASSOC);
+
+			$totalRows_rsCatMae = $rsCatMae->rowCount();
+
+
+
+			if($totalRows_rsCatMae > 0) {
+
+				$nome_url = $row_rsCatMae['url']."-";
+
+			} 
+
+			else {
+
+				$nome_url="";
+
+			}
+
+			
+
+			$nome_url .= strtolower(verifica_nome($_POST['nome']));		
+
+				
+
+			$query_rsProc = "SELECT id FROM l_categorias".$extensao." WHERE url like '$nome_url' AND id!=:id";
+
+			$rsProc = DB::getInstance()->prepare($query_rsProc);
+
+			$rsProc->bindParam(':id', $id, PDO::PARAM_INT, 5);
+
+			$rsProc->execute();
+
+			$totalRows_rsProc = $rsProc->rowCount();
+
+
+
+			if($totalRows_rsProc > 0) {
+
+				$nome_url = $nome_url."-".$id;
+
+			}	
+
+			
+
+			//REDIRECT 301
+
+			if($row_rsP['url']!=$nome_url) redirectURL($row_rsP['url'], $nome_url, substr($extensao,1));
+
+
+
+
+
+			produtos_URL($row_rsP['id'], $row_rsP['url'], $nome_url, $extensao);
+
+
+
+			//Caso seja Categoria Principal, vai �s suas SubCategorias e aos seus respetivos Produtos
+
+			if($row_rsP['cat_mae'] == 0){
+
+
+
+				$query_rsCategorias = "SELECT * FROM l_categorias".$extensao." WHERE cat_mae=:cat_mae";
+
+				$rsCategorias = DB::getInstance()->prepare($query_rsCategorias);
+
+				$rsCategorias->bindParam(':cat_mae', $row_rsP['id'], PDO::PARAM_INT);
+
+				$rsCategorias->execute();
+
+				$totalRows_rsCategorias = $rsCategorias->rowCount();
+
+
+
+				if($totalRows_rsCategorias > 0){
+
+					while($row_rsCategorias = $rsCategorias->fetch()){
+
+
+
+						$url_new = str_replace($row_rsP['url'], $nome_url, $row_rsCategorias['url']);
+
+
+
+						//REDIRECT 301
+
+						if($row_rsCategorias['url']!=$url_new) redirectURL($row_rsCategorias['url'], $url_new, substr($extensao,1));
+
+
+
+						$updateSQL = "UPDATE l_categorias".$extensao." SET url=:url WHERE id=:id";
+
+						$rsUpdateUrl = DB::getInstance()->prepare($updateSQL);
+
+						$rsUpdateUrl->bindParam(':url', $url_new, PDO::PARAM_STR, 5);
+
+						$rsUpdateUrl->bindParam(':id', $row_rsCategorias['id'], PDO::PARAM_INT, 5);	
+
+						$rsUpdateUrl->execute();
+
+
+
+						produtos_URL($row_rsCategorias['id'], $row_rsCategorias['url'], $url_new, $extensao);
+
+					}
+
+				}
+
+			}
+
+		}
+
+		else {
+
+      $nome_url = $row_rsP['url'];
+
+    }	
+
+		
+
+		//VERIFICA SE O TITULO JÁ ESTÁ PERSONALIZADO
+
+		$title=$_POST['nome'];
+
+		if($row_rsP['title']!=$row_rsP['nome']) {
+
+			$title=$row_rsP['title'];
+
+		}
+
+		
+
+		$insertSQL = "UPDATE l_categorias".$extensao." SET nome=:nome,nav_name=:nav_name,highlight_visible=:highlight_visible, descricao=:descricao, url=:url, title=:title WHERE id=:id";
+
+		$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+		$rsInsert->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR, 5);	
+
+		$rsInsert->bindParam(':nav_name', $_POST['nav_name'], PDO::PARAM_STR, 5);	
+
+		$rsInsert->bindParam(':highlight_visible', $_POST['highlight_visible'], PDO::PARAM_INT);
+
+		$rsInsert->bindParam(':descricao', $_POST['descricao'], PDO::PARAM_STR, 5);	
+
+		$rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5);	
+
+		$rsInsert->bindParam(':title', $title, PDO::PARAM_STR, 5);	
+
+		$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);	
+
+		$rsInsert->execute();
+
+				
+
+		foreach($row_rsLinguas as $linguas) {			
+
+			$insertSQL = "UPDATE l_categorias_".$linguas["sufixo"]." SET cat_mae=:categoria WHERE id=:id";
+
+			$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+			$rsInsert->bindParam(':categoria', $_POST['categoria'], PDO::PARAM_INT);
+
+			$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);	
+
+			$rsInsert->execute();
+
+		}
+
+
+
+		alteraSessions('categorias');
+
+
+
+		DB::close();
+
+		
+
+		if(!$manter) 
+
+			header("Location: categorias.php?alt=1");
+
+		else 
+
+			header("Location: categorias-edit.php?id=".$id."&alt=1&tab_sel=1");
+
+	}
+
+	
+
+	if($tab_sel==2) {
+
+		$rem = 0;
+
+		$opcao = $_POST['opcao'];
+
+		$imagem = $row_rsP['imagem1'];
+
+
+
+		$mascara = 0;
+
+	  if(isset($_POST['mascara'])) {
+
+	    $mascara = 1;
+
+	  }
+
+
+
+	  $mostra_titulo = 0;
+
+	  if(isset($_POST['mostra_titulo'])) {
+
+	    $mostra_titulo = 1;
+
+	  }
+
+
+
+	  $tipo_fundo = 0;
+
+	  if(isset($_POST['tipo_fundo'])) {
+
+	    $tipo_fundo = 1;
+
+	  }
+
+
+
+		foreach ($row_rsLinguas as $linguas) {
+
+			$insertSQL = "UPDATE l_categorias_".$linguas["sufixo"]." SET mascara=:mascara WHERE id=:id";
+
+			$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+			$rsInsert->bindParam(':mascara', $mascara, PDO::PARAM_INT);		
+
+			$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);	
+
+			$rsInsert->execute();
+
+		}
+
+
+
+		if($opcao == 1) {
+
+			$insertSQL = "UPDATE l_categorias".$extensao." SET mostra_titulo=:mostra_titulo, cor_titulo=:cor_titulo, cor_fundo=:cor_fundo, tipo_fundo=:tipo_fundo  WHERE id=:id";
+
+			$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+			$rsInsert->bindParam(':id', $id, PDO::PARAM_INT, 5);
+
+			$rsInsert->bindParam(':mostra_titulo', $mostra_titulo, PDO::PARAM_INT);	
+
+			$rsInsert->bindParam(':cor_titulo', $_POST['cor_titulo'], PDO::PARAM_STR, 5);
+
+			$rsInsert->bindParam(':cor_fundo', $_POST['cor_fundo'], PDO::PARAM_STR, 5);
+
+			$rsInsert->bindParam(':tipo_fundo', $_POST['tipo_fundo'], PDO::PARAM_INT);		
+
+			$rsInsert->execute();
+
+		}else if($opcao == 2) {
+
+			foreach ($row_rsLinguas as $linguas) {
+
+				$insertSQL = "UPDATE l_categorias_".$linguas["sufixo"]." SET mostra_titulo=:mostra_titulo, cor_titulo=:cor_titulo, cor_fundo=:cor_fundo, tipo_fundo=:tipo_fundo WHERE id=:id";
+
+				$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+				$rsInsert->bindParam(':mostra_titulo', $mostra_titulo, PDO::PARAM_INT);	
+
+				$rsInsert->bindParam(':cor_titulo', $_POST['cor_titulo'], PDO::PARAM_STR, 5);
+
+				$rsInsert->bindParam(':cor_fundo', $_POST['cor_fundo'], PDO::PARAM_STR, 5);
+
+				$rsInsert->bindParam(':tipo_fundo', $_POST['tipo_fundo'], PDO::PARAM_INT);	
+
+				$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);	
+
+				$rsInsert->execute();
+
+				
+
+			}
+
+		}
+
+
+
+		if(isset($_POST['img_remover1']) && $_POST['img_remover1']==1) {
+
+			if($opcao == 1) {
+
+
+
+				$insertSQL = "UPDATE l_categorias".$extensao." SET imagem1=NULL WHERE id=:id";
+
+				$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+				$rsInsert->bindParam(':id', $id, PDO::PARAM_INT, 5);	
+
+				$rsInsert->execute();
+
+		
+
+				$r = 0;
+
+
+
+				//Para todas as l�nguas e enquanto n�o encontrar-mos outra categoria com a imagem a ser removida...
+
+				foreach ($row_rsLinguas as $linguas) {	
+
+					$query_rsImagem = "SELECT * FROM l_categorias_".$linguas["sufixo"]." WHERE imagem1=:imagem AND id=:id";
+
+					$rsImagem = DB::getInstance()->prepare($query_rsImagem);
+
+					$rsImagem->bindParam(':imagem', $imagem, PDO::PARAM_STR, 5);
+
+					$rsImagem->bindParam(':id', $id, PDO::PARAM_INT);
+
+					$rsImagem->execute();
+
+					$totalRows_rsImagem = $rsImagem->rowCount();
+
+
+
+					if($totalRows_rsImagem > 0)
+
+						$r = 1;
+
+				}
+
+
+
+				//Se a vari�vel for igual a 0, significa que a imagem n�o � usada em mais nenhum registo e podemos remov�-la
+
+				if($r == 0)
+
+					@unlink('../../../imgs/categorias/'.$imagem);
+
+			}
+
+			else if($opcao == 2) {
+
+				foreach ($row_rsLinguas as $linguas) {	
+
+					$query_rsSelect = "SELECT * FROM l_categorias_".$linguas['sufixo']." WHERE id=:id";
+
+					$rsSelect = DB::getInstance()->prepare($query_rsSelect);
+
+					$rsSelect->bindParam(':id', $id, PDO::PARAM_INT);
+
+					$rsSelect->execute();
+
+					$row_rsSelect = $rsSelect->fetch(PDO::FETCH_ASSOC);
+
+
+
+					@unlink('../../../imgs/categorias/'.$row_rsSelect['imagem1']);
+
+
+
+					$insertSQL = "UPDATE l_categorias_".$linguas["sufixo"]." SET imagem1=NULL WHERE id=:id";
+
+					$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+					$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);	
+
+					$rsInsert->execute();
+
+				}
+
+
+
+			}
+
+
+
+			$rem = 1;
+
+		}
+
+		
+
+		$ins = 0;
+
+
+
+		if($_FILES['img']['name']!='') { // actualiza imagem
+
+			//Verificar o formato do ficheiro
+
+			$ext = strtolower(pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION));
+
+
+
+			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png") {
+
+				$erro = 1;
+
+			}
+
+			else {
+
+				$ins = 1;	
+
+				require("../resize_image.php");
+
+				
+
+				$imagem="";		
+
+				
+
+				$imgs_dir = "../../../imgs/categorias";
+
+				$contaimg = 1; 
+
+		
+
+				foreach($_FILES as $file_name => $file_array) {
+
+			
+
+					$id_file=date("his").'_'.$contaimg.'_'.rand(0,9999);
+
+					
+
+					switch ($contaimg) {
+
+						case '1': case '2': case '3':    
+
+							$file_dir =  $imgs_dir;
+
+						break;
+
+					}
+
+		
+
+					if($file_array['size'] > 0){
+
+							$nome_img=verifica_nome($file_array['name']);
+
+							$nome_file = $id_file."_".$nome_img;
+
+							@unlink($file_dir.'/'.$_POST['file_db_'.$contaimg]);
+
+					}else {
+
+							//$nome_file = $_POST['file_db_'.$contaimg];
+
+		
+
+						if($_POST['file_db_'.$contaimg])
+
+							$nome_file = $_POST['file_db_'.$contaimg];
+
+						else {
+
+							$nome_file ='';
+
+							@unlink($file_dir.'/'.$_POST['file_db_del_'.$contaimg]);
+
+						}
+
+					}
+
+							
+
+					if (is_uploaded_file($file_array['tmp_name'])) { move_uploaded_file($file_array['tmp_name'],"$file_dir/$nome_file") or die ("Couldn't copy"); }
+
+		
+
+					//store the name plus index as a string 
+
+					$variableName = 'nome_file' . $contaimg; 
+
+					//the double dollar sign is saying assign $imageName 
+
+					// to the variable that has the name that is in $variableName
+
+					$$variableName = $nome_file; 	
+
+					$contaimg++;
+
+															
+
+				} // fim foreach
+
+				//Fim do Trat. Imagens
+
+					
+
+				//RESIZE DAS IMAGENS
+
+				$imagem = $nome_file1;
+
+				$imagem2 = $nome_file2;
+
+
+
+				//IMAGEM 1
+
+				if($_FILES['img']['name']!='') {
+
+					if($imagem!="" && file_exists("../../../imgs/categorias/".$imagem)){
+
+										
+
+						$maxW=$tamanho_imagens1['0'];
+
+						$maxH=$tamanho_imagens1['1'];
+
+						
+
+						$sizes=getimagesize("../../../imgs/categorias/".$imagem);
+
+						
+
+						$imageW=$sizes[0];
+
+						$imageH=$sizes[1];
+
+						
+
+						if($imageW>$maxW || $imageH>$maxH){
+
+											
+
+							$img1=new Resize("../../../imgs/categorias/", $imagem, $imagem, $maxW, $maxH);
+
+							$img1->resize_image();
+
+							
+
+						}
+
+					
+
+					}		
+
+					
+
+					if($row_rsP['imagem1']){
+
+						@unlink('../../../imgs/categorias/'.$row_rsP['imagem1']);
+
+					}
+
+
+
+					//compressImage('../../../imgs/categorias/'.$imagem, '../../../imgs/categorias/'.$imagem);
+
+
+
+					//Inserir apenas na l�ngua atual
+
+					if($opcao == 1) {
+
+						$insertSQL = "UPDATE l_categorias".$extensao." SET imagem1=:imagem1 WHERE id=:id";
+
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+						$rsInsert->bindParam(':imagem1', $imagem, PDO::PARAM_STR, 5);
+
+						$rsInsert->bindParam(':id', $id, PDO::PARAM_INT, 5);		
+
+						$rsInsert->execute();
+
+					}
+
+					//Inserir para todas as l�nguas
+
+					else if($opcao == 2) {
+
+						foreach ($row_rsLinguas as $linguas) {		
+
+							$insertSQL = "UPDATE l_categorias_".$linguas["sufixo"]." SET imagem1=:imagem1 WHERE id=:id";
+
+							$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+							$rsInsert->bindParam(':imagem1', $imagem, PDO::PARAM_STR, 5);
+
+							$rsInsert->bindParam(':id', $id, PDO::PARAM_INT, 5);		
+
+							$rsInsert->execute();
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+
+
+		DB::close();
+
+
+
+		alteraSessions('categorias');
+
+		
+
+		if($erro == 1)
+
+			header("Location: categorias-edit.php?id=".$id."&erro=1&tab_sel=2");
+
+		else {
+
+			if(!$manter) 
+
+				header("Location: categorias.php?alt=1");
+
+			else {
+
+				if($rem == 1 && $ins == 0)
+
+					header("Location: categorias-edit.php?id=".$id."&rem=1&tab_sel=2");
+
+				else
+
+					header("Location: categorias-edit.php?id=".$id."&alt=1&tab_sel=2");
+
+			}
+
+		}
+
+	}
+
+	
+
+	if($tab_sel==3) {
+
+		if($_POST['url']!='') {
+
+			$query_rsP = "SELECT url FROM l_categorias".$extensao." WHERE id=:id";
+
+			$rsP = DB::getInstance()->prepare($query_rsP);
+
+			$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);	
+
+			$rsP->execute();
+
+			$row_rsP = $rsP->fetch(PDO::FETCH_ASSOC);
+
+			$totalRows_rsP = $rsP->rowCount();
+
+			
+
+			$nome_url=strtolower(verifica_nome($_POST['url']));
+
+
+
+			$query_rsProc = "SELECT id FROM l_categorias".$extensao." WHERE url like :nome_url AND id!=:id";
+
+      $rsProc = DB::getInstance()->prepare($query_rsProc);
+
+      $rsProc->bindParam(':id', $id, PDO::PARAM_INT);
+
+      $rsProc->bindParam(':nome_url', $nome_url, PDO::PARAM_STR, 5);
+
+      $rsProc->execute();
+
+      $totalRows_rsProc = $rsProc->rowCount();
+
+      
+
+      if($totalRows_rsProc > 0) {
+
+        $nome_url = $nome_url."-".$id;
+
+      }
+
+			
+
+			//REDIRECT 301
+
+			if($row_rsP['url']!=$nome_url) redirectURL($row_rsP['url'], $nome_url, substr($extensao,1));
+
+		
+
+			$insertSQL = "UPDATE l_categorias".$extensao." SET url=:url, title=:title, description=:description, keywords=:keywords WHERE id=:id";
+
+			$rsInsert = DB::getInstance()->prepare($insertSQL);
+
+			$rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5);
+
+			$rsInsert->bindParam(':title', $_POST['title'], PDO::PARAM_STR, 5);	
+
+			$rsInsert->bindParam(':description', $_POST['description'], PDO::PARAM_STR, 5);	
+
+			$rsInsert->bindParam(':keywords', $_POST['keywords'], PDO::PARAM_STR, 5);	
+
+			$rsInsert->bindParam(':id', $id, PDO::PARAM_INT, 5);	
+
+			$rsInsert->execute();
+
+			DB::close();
+
+		}
+
+
+
+		alteraSessions('categorias');
+
+	
+
+		if(!$manter) 
+
+			header("Location: categorias.php?alt=1");
+
+		else 
+
+			header("Location: categorias-edit.php?id=".$id."&alt=1&tab_sel=3");
+
+	}
+
+}
+
+
+
+$query_rsP = "SELECT * FROM l_categorias".$extensao." WHERE id=:id";
+
+$rsP = DB::getInstance()->prepare($query_rsP);
+
+$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);	
+
+$rsP->execute();
+
+$row_rsP = $rsP->fetch(PDO::FETCH_ASSOC);
+
+$totalRows_rsP = $rsP->rowCount();
+
+
+
+DB::close();
+
+
+
+?>
+
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css"/>
+
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+
+<!-- END PAGE LEVEL STYLES -->
+
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+
+<!--COR-->
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>js/jscolor/jscolor.js"></script>
+
+<body class="<?php echo $body_info; ?>">
+
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+
+<div class="clearfix"> </div>
+
+<!-- BEGIN CONTAINER -->
+
+<div class="page-container">
+
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+
+  <!-- BEGIN CONTENT -->
+
+  <div class="page-content-wrapper">
+
+    <div class="page-content"> 
+
+      <!-- BEGIN PAGE HEADER-->
+
+      <h3 class="page-title"> <?php echo $RecursosCons->RecursosCons['categorias']; ?> <small><?php echo $RecursosCons->RecursosCons['editar_registo']; ?></small> </h3>
+
+			<div class="page-bar">
+
+				<ul class="page-breadcrumb">
+
+					<li>
+
+						<i class="fa fa-home"></i>
+
+						<a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?></a>
+
+						<i class="fa fa-angle-right"></i>
+
+					</li>
+
+					<li>
+
+						<a href="produtos.php"><?php echo $RecursosCons->RecursosCons['produtos']; ?></a>
+
+						<i class="fa fa-angle-right"></i>
+
+					</li>
+
+					<li>
+
+						<a href="categorias.php"><?php echo $RecursosCons->RecursosCons['categorias']; ?> <i class="fa fa-angle-right"></i></a>
+
+					</li>
+
+					<li>
+
+						<a href="javascript:"><?php echo $RecursosCons->RecursosCons['editar_registo']; ?></a>
+
+					</li>
+
+				</ul>
+
+			</div>
+
+      <!-- END PAGE HEADER-->      
+
+      <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
+      <div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+
+          <div class="modal-content">
+
+            <div class="modal-header">
+
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+              <h4 class="modal-title"><?php echo $RecursosCons->RecursosCons['eliminar_registo']; ?></h4>
+
+            </div>
+
+            <div class="modal-body"> <?php echo $RecursosCons->RecursosCons['msg_required']; ?> </div>
+
+            <div class="modal-footer">
+
+              <button type="button" class="btn blue" onClick="document.location='categorias.php?rem=1&id=<?php echo $row_rsP["id"]; ?>'"><?php echo $RecursosCons->RecursosCons['txt_ok']; ?></button>
+
+              <button type="button" class="btn default" data-dismiss="modal"><?php echo $RecursosCons->RecursosCons['txt_cancelar']; ?></button>
+
+            </div>
+
+          </div>
+
+          <!-- /.modal-content --> 
+
+        </div>
+
+        <!-- /.modal-dialog --> 
+
+      </div>
+
+      <!-- /.modal --> 
+
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
+      <!-- BEGIN PAGE CONTENT-->
+
+      <div class="row">
+
+        <div class="col-md-12">
+
+		  		<?php include_once(ROOTPATH_ADMIN.'inc_linguas.php'); ?> 
+
+          <form id="categorias_form" name="categorias_form" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+
+            <input type="hidden" name="manter" id="manter" value="0">
+
+            <input type="hidden" name="tab_sel" id="tab_sel" value="<?php echo $tab_sel; ?>">
+
+            <input type="hidden" name="img_remover1" id="img_remover1" value="0">
+
+            <div class="portlet">
+
+              <div class="portlet-title">
+
+                <div class="caption"> <i class="fa fa-pencil-square"></i><?php echo $RecursosCons->RecursosCons['categorias']; ?> - <?php echo $row_rsP['nome']; ?></div>
+
+                <div class="form-actions actions btn-set">
+
+                  <button type="button" name="back" class="btn default" onClick="document.location='categorias.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+
+                  <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar']; ?></button>
+
+                  <button type="submit" class="btn green"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar']; ?></button>
+
+                  <button type="submit" class="btn green" onClick="document.getElementById('manter').value='1';"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar_manter']; ?></button>
+
+                  <a href="#modal_delete" data-toggle="modal" class="btn red"><i class="fa fa-remove"></i> <?php echo $RecursosCons->RecursosCons['eliminar']; ?></a>
+
+                </div>
+
+              </div>
+
+              <div class="portlet-body">
+
+              	<div class="tabbable">
+
+                  <ul class="nav nav-tabs">
+
+                    <li <?php if($tab_sel==1) echo "class=\"active\""; ?>> <a href="#tab_general" data-toggle="tab" onClick="document.getElementById('tab_sel').value='1'"> <?php echo $RecursosCons->RecursosCons['tab_detalhes']; ?> </a> </li>
+
+                    <li <?php if($tab_sel==2) echo "class=\"active\""; ?>> <a href="#tab_images" data-toggle="tab" onClick="document.getElementById('tab_sel').value='2'"> <?php echo $RecursosCons->RecursosCons['tab_imagem']; ?> </a> </li>
+
+  									<li onClick="window.location='categorias-catalogo.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> <?php echo $RecursosCons->RecursosCons['tab_ficheiros']; ?> </a> </li>
+
+  									<li <?php if($tab_sel==3) echo "class=\"active\""; ?>> <a id="tab_3" href="#tab_dados" data-toggle="tab" onClick="document.getElementById('tab_sel').value='3'"> <?php echo $RecursosCons->RecursosCons['tab_metatags']; ?> </a> </li>
+
+                  </ul>
+
+                  <div class="tab-content no-space">
+
+                    <div class="tab-pane <?php if($tab_sel==1) echo "active"; ?>" id="tab_general">
+
+                      <div class="form-body">
+
+					  						<?php if($_GET['alt'] == 1 && $_GET['tab_sel'] == 1) { ?>
+
+                        	<div class="alert alert-success display-show">
+
+	                          <button class="close" data-close="alert"></button>
+
+	                          <?php echo $RecursosCons->RecursosCons['alt']; ?> 
+
+	                        </div>
+
+                        <?php } ?>
+
+												<?php if($_GET['env'] == 1) { ?>  
+
+	                        <div class="alert alert-success display-show">
+
+	                          <button class="close" data-close="alert"></button>
+
+	                          <?php echo $RecursosCons->RecursosCons['env_config']; ?> 
+
+	                        </div>
+
+                        <?php } ?>
+
+	                      <div class="alert alert-danger display-hide">
+
+	                        <button class="close" data-close="alert"></button>
+
+	                        <?php echo $RecursosCons->RecursosCons['msg_required']; ?>
+
+	                      </div>                  
+
+	                      <div class="form-group">
+
+	                        <label class="col-md-2 control-label" for="nome"><?php echo $RecursosCons->RecursosCons['nome_label']; ?>: <span class="required"> * </span></label>
+
+	                        <div class="col-md-5">
+
+	                          <input type="text" class="form-control" name="nome" id="nome" value="<?php echo $row_rsP['nome']; ?>">
+
+	                        </div>
+
+	                        <label class="col-md-1 control-label" for="atualizar_url"><?php echo $RecursosCons->RecursosCons['atualizar_url']; ?>? </label>
+
+                          <div class="col-md-2" style="padding-top: 7px;">
+
+                            <input type="checkbox" class="form-control" name="atualizar_url" id="atualizar_url" value="1">
+
+                            <p class="help-block"><?php echo $RecursosCons->RecursosCons['atualizar_url_txt']; ?></p>
+
+                          </div>
+
+	                      </div> 
+
+                      	<div class="form-group">
+
+	                    		<label class="col-md-2 control-label" for="categoria"><?php echo $RecursosCons->RecursosCons['categoria_principal_label']; ?>:</label>
+
+                    			<div class="col-md-8">
+
+	                        	<select class="form-control select2me" id="categoria" name="categoria" >
+
+	                            <option value="0"><?php echo $RecursosCons->RecursosCons['categoria_principal_label']; ?></option>
+
+	                            <?php //listaCategorias(0, 2, "", $row_rsP['id'], $row_rsP['cat_mae']); ?>
+
+	                            <?php umaCategoriaPorProd(0, "", $row_rsP['id'],1); ?>
+
+	                        	</select>
+
+	                    		</div>
+
+                				</div>   
+
+
+
+						<div class="form-group">
+
+		                    <label class="col-md-2 control-label" for="highlight_visible" style="padding-top:0;">Show Menu</label>
+
+		                    <div class="col-md-3">
+
+		                      <input type="checkbox" class="form-control" name="highlight_visible" id="highlight_visible" value="1" <?php if($row_rsP['highlight_visible'] == 1) echo "checked";?>>
+
+		                    </div>
+
+		                    <label class="col-md-2 control-label div_cor" for="nav_name">Menu Name: </label>
+
+		                    <div class="col-md-3">
+
+	                          <input type="text" class="form-control" name="nav_name" id="nav_name" value="<?php echo $row_rsP['nav_name']; ?>">
+
+	                        </div>
+
+		                  </div>
+
+
+
+			                	<div class="form-group">
+
+			                    <label class="col-md-2 control-label" for="descricao"><?php echo $RecursosCons->RecursosCons['descricao_label']; ?>: </label>
+
+			                    <div class="col-md-6">
+
+			                      <textarea class="form-control" rows="3" id="descricao" name="descricao"><?php echo $row_rsP['descricao']; ?></textarea>
+
+			                    </div>
+
+			                  </div>                
+
+                    	</div>
+
+                    </div>
+
+                    <div class="tab-pane <?php if($tab_sel==2) echo "active"; ?>" id="tab_images">
+
+                      <div class="form-body">
+
+                      	<?php if($_GET['alt'] == 1 && $_GET['tab_sel'] == 2) { ?>
+
+                        <div class="alert alert-success display-show">
+
+                          <button class="close" data-close="alert"></button>
+
+                          <?php echo $RecursosCons->RecursosCons['img_alt']; ?> </div>
+
+                        <?php } ?>
+
+                        <?php if($_GET['rem'] == 1 && $_GET['tab_sel'] == 2) { ?>
+
+                        <div class="alert alert-danger display-show">
+
+                          <button class="close" data-close="alert"></button>
+
+                          <?php echo $RecursosCons->RecursosCons['img_rem']; ?> </div>
+
+                        <?php } ?>
+
+                        <?php if($_GET['erro'] == 1 && $_GET['tab_sel'] == 2) { ?>
+
+                        <div class="alert alert-danger display-show">
+
+                        	<button class="close" data-close="alert"></button>
+
+                        	<?php echo $RecursosCons->RecursosCons['erro_ficheiro']; ?> </div>
+
+                        <?php } ?>
+
+                        <div class="form-group">
+
+							<label class="col-md-2 control-label" for="mascara" style="padding-top:0;"> <?php echo $RecursosCons->RecursosCons['tem_mascara_label']; ?></label>
+
+							<div class="col-md-4">
+
+								<input type="checkbox" class="form-control" name="mascara" id="mascara" value="1" <?php if($row_rsP['mascara'] == 1) echo "checked";?>>
+
+								<p class="help-block"><?php echo $RecursosCons->RecursosCons['sel_mascara_msg']; ?></p>
+
+							</div>
+
+                        </div>
+
+                        <div class="form-group div_topo">
+
+		                    <label class="col-md-2 control-label" for="mostra_titulo" style="padding-top:0;"><?php echo $RecursosCons->RecursosCons['mostrar_titulo']; ?> </label>
+
+		                    <div class="col-md-3">
+
+		                      <input type="checkbox" class="form-control" name="mostra_titulo" id="mostra_titulo" value="1" <?php if($row_rsP['mostra_titulo'] == 1) echo "checked";?>>
+
+		                      <p class="help-block"><?php echo $RecursosCons->RecursosCons['info_mostra_titulo']; ?></p>
+
+		                    </div>
+
+		                    <label class="col-md-2 control-label div_cor" for="cor_titulo"><?php echo $RecursosCons->RecursosCons['cor_titulo_label']; ?>: </label>
+
+		                    <div class="col-md-2 div_cor">
+
+		                    	<input type="text" class="form-control color" name="cor_titulo" id="cor_titulo" value="<?php echo $row_rsP['cor_titulo']; ?>">
+
+		                    </div>
+
+		                  </div>
+
+                        <div class="form-group div_topo" id="div_tipo">
+
+						    <label class="col-md-2 control-label" for="tipo_fundo"><?php echo $RecursosCons->RecursosCons['tipo_fundo_label']; ?>: </label>
+
+						    <div class="col-md-3" style="padding-top: 6px;">
+
+						        <div class="radio-list bg-type-main">
+
+						        	 <label class="radio">
+
+						            <input type="radio"  bg-type="1" name="tipo_fundo" id="tipo_fundo2" value="1" <?php if($row_rsP['tipo_fundo'] == 1) echo "checked"; ?>> <?php echo $RecursosCons->RecursosCons['imagem']; ?> </label>
+
+						            <label class="radio" style="margin-bottom: 10px;">
+
+						            <input type="radio"  bg-type="2" name="tipo_fundo" id="tipo_fundo1" value="2" <?php if($row_rsP['tipo_fundo'] == 2) echo "checked"; ?>> <?php echo $RecursosCons->RecursosCons['cor_label']; ?> </label>  
+
+						        </div>
+
+						    </div>
+
+						     <label class="col-md-2 control-label" for="opcao"><?php echo $RecursosCons->RecursosCons['guardar_para']; ?>: </label>
+
+	                          <div class="col-md-4">
+
+	                          	<div style="margin-top: 8px" class="md-radio-list">
+
+									<div class="md-radio">
+
+										<input type="radio" id="opcao1" name="opcao" value="1" class="md-radiobtn" checked>
+
+										<label for="opcao1">
+
+										<span></span>
+
+										<span class="check"></span>
+
+										<span class="box"></span>
+
+										<?php echo $RecursosCons->RecursosCons['lingua_atual']; ?> </label>
+
+									</div>
+
+									<div class="md-radio">
+
+										<input type="radio" id="opcao2" name="opcao" value="2" class="md-radiobtn">
+
+										<label for="opcao2">
+
+										<span></span>
+
+										<span class="check"></span>
+
+										<span class="box"></span>
+
+										<?php echo $RecursosCons->RecursosCons['todas_linguas']; ?> </label>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						
+
+                        <div class="form-group data-bg" data-bg-type="1">
+
+                          <label class="col-md-2 control-label"><?php echo $RecursosCons->RecursosCons['imagem']; ?>: <br><strong><?php echo $tamanho_imagens1['0']." * ".$tamanho_imagens1['1']." px"; ?></strong></label>
+
+                          <div class="col-md-4">
+
+                            <div class="fileinput fileinput-<?php if($row_rsP['imagem1']!="" && file_exists("../../../imgs/categorias/".$row_rsP['imagem1'])) { ?>exists<?php } else { ?>new<?php } ?>" data-provides="fileinput">
+
+                              <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"> <img src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>imgs/sem_imagem.png" alt=""/> </div>
+
+                              <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+
+                                <?php if($row_rsP['imagem1']!="" && file_exists("../../../imgs/categorias/".$row_rsP['imagem1'])) { ?>
+
+                                <a href="../../../imgs/categorias/<?php echo $row_rsP['imagem1']; ?>" data-fancybox ><img src="../../../imgs/categorias/<?php echo $row_rsP['imagem1']; ?>"></a>
+
+                                <?php } ?>
+
+                              </div>
+
+                              <div> <span class="btn default btn-file"> <span class="fileinput-new"> <?php echo $RecursosCons->RecursosCons['selec_imagem']; ?></span> <span class="fileinput-exists"> <?php echo $RecursosCons->RecursosCons['btn_altera_img']; ?> </span>
+
+                                <input id="upload_campo" type="file" name="img">
+
+                                </span> <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput" onClick="document.getElementById('img_remover1').value='1'"> <?php echo $RecursosCons->RecursosCons['btn_remove_img']; ?>  </a> </div>
+
+                            </div>
+
+                            <div style="margin-top: 10px;"><span class="label label-danger"><?php echo $RecursosCons->RecursosCons['formatos_sup_txt']; ?> </span></div>
+
+                            <script type="text/javascript">
+
+                            function alterar_imagem(){
+
+                                document.getElementById('file_delete_1').value='';
+
+                            }
+
+                            function remover_imagem(){
+
+                                document.getElementById('file_delete_1').value='';
+
+                                document.getElementById('img_cont_1_vazia').style.display='block';									
+
+                                document.getElementById('img_cont_1').style.display='none';
+
+                            }
+
+                            </script> 
+
+                          </div>
+
+                         	
+
+                          </div>
+
+                          <div class="form-group data-bg" data-bg-type="2">
+
+								<label class="col-md-2 control-label div_cor_fundo" for="cor_fundo"><?php echo $RecursosCons->RecursosCons['cor_fundo_label']; ?>: </label>
+
+							    <div class="col-md-2 div_cor_fundo">
+
+							        <input type="text" class="form-control color" name="cor_fundo" id="cor_fundo" value="<?php echo $row_rsP['cor_fundo']; ?>">
+
+							    </div>
+
+							</div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="tab-pane <?php if($tab_sel==3) echo "active"; ?>" id="tab_dados">
+
+                      <div class="form-body">
+
+												<?php if($_GET['alt'] == 1 && $_GET['tab_sel'] == 3) { ?>
+
+                        	<div class="alert alert-success display-show">
+
+	                          <button class="close" data-close="alert"></button>
+
+	                           <?php echo $RecursosCons->RecursosCons['alt']; ?> </div>
+
+                        <?php } ?>
+
+												<div class="form-group">
+
+											    <label class="col-md-2 control-label" for="url"><?php echo $RecursosCons->RecursosCons['url_label']; ?>:</label>
+
+											    <div class="col-md-10">
+
+										        <input type="text" class="form-control" name="url" id="url" value="<?php echo $row_rsP['url']; ?>" onkeyup="carregaPreview()" onblur="carregaPreview()">
+
+											    </div>
+
+												</div>
+
+												<div class="form-group">
+
+											    <label class="col-md-2 control-label" for="title"><?php echo $RecursosCons->RecursosCons['titulo_label']; ?>:</label>
+
+											    <div class="col-md-10">
+
+										        <input type="text" class="form-control" name="title" id="title" value="<?php echo $row_rsP['title']; ?>" onkeyup="carregaPreview()" onblur="carregaPreview()">
+
+											    </div>
+
+												</div>
+
+												<div class="form-group">
+
+											    <label class="col-md-2 control-label" for="description"><?php echo $RecursosCons->RecursosCons['descricao_label']; ?>:</label>
+
+											    <div class="col-md-10">
+
+										        <textarea class="form-control" rows="5" id="description" name="description" style="resize:none" onkeyup="carregaPreview()" onblur="carregaPreview()"><?php echo $row_rsP['description']; ?></textarea>
+
+											    </div>
+
+												</div>
+
+												<div class="form-group">
+
+											    <label class="col-md-2 control-label" for="keywords"><?php echo $RecursosCons->RecursosCons['palavras-chave_label']; ?>:</label>
+
+											    <div class="col-md-10">
+
+										        <textarea class="form-control" rows="5" id="keywords" name="keywords" style="resize:none" onkeyup="carregaPreview()" onblur="carregaPreview()"><?php echo $row_rsP['keywords']; ?></textarea>
+
+										    		<span class="help-block"><strong>Nota:</strong> separate words by comma ','</span>
+
+											    </div>
+
+												</div>
+
+												<div class="form-group">
+
+											    <label class="col-md-2 control-label"><?php echo $RecursosCons->RecursosCons['pre-view_google_label']; ?>:</label>
+
+											    <div class="col-md-10" style="padding:0 15px">
+
+										        <div style="border:1px solid #e5e5e5;min-height:50px;padding:10px" id="googlePreview"></div>
+
+											    </div>
+
+												</div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div> 
+
+              </div>
+
+            </div>
+
+            <input type="hidden" name="MM_insert" value="categorias_form" />
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- END PAGE CONTENT--> 
+
+    </div>
+
+  </div>
+
+  <!-- END CONTENT -->
+
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+
+</div>
+
+<!-- END CONTAINER -->
+
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/jquery.fancybox.min.js"></script> 
+
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/plupload/js/plupload.full.min.js" type="text/javascript"></script> 
+
+<!-- END PAGE LEVEL PLUGINS -->
+
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckeditor/ckeditor.js"></script> 
+
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.js"></script>
+
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+
+<script src="form-validation.js"></script> 
+
+<!-- END PAGE LEVEL SCRIPTS --> 
+
+<script>
+
+jQuery(document).ready(function() {    
+
+   Metronic.init(); // init metronic core components
+
+   Layout.init(); // init current layout
+
+   QuickSidebar.init(); // init quick sidebar
+
+   Demo.init(); // init demo features
+
+   FormValidation.init();
+
+});
+
+</script> 
+
+<script type="text/javascript">
+
+document.ready=carregaPreview();
+
+</script>
+
+<script type="text/javascript">
+
+CKEDITOR.replace('descricao', {
+
+  filebrowserBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html',
+
+  filebrowserImageBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Images',
+
+  filebrowserFlashBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Flash',
+
+  filebrowserUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+
+  filebrowserImageUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+
+  filebrowserFlashUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+
+  toolbar : "Basic2"
+
+});
+
+</script>
+
+
+
+<script type="text/javascript">
+
+		$('.bg-type-main .radio').click(function(event) {
+
+			/* Act on the event */
+
+			var checked_val = $(this).find('input:checked').val();
+
+			bg_type_hide_show(checked_val); 
+
+		});
+
+
+
+		jQuery(document).ready(function($) {
+
+			var checked_val = $('.bg-type-main .radio').find('input:checked').val();
+
+			bg_type_hide_show(checked_val);
+
+		});
+
+
+
+		function bg_type_hide_show(checked_val) {
+
+			$('.data-bg').each(function(index, el) {
+
+				if ($(this).attr('data-bg-type') == checked_val) {
+
+					$(this).show();
+
+				}else{
+
+					$(this).hide();
+
+				}
+
+			});
+
+		}
+
+	</script>
+
+</body>
+
+<!-- END BODY -->
+
+</html>
+

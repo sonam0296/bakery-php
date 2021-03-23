@@ -1,0 +1,364 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php //ini_set('display_errors', 1);
+
+$menu_sel='clientes';
+$menu_sub_sel='listagem';
+
+$erro_password=0;
+$erro_email = 0;
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form_cliente")) {
+	if($_POST['nome']!='' && $_POST['email']!='' && $_POST['pass']!='' && $_POST['tipo']!='') {
+		$query_rsExiste = "SELECT id FROM clientes WHERE email=:email";
+		$rsExiste = DB::getInstance()->prepare($query_rsExiste);
+		$rsExiste->bindParam(':email', $_POST['email'], PDO::PARAM_STR, 5);	
+		$rsExiste->execute();
+		$row_rsExiste = $rsExiste->fetch(PDO::FETCH_ASSOC);
+		$totalRows_rsExiste = $rsExiste->rowCount();
+		
+		if($_POST['pass'] != $_POST['pass2']) {
+			$erro_password = 1;
+		} 
+    else if($totalRows_rsExiste > 0) {
+			$erro_email = 1;
+		} 
+    else {
+			$insertSQL = "SELECT MAX(id) FROM clientes";
+			$rsInsert = DB::getInstance()->prepare($insertSQL);
+			$rsInsert->execute();
+			$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+			
+			$id_max = $row_rsInsert["MAX(id)"] + 1;
+			
+			do {
+				$cod_bonus_gera = geraSenha(8, true, true);
+				
+				$rsGeraCod = "SELECT id FROM clientes WHERE cod_bonus='$cod_bonus_gera'";
+				$rsGeraCod = DB::getInstance()->prepare($rsGeraCod);
+				$rsGeraCod->execute();
+				$totalRows_rsGeraCod = $rsGeraCod->fetch(PDO::FETCH_ASSOC);
+
+			} while($totalRows_rsGeraCod > 0);
+			
+			$pvp = 1;
+      $lang = 'pt';   
+
+			$validado = 0;
+      $ativo = 0;
+			if($_POST['tipo'] == 1) {
+        $validado = 1;
+        $ativo = 1;
+      }	
+			
+			$salt = createSalt();
+      $hash = hash('sha256', $_POST['pass']);
+
+      $password_final = hash('sha256', $salt . $hash);
+
+      $data_nasc = $_POST['data_nasc'];
+      if(!$data_nasc) $data_nasc = NULL;		
+			
+			$insertSQL = "INSERT INTO clientes (id, tipo, data_registo, email, password, password_salt, data_nasc, nome, pessoa, atividade, atividade2, morada, cod_postal, localidade, pais, telefone, telemovel, nif, pvp, desconto, validado, ativo, lingua, cod_bonus) VALUES (:id, :tipo, :data_registo, :email, :password, :password_salt, :data_nasc, :nome, :pessoa, :atividade, :atividade2, :morada, :cod_postal, :localidade, :pais, :telefone, :telemovel, :nif, :pvp, :desconto, :validado, :ativo, :lingua, :cod_bonus)";
+			$rsInsert = DB::getInstance()->prepare($insertSQL);
+			$rsInsert->bindParam(':id', $id_max, PDO::PARAM_INT);
+      $rsInsert->bindParam(':tipo', $_POST['tipo'], PDO::PARAM_INT);
+			$rsInsert->bindParam(':data_registo', date('Y-m-d H:i:s'), PDO::PARAM_STR, 5);	
+			$rsInsert->bindParam(':email', $_POST['email'], PDO::PARAM_STR, 5);	
+			$rsInsert->bindParam(':password', $password_final, PDO::PARAM_STR, 5);		
+      $rsInsert->bindParam(':password_salt', $salt, PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':data_nasc', $data_nasc, PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':nome', $_POST['nome'], PDO::PARAM_STR, 5);
+      $rsInsert->bindParam(':pessoa', $_POST['pessoa'], PDO::PARAM_STR, 5);
+      $rsInsert->bindParam(':atividade', $_POST['atividade'], PDO::PARAM_STR, 5);
+      $rsInsert->bindParam(':atividade2', $_POST['atividade2'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':morada', $_POST['morada'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':cod_postal', $_POST['cpostal'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':localidade', $_POST['localidade'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':pais', $_POST['pais'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':telefone', $_POST['telefone'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':telemovel', $_POST['telemovel'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':nif', $_POST['nif'], PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':pvp', $pvp, PDO::PARAM_INT);
+			$rsInsert->bindParam(':desconto', $_POST['desconto'], PDO::PARAM_INT);
+			$rsInsert->bindParam(':validado', $validado, PDO::PARAM_INT);
+      $rsInsert->bindParam(':ativo', $ativo, PDO::PARAM_INT);
+			$rsInsert->bindParam(':lingua', $lang, PDO::PARAM_STR, 5);
+			$rsInsert->bindParam(':cod_bonus', $cod_bonus_gera, PDO::PARAM_STR, 5);
+			$rsInsert->execute();
+			
+			DB::close();
+			
+      if($erro_password == 0 && $erro_email == 0) {
+        if($_POST['tipo'] == 1) { 
+          header("Location: clientes.php?suc=1");
+        }
+        else if($_POST['tipo'] == 2) {
+          header("Location: clientes-edit.php?id=".$id_max."&suc=1");
+        }
+      }
+		}
+	}
+}
+
+$query_rsPais = "SELECT * FROM paises ORDER BY nome ASC";
+$rsPais = DB::getInstance()->query($query_rsPais);
+$rsPais->execute();
+$totalRows_rsPais = $rsPais->rowCount();
+DB::close();
+
+$query_rsAtividades = "SELECT * FROM clientes_atividades".$extensao." ORDER BY id ASC";
+$rsAtividades = DB::getInstance()->prepare($query_rsAtividades);
+$rsAtividades->execute();
+$totalRows_rsAtividades = $rsAtividades->rowCount();
+DB::close();
+
+?>
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+  #div_atividade {
+    display: none;
+  }
+  #div_atividade2 {
+    display: none;
+  }
+</style>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+<body class="<?php echo $body_info; ?>">
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+<div class="clearfix"> </div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content"> 
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> <?php echo $RecursosCons->RecursosCons['clientes']; ?> <small><?php echo $RecursosCons->RecursosCons['inserir_user']; ?></small> </h3>
+      <div class="page-bar">
+        <ul class="page-breadcrumb">
+          <li> <i class="fa fa-home"></i> <a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?></a> <i class="fa fa-angle-right"></i> </li>
+          <li> <a href="clientes.php"><?php echo $RecursosCons->RecursosCons['clientes']; ?> </a> <i class="fa fa-angle-right"></i> </li>
+          <li> <a href="javascript:"><?php echo $RecursosCons->RecursosCons['inserir_user']; ?></a> </li>
+        </ul>
+      </div>
+      <!-- END PAGE HEADER--> 
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+        <div class="col-md-12">
+          <form id="form_cliente" name="form_cliente" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <div class="portlet">
+              <div class="portlet-title">
+                <div class="caption"> <i class="fa fa-user"></i><?php echo $RecursosCons->RecursosCons['cliente_novo-util']; ?> </div>
+                <div class="form-actions actions btn-set">
+                  <button type="button" name="back" class="btn default" onClick="document.location='clientes.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+                  <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar']; ?></button>
+                  <button type="submit" class="btn green"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar_cont']; ?></button>
+                </div>
+              </div>
+              <div class="portlet-body">
+                <div class="form-body">
+                  <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <?php echo $RecursosCons->RecursosCons['msg_required']; ?> 
+                  </div>
+                  <?php if($erro_password == 1) { ?>
+                    <div class="alert alert-danger display-show">
+                      <button class="close" data-close="alert"></button>
+                      <?php echo $RecursosCons->RecursosCons['pass_error']; ?> 
+                    </div>
+                  <?php } ?>
+                  <?php if($erro_email == 1) { ?>
+                    <div class="alert alert-danger display-show">
+                      <button class="close" data-close="alert"></button>
+                      <?php echo $RecursosCons->RecursosCons['email_existe_insere_novo']; ?> 
+                    </div>
+                  <?php } ?>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="tipo"><?php echo $RecursosCons->RecursosCons['tipo_label']; ?>: <span class="required"> * </span> </label>
+                    <div class="col-md-3">
+                      <select class="form-control" name="tipo" id="tipo">
+                        <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+                        <option value="1"><?php echo $RecursosCons->RecursosCons['tipo1_label']; ?></option>
+                      </select>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="nif"><?php echo $RecursosCons->RecursosCons['cli_contribuinte']; ?>: </label>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" name="nif" id="nif" value="<?php echo $_POST['nif']; ?>">
+                    </div>
+                    <label class="col-md-2 control-label" for="data_nasc"><?php echo $RecursosCons->RecursosCons['cli_data_nasc']; ?>: </label>
+                    <div class="col-md-3">
+                      <div class="input-group date date-picker" data-date-format="yyyy-mm-dd">
+                        <input type="text" class="form-control form-filter input-sm" name="data_nasc" placeholder="Data" id="data_nasc" value="<?php echo $_POST['data_nasc']; ?>">
+                        <span class="input-group-btn">
+                        <button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button>
+                        </span> 
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="nome"><?php echo $RecursosCons->RecursosCons['cli_nome_empresa']; ?>: <span class="required"> * </span> </label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="nome" id="nome" value="<?php echo $_POST['nome']; ?>" data-required="1">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="pessoa"><?php echo $RecursosCons->RecursosCons['ar_pessoa_contacto']; ?>: </label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="pessoa" id="pessoa" value="<?php echo $_POST['pessoa']; ?>">
+                    </div>
+                  </div>
+                  <div class="form-group" id="div_atividade">
+                    <label class="col-md-2 control-label" for="atividade"><?php echo $RecursosCons->RecursosCons['atividade_label']; ?>: </label>
+                    <div class="col-md-8">
+                      <select class="form-control" name="atividade" id="atividade" onChange="verificaAtividade(this.value);">
+                        <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+                        <?php if($totalRows_rsAtividades > 0) {
+                          while($row_rsAtividades = $rsAtividades->fetch()) { ?>
+                            <option value="<?php echo $row_rsAtividades['nome']; ?>"><?php echo $row_rsAtividades['nome']; ?></option>
+                          <?php }
+                        } ?>
+                        <option value="<?php echo $RecursosCons->RecursosCons['atividade_outro']; ?>"><?php echo $RecursosCons->RecursosCons['atividade_outro']; ?></option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" id="div_atividade2">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="atividade2" id="atividade2" value="<?php echo $_POST['atividade2']; ?>" placeholder="<?php echo $RecursosCons->RecursosCons['atividade_qual']; ?>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="email"><?php echo $RecursosCons->RecursosCons['cli_email']; ?>: <span class="required"> * </span> </label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="email" id="email" value="<?php echo $_POST['email']; ?>" data-required="1" autocomplete="new-email">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="pass"><?php echo $RecursosCons->RecursosCons['cli_password']; ?>: <span class="required"> * </span> </label>
+                    <div class="col-md-3">
+                      <input type="password" class="form-control" name="pass" id="pass" value="" data-required="1" autocomplete="new-password">
+                    </div>
+                    <label class="col-md-2 control-label" for="pass2"><?php echo $RecursosCons->RecursosCons['cli_rep_password']; ?>: <span class="required"> * </span> </label>
+                    <div class="col-md-3">
+                      <input type="password" class="form-control" name="pass2" id="pass2" value="" data-required="1" autocomplete="new-password2">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="morada"><?php echo $RecursosCons->RecursosCons['cli_morada']; ?>: </label>
+                    <div class="col-md-3">
+                      <textarea class="form-control" rows="2" id="morada" name="morada"><?php echo $_POST['morada']; ?></textarea>
+                    </div>
+                    <label class="col-md-2 control-label" for="cpostal"><?php echo $RecursosCons->RecursosCons['cli_cod_postal']; ?>: </label>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" name="cpostal" id="cpostal" value="<?php echo $_POST['cpostal']; ?>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="localidade"><?php echo $RecursosCons->RecursosCons['cli_localidade']; ?>: </label>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" name="localidade" id="localidade" value="<?php echo $_POST['localidade']; ?>">
+                    </div>
+                    <label class="col-md-2 control-label" for="pais"><?php echo $RecursosCons->RecursosCons['cli_pais']; ?>:</label>
+                    <div class="col-md-3">
+                      <select class="form-control select2me" id="pais" name="pais">
+                        <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+                        <?php if($totalRows_rsPais > 0) { ?>
+                          <?php while($row_rsPais = $rsPais->fetch()) { ?>
+                            <option value="<?php echo $row_rsPais['id']; ?>" <?php if($row_rsPais['id']=='197') echo "selected"; ?>><?php echo $row_rsPais['nome']; ?></option>
+                          <?php } ?>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="telefone"><?php echo $RecursosCons->RecursosCons['cli_telefone']; ?>: </label>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" name="telefone" id="telefone" value="<?php echo $_POST['telefone']; ?>">
+                    </div>
+                    <label class="col-md-2 control-label" for="telemovel"><?php echo $RecursosCons->RecursosCons['cli_telemovel']; ?>: </label>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" name="telemovel" id="telemovel" value="<?php echo $_POST['telemovel']; ?>">
+                    </div>
+                  </div>  
+                  <hr>
+                  <div class="form-group">
+                   <label class="col-md-2 control-label" for="desconto"><?php echo $RecursosCons->RecursosCons['cli_desconto']; ?>:</label>
+                    <div class="col-md-3">
+                    	<div class="input-group">
+                        <input type="text" class="form-control" name="desconto" id="desconto" value="<?php echo $_POST['desconto']; ?>" maxlength="2" onkeyup="onlyNumber(this)" onblur="onlyNumber(this)">
+                      	<span class="input-group-addon">%</span>
+                      </div>                        
+                    </div>
+                  </div>                                  
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="MM_insert" value="form_cliente" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+  </div>
+  <!-- END CONTENT -->
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+</div>
+<!-- END CONTAINER -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+<!-- LINGUA PORTUGUESA -->
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt.js"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/source/jquery.fancybox.pack.js"></script> 
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+<script src="form-validation.js"></script> 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+jQuery(document).ready(function() {    
+  Metronic.init(); // init metronic core components
+  Layout.init(); // init current layout
+  QuickSidebar.init(); // init quick sidebar
+  Demo.init(); // init demo features
+  User.init();
+
+  $("#tipo").change(function(){
+    if($(this).val() == 2){
+      $('#div_atividade').css('display', 'block');
+    }
+    else{
+      $('#div_atividade').css('display', 'none');
+    }
+  });
+
+});
+
+function verificaAtividade(val) {
+  if(val == 'Outro') {
+    $('#div_atividade2').css('display', 'block');
+  }
+  else {
+    $('#div_atividade2').css('display', 'none');
+  }
+}
+</script>
+</body>
+<!-- END BODY -->
+</html>

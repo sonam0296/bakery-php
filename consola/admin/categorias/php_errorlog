@@ -1,0 +1,58 @@
+[01-Jan-2021 05:59:48 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/customer/www/cakerysuppliers.co.uk/public_html/helpers/carrinho.php on line 2297
+[01-Jan-2021 06:00:00 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/customer/www/cakerysuppliers.co.uk/public_html/helpers/carrinho.php on line 2297
+[11-Jan-2021 23:33:15 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1 in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php:127
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php(127): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php on line 127
+[11-Jan-2021 23:33:16 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc' at line 1 in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php:127
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php(127): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php on line 127
+[11-Jan-2021 23:35:29 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc' at line 1 in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php:127
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php(127): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php on line 127
+[11-Jan-2021 23:35:32 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc' at line 1 in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php:127
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php(127): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-list.php on line 127
+[12-Jan-2021 01:05:45 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php:164
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php(164): PDOStatement->execute()
+#1 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-edit.php(411): redirectURL('candles', 'number-candles', 'en')
+#2 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php on line 164
+[12-Jan-2021 01:05:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php:164
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php(164): PDOStatement->execute()
+#1 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-edit.php(411): redirectURL('candles', 'number-candles', 'en')
+#2 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php on line 164
+[12-Jan-2021 01:06:10 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php:164
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php(164): PDOStatement->execute()
+#1 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-edit.php(411): redirectURL('candles', 'number-candles', 'en')
+#2 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php on line 164
+[12-Jan-2021 01:06:17 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php:164
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php(164): PDOStatement->execute()
+#1 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-edit.php(411): redirectURL('candles', 'number-candles', 'en')
+#2 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php on line 164
+[12-Jan-2021 01:06:48 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php:164
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php(164): PDOStatement->execute()
+#1 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-edit.php(91): redirectURL('candles', 'number-candles', 'en')
+#2 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php on line 164
+[12-Jan-2021 01:06:54 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php:164
+Stack trace:
+#0 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php(164): PDOStatement->execute()
+#1 /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/categorias/categorias-edit.php(91): redirectURL('candles', 'number-candles', 'en')
+#2 {main}
+  thrown in /home/customer/www/cakerysuppliers.co.uk/public_html/consola/admin/inc_pages.php on line 164

@@ -1,0 +1,69 @@
+[26-May-2020 15:12:56 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'catalogo' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php:84
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php(84): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php on line 84
+[28-May-2020 08:41:52 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'catalogo' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php:84
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php(84): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php on line 84
+[28-May-2020 08:48:39 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'catalogo' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php:84
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php(84): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php on line 84
+[28-May-2020 08:53:39 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'is, nome, catalogo FROM l_categorias_pt WHERE id=5' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php:86
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php(86): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php on line 86
+[28-May-2020 08:56:45 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'catalogo' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php:84
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php(84): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-catalogo.php on line 84
+[28-May-2020 08:59:24 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'mascara' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php:176
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php(176): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 176
+[28-May-2020 09:02:01 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'mascara' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php:176
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php(176): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 176
+[30-May-2020 18:36:21 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'mascara' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php:176
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php(176): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 176
+[12-Jun-2020 08:37:17 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 382
+[08-Jul-2020 13:59:28 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'DB' not found in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php:108
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php on line 108
+[08-Jul-2020 13:59:42 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'DB' not found in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php:108
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php on line 108
+[24-Jul-2020 14:10:49 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php:109
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php(109): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-list.php on line 109
+[15-Sep-2020 08:18:13 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'mascara' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php:176
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php(176): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 176
+[17-Sep-2020 16:46:59 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php:186
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php(186): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 186
+[17-Sep-2020 16:49:43 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'mostra_titulo' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php:207
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php(207): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/categorias/categorias-edit.php on line 207

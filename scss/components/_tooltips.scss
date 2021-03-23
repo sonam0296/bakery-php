@@ -1,0 +1,187 @@
+[tooltipster]{
+	@include displayInline(top);
+	position: relative;
+	font-weight: bold;
+	& p{
+		@include displayInline(top);
+	}
+	& a{
+		color: $primary-color;
+
+		&:hover{
+			color: $secondary-color;
+		}
+	}
+}
+[tooltip]{
+	position: fixed;
+	display: table;
+
+	background: $tooltips-background;
+	border: $tooltips-border;
+	border-radius: $tooltips-radius;
+	box-shadow: $tooltips-shadow;
+
+	min-width: 170px;
+
+	padding: $tooltips-padding;
+	
+	@include textos($tooltips-text);
+	z-index: $tooltips-zindex;
+
+	pointer-events: none;
+	opacity: 0;
+
+	@include Animationcss(opacity 0.3s, transform 0.3s cubic-bezier(0.1,1,0.9,1));
+
+	&:before,
+	&:after{
+		display: block;
+
+		content: '';
+	    position: absolute;
+
+	    pointer-events: none;
+	    border-style: solid;
+	}
+
+
+	//START POSITIONS
+	&[tooltip-absolute] {
+		position: absolute;
+	}
+	&[tooltip-absolute-self] {
+		position: absolute;
+
+		&[tooltip-position="top"],
+		&[tooltip-position="bottom"] {
+			left: 0%;
+		}
+
+		&[tooltip-position="left"],
+		&[tooltip-position="right"] {
+			top: 50%;
+		}
+	}
+	&[tooltip-position="top"] {
+		bottom: 100%;
+		margin-bottom: $tooltips-triangle !important;
+
+		&:before,
+		&:after{
+			top: 100%;
+			border-width: #{$tooltips-triangle/2} #{$tooltips-triangle /2} 0 #{$tooltips-triangle /2};
+		}
+		&:before{
+			margin-top: 1px;
+			border-color: $tooltips-border-color transparent transparent transparent;
+		}
+		&:after{
+			border-color: $tooltips-background transparent transparent transparent;
+		}
+	}
+	&[tooltip-position="left"] {
+		right: 100%;
+		margin-right: $tooltips-triangle !important;
+
+		&:before,
+		&:after{
+			left: 100%;
+			border-width: #{$tooltips-triangle/2}  0 #{$tooltips-triangle/2}  #{$tooltips-triangle/2} ;
+		}
+		&:before{
+			margin-left: 1px;
+			border-color: transparent transparent transparent $tooltips-border-color;
+		}
+		&:after{
+			border-color: transparent transparent transparent $tooltips-background;
+		}
+	}
+	&[tooltip-position="right"] {
+		left: 100%;
+		margin-left: $tooltips-triangle !important;
+
+		&:before,
+		&:after{
+			right: 100%;
+			border-width: #{$tooltips-triangle/2}  #{$tooltips-triangle/2}  #{$tooltips-triangle/2}  0;
+		}
+		&:before{
+			margin-right: 1px;
+			border-color: transparent $tooltips-border-color transparent transparent;
+		}
+		&:after{
+			border-color: transparent $tooltips-background transparent transparent;
+		}
+	}
+	&[tooltip-position="bottom"] {
+		top: 100%;
+		margin-top: $tooltips-triangle !important;
+
+		&:before,
+		&:after{
+			bottom: 100%;
+			border-width: 0 #{$tooltips-triangle/2}  #{$tooltips-triangle/2}  #{$tooltips-triangle/2} ;
+		}
+		&:before{
+			margin-bottom: 1px;
+			border-color: transparent transparent $tooltips-border-color transparent;
+		}
+		&:after{
+			border-color: transparent transparent $tooltips-background transparent;
+		}
+	}
+
+	&[tooltip-position="top"],
+	&[tooltip-position="bottom"] {
+		&:before,
+		&:after{
+			left: 50%;
+			margin-left: -#{$tooltips-triangle /2};
+		}
+	}
+
+	&[tooltip-position="left"],
+	&[tooltip-position="right"] {
+		&:before,
+		&:after{
+			top: 50%;
+			margin-top: -#{$tooltips-triangle /2};
+		}
+	}
+	//END POSITIONS
+	
+	//START ANMATIONCS
+	&[tooltip-animation="fall"]{
+		&[tooltip-position="top"],
+		&[tooltip-position="left"],
+		&[tooltip-position="right"]{
+			@include transform(translate3d(0,-30px,0));
+		}
+		&[tooltip-position="bottom"]{
+			@include transform(translate3d(0,30px,0));
+		}
+	}
+	&[tooltip-animation="grow"]{
+		@include transform(scale3d(0.6,0.6,1));
+	}
+	//END ANMATIONCS
+		
+	
+
+	&[tooltip-visible] {
+		opacity: 1;
+		pointer-events: auto;
+
+		&[tooltip-animation="fall"]{
+			@include transform(translate3d(0,0,0) !important);
+		}
+		&[tooltip-animation="grow"]{
+			@include transform(scale3d(1,1,1));
+		}
+	}
+
+}
+
+
+

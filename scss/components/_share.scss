@@ -1,0 +1,860 @@
+$share-font-path: "../fonts/share" !default;
+
+$share-blogger: \e900;
+$share-blogger-circle: \e901;
+$share-blogger-round: \e902;
+$share-blogger-square: \e903;
+$share-facebook: \e904;
+$share-facebook-circle: \e905;
+$share-facebook-round: \e906;
+$share-facebook-square: \e907;
+$share-flickr: \e908;
+$share-flickr-circle: \e909;
+$share-flickr-round: \e90a;
+$share-flickr-square: \e90b;
+$share-instagram: \e910;
+$share-instagram-circle: \e911;
+$share-instagram-round: \e912;
+$share-instagram-square: \e913;
+$share-linkedin: \e914;
+$share-linkedin-circle: \e915;
+$share-linkedin-round: \e916;
+$share-linkedin-square: \e917;
+$share-mail: \e918;
+$share-mail-circle: \e919;
+$share-mail-round: \e91a;
+$share-mail-square: \e91b;
+$share-messenger: \e91c;
+$share-messenger-circle: \e91d;
+$share-messenger-round: \e91e;
+$share-messenger-square: \e91f;
+$share-pinterest: \e920;
+$share-pinterest-circle: \e921;
+$share-pinterest-round: \e922;
+$share-pinterst-square: \e923;
+$share-share: \e924;
+$share-share-circle: \e925;
+$share-share-round: \e926;
+$share-share-square: \e927;
+$share-skype: \e928;
+$share-skype-circle: \e929;
+$share-skype-round: \e92a;
+$share-skype-square: \e92b;
+$share-thumblr: \e92c;
+$share-thumblr-circle: \e92d;
+$share-thumblr-round: \e92e;
+$share-thumblr-square: \e92f;
+$share-twitter: \e930;
+$share-twitter-circle: \e931;
+$share-twitter-round: \e932;
+$share-twitter-square: \e933;
+$share-vimeo: \e934;
+$share-vimeo-circle: \e935;
+$share-vimeo-round: \e936;
+$share-vimeo-square: \e937;
+$share-whatsapp: \e938;
+$share-whatsapp-circle: \e939;
+$share-whatsapp-round: \e93a;
+$share-whatsapp-square: \e93b;
+$share-wordpress: \e93c;
+$share-wordpress-circle: \e93d;
+$share-wordpress-round: \e93e;
+$share-wordpress-square: \e93f;
+$share-youtube: \e940;
+$share-youtube-circle: \e941;
+$share-youtube-round: \e942;
+$share-youtube-square: \e943;
+
+@font-face {
+  font-family: 'share';
+  src:  url('#{$share-font-path}/share.eot?a0yp7');
+  src:  url('#{$share-font-path}/share.eot?a0yp7#iefix') format('embedded-opentype'),
+    url('#{$share-font-path}/share.ttf?a0yp7') format('truetype'),
+    url('#{$share-font-path}/share.woff?a0yp7') format('woff'),
+    url('#{$share-font-path}/share.svg?a0yp7#share') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+[class^="share-"]:before,
+[class*=" share-"]:before{
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'share' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.share-blogger {
+  &:before {
+    content: unicode($share-blogger); 
+  }
+}
+.share-blogger-circle {
+  &:before {
+    content: unicode($share-blogger-circle); 
+  }
+}
+.share-blogger-round {
+  &:before {
+    content: unicode($share-blogger-round); 
+  }
+}
+.share-blogger-square {
+  &:before {
+    content: unicode($share-blogger-square); 
+  }
+}
+.share-facebook {
+  &:before {
+    content: unicode($share-facebook); 
+  }
+}
+.share-facebook-circle {
+  &:before {
+    content: unicode($share-facebook-circle); 
+  }
+}
+.share-facebook-round {
+  &:before {
+    content: unicode($share-facebook-round); 
+  }
+}
+.share-facebook-square {
+  &:before {
+    content: unicode($share-facebook-square); 
+  }
+}
+.share-flickr {
+  &:before {
+    content: unicode($share-flickr); 
+  }
+}
+.share-flickr-circle {
+  &:before {
+    content: unicode($share-flickr-circle); 
+  }
+}
+.share-flickr-round {
+  &:before {
+    content: unicode($share-flickr-round); 
+  }
+}
+.share-flickr-square {
+  &:before {
+    content: unicode($share-flickr-square); 
+  }
+}
+.share-instagram {
+  &:before {
+    content: unicode($share-instagram); 
+  }
+}
+.share-instagram-circle {
+  &:before {
+    content: unicode($share-instagram-circle); 
+  }
+}
+.share-instagram-round {
+  &:before {
+    content: unicode($share-instagram-round); 
+  }
+}
+.share-instagram-square {
+  &:before {
+    content: unicode($share-instagram-square); 
+  }
+}
+.share-linkedin {
+  &:before {
+    content: unicode($share-linkedin); 
+  }
+}
+.share-linkedin-circle {
+  &:before {
+    content: unicode($share-linkedin-circle); 
+  }
+}
+.share-linkedin-round {
+  &:before {
+    content: unicode($share-linkedin-round); 
+  }
+}
+.share-linkedin-square {
+  &:before {
+    content: unicode($share-linkedin-square); 
+  }
+}
+.share-mail {
+  &:before {
+    content: unicode($share-mail); 
+  }
+}
+.share-mail-circle {
+  &:before {
+    content: unicode($share-mail-circle); 
+  }
+}
+.share-mail-round {
+  &:before {
+    content: unicode($share-mail-round); 
+  }
+}
+.share-mail-square {
+  &:before {
+    content: unicode($share-mail-square); 
+  }
+}
+.share-messenger {
+  &:before {
+    content: unicode($share-messenger); 
+  }
+}
+.share-messenger-circle {
+  &:before {
+    content: unicode($share-messenger-circle); 
+  }
+}
+.share-messenger-round {
+  &:before {
+    content: unicode($share-messenger-round); 
+  }
+}
+.share-messenger-square {
+  &:before {
+    content: unicode($share-messenger-square); 
+  }
+}
+.share-pinterest {
+  &:before {
+    content: unicode($share-pinterest); 
+  }
+}
+.share-pinterest-circle {
+  &:before {
+    content: unicode($share-pinterest-circle); 
+  }
+}
+.share-pinterest-round {
+  &:before {
+    content: unicode($share-pinterest-round); 
+  }
+}
+.share-pinterst-square {
+  &:before {
+    content: unicode($share-pinterst-square); 
+  }
+}
+.share-share {
+  &:before {
+    content: unicode($share-share); 
+  }
+}
+.share-share-circle {
+  &:before {
+    content: unicode($share-share-circle); 
+  }
+}
+.share-share-round {
+  &:before {
+    content: unicode($share-share-round); 
+  }
+}
+.share-share-square {
+  &:before {
+    content: unicode($share-share-square); 
+  }
+}
+.share-skype {
+  &:before {
+    content: unicode($share-skype); 
+  }
+}
+.share-skype-circle {
+  &:before {
+    content: unicode($share-skype-circle); 
+  }
+}
+.share-skype-round {
+  &:before {
+    content: unicode($share-skype-round); 
+  }
+}
+.share-skype-square {
+  &:before {
+    content: unicode($share-skype-square); 
+  }
+}
+.share-thumblr {
+  &:before {
+    content: unicode($share-thumblr); 
+  }
+}
+.share-thumblr-circle {
+  &:before {
+    content: unicode($share-thumblr-circle); 
+  }
+}
+.share-thumblr-round {
+  &:before {
+    content: unicode($share-thumblr-round); 
+  }
+}
+.share-thumblr-square {
+  &:before {
+    content: unicode($share-thumblr-square); 
+  }
+}
+.share-twitter {
+  &:before {
+    content: unicode($share-twitter); 
+  }
+}
+.share-twitter-circle {
+  &:before {
+    content: unicode($share-twitter-circle); 
+  }
+}
+.share-twitter-round {
+  &:before {
+    content: unicode($share-twitter-round); 
+  }
+}
+.share-twitter-square {
+  &:before {
+    content: unicode($share-twitter-square); 
+  }
+}
+.share-vimeo {
+  &:before {
+    content: unicode($share-vimeo); 
+  }
+}
+.share-vimeo-circle {
+  &:before {
+    content: unicode($share-vimeo-circle); 
+  }
+}
+.share-vimeo-round {
+  &:before {
+    content: unicode($share-vimeo-round); 
+  }
+}
+.share-vimeo-square {
+  &:before {
+    content: unicode($share-vimeo-square); 
+  }
+}
+.share-whatsapp {
+  &:before {
+    content: unicode($share-whatsapp); 
+  }
+}
+.share-whatsapp-circle {
+  &:before {
+    content: unicode($share-whatsapp-circle); 
+  }
+}
+.share-whatsapp-round {
+  &:before {
+    content: unicode($share-whatsapp-round); 
+  }
+}
+.share-whatsapp-square {
+  &:before {
+    content: unicode($share-whatsapp-square); 
+  }
+}
+.share-wordpress {
+  &:before {
+    content: unicode($share-wordpress); 
+  }
+}
+.share-wordpress-circle {
+  &:before {
+    content: unicode($share-wordpress-circle); 
+  }
+}
+.share-wordpress-round {
+  &:before {
+    content: unicode($share-wordpress-round); 
+  }
+}
+.share-wordpress-square {
+  &:before {
+    content: unicode($share-wordpress-square); 
+  }
+}
+.share-youtube {
+  &:before {
+    content: unicode($share-youtube); 
+  }
+}
+.share-youtube-circle {
+  &:before {
+    content: unicode($share-youtube-circle); 
+  }
+}
+.share-youtube-round {
+  &:before {
+    content: unicode($share-youtube-round); 
+  }
+}
+.share-youtube-square {
+  &:before {
+    content: unicode($share-youtube-square); 
+  }
+}
+
+
+.share-blogger,
+.share-blogger-square,
+.share-blogger-round,
+.share-blogger-circle{
+  .shareNormal &{
+    color:#fb8f3d !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+
+    &:hover{
+      color:#fb8f3d !important;
+    }
+  }
+}
+.share-facebook,
+.share-facebook-square,
+.share-facebook-round,
+.share-facebook-circle{
+  .shareNormal &{
+    color:#3b5998 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+
+    &:hover{
+      color:#3b5998 !important;
+    }
+  }
+}
+.share-flickr,
+.share-flickr-square,
+.share-flickr-round,
+.share-flickr-circle{
+  .shareNormal &{
+    color:#ff0084 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+
+    &:hover{
+      color:#ff0084 !important;
+    }
+  }
+}
+.share-instagram,
+.share-instagram-square,
+.share-instagram-round,
+.share-instagram-circle{
+  .shareNormal &{
+    color:#f724d2 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#f724d2 !important;
+    }
+  }
+}
+.share-linkedin,
+.share-linkedin-square,
+.share-linkedin-round,
+.share-linkedin-circle{
+  .shareNormal &{
+    color:#007bb6 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#007bb6 !important;
+    }
+  }
+}
+.share-mail,
+.share-mail-square,
+.share-mail-round,
+.share-mail-circle{
+  .shareNormal &{
+    color:$secondary-color !important;
+    
+    &:hover{
+      color: $primary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+}
+.share-messenger,
+.share-messenger-square,
+.share-messenger-round,
+.share-messenger-circle{
+  .shareNormal &{
+    color:#0084FF !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#0084FF !important;
+    }
+  }
+}
+.share-pinterest,
+.share-pinterest-square,
+.share-pinterest-round,
+.share-pinterest-circle{
+  .shareNormal &{
+    color:#cb2027 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#cb2027 !important;
+    }
+  }
+}
+.share-share,
+.share-share-square,
+.share-share-round,
+.share-share-circle{
+  .shareNormal &{
+    color:$secondary-color !important;
+    
+    &:hover{
+      color:$primary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+}
+.share-skype,
+.share-skype-square,
+.share-skype-round,
+.share-skype-circle{
+  .shareNormal &{
+    color:#12A5F4 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#12A5F4 !important;
+    }
+  }
+}
+.share-tumblr,
+.share-tumblr-square,
+.share-tumblr-round,
+.share-tumblr-circle{
+  .shareNormal &{
+    color:#32506d !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#32506d !important;
+    }
+  }
+}
+.share-twitter,
+.share-twitter-square,
+.share-twitter-round,
+.share-twitter-circle{
+  .shareNormal &{
+    color:#00aced !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#00aced !important;
+    }
+  }
+}
+.share-vimeo,
+.share-vimeo-square,
+.share-vimeo-round,
+.share-vimeo-circle{
+  .shareNormal &{
+    color:#45bbff !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#45bbff !important;
+    }
+  }
+}
+.share-whatsapp,
+.share-whatsapp-square,
+.share-whatsapp-round,
+.share-whatsapp-circle{
+  .shareNormal &{
+    color:#25d366 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#25d366 !important;
+    }
+  }
+}
+.share-wordpress,
+.share-wordpress-square,
+.share-wordpress-round,
+.share-wordpress-circle{
+  .shareNormal &{
+    color:#21759b !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#21759b !important;
+    }
+  }
+}
+.share-youtube,
+.share-youtube-square,
+.share-youtube-round,
+.share-youtube-circle{
+  .shareNormal &{
+    color:#bb0000 !important;
+    
+    &:hover{
+      color:$secondary-color !important;
+    }
+  }
+  .shareInvert &{
+    color: $primary-color !important;
+    &:hover{
+      color:#bb0000 !important;
+    }
+  }
+}
+
+.share_container{
+ /* position: absolute;
+  bottom: 20px;
+  left: 20px;*/
+
+  @include displayInline(middle);
+  
+  & .share-button{
+    cursor: pointer;
+
+    @include Animationcss(all 0.3s linear);
+  }
+
+  & .share_list{
+    display: block;
+    position: relative;
+
+    z-index: 5;
+
+    & span{
+     display: block;
+     @include textos(list_txt, $dark-gray);
+
+      padding-bottom: 1rem;
+    }
+  
+    & .share-button{
+      @include displayInline(middle);
+      font-size:2.5rem;
+      margin: 0 3px;
+      color: $secondary-color;
+    }
+  }
+  & .share_modal{
+    display: block;
+
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: $white;
+
+    padding: 5px 1rem;
+
+    border: 1px solid $medium-gray;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events:none;
+
+    z-index: 20;
+
+    &.top{
+      bottom: 100%;
+
+      &.shareArrow{
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      &:not(.shareArrow){
+        border-bottom: 0;
+        padding-bottom: 5px;
+        border-radius: 10px 10px 0 0;
+      }
+    }
+    &.bottom{
+      top: 100%;
+
+      &.shareArrow{
+        border-radius: 10px;
+        margin-top: 20px;
+      }
+      &:not(.shareArrow){
+        border-top: 0;
+        padding-top: 5px;
+        border-radius: 0 0 10px 10px;
+      }
+    }
+
+    &.shareArrow{
+      &:after,
+      &:before{
+        content: '';
+        position: absolute;
+        left: 50%;
+        margin-left: -10px;
+
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 10px 10px 0 10px;
+        
+      }
+      &:after{
+        border-color: $white transparent transparent transparent;
+      }
+      &:before{
+        border-color: $medium-gray transparent transparent transparent;
+        margin-top: 1px;
+      }
+      &.top{
+        &:after,
+        &:before{
+          top: 100%;
+        }
+      }
+      &.bottom{
+        &:after,
+        &:before{
+          bottom: 100%;
+        }
+      }
+    }
+
+    &.active{
+      opacity: 1;
+      visibility: visible;
+      pointer-events:auto;
+    }
+
+    & .share-button{
+      @include displayInline(top);
+      width: 100%;
+
+      @include textos(list_txt);
+      font-style:normal;
+      margin: 5px 0;
+
+      &:before{
+        @include displayInline(middle);
+        font-size:2.6rem;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    bottom: 10px;
+    left: 10px;
+
+    & .share_list .share-button,
+    & .share_modal .share-button:before{
+      font-size:3rem;
+    }
+  }
+}
+
+
+
+
+
+

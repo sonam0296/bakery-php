@@ -1,0 +1,18 @@
+#  URLs Amigaveis
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+#LOCAL_PATH
+#RewriteRule .(/)?$ /trabalhos/N/natura_saude/site/redirect.php
+#LOCAL_PATH
+#ONLINE_PATH
+#RewriteRule .(/)?$ /Bismillah/redirect.php
+RewriteRule .(/)?$ /beta/redirect.php
+#ONLINE_PATH
+	
+RewriteCond %{SERVER_PORT} ^443$
+RewriteRule (.*) http://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+AddDefaultCharset UTF-8

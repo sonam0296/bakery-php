@@ -1,0 +1,72 @@
+[03-Mar-2021 14:32:44 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[03-Mar-2021 14:34:37 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[03-Mar-2021 14:35:30 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[03-Mar-2021 14:41:15 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[03-Mar-2021 14:43:06 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[03-Mar-2021 14:54:02 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[03-Mar-2021 14:55:39 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103
+[03-Mar-2021 14:59:13 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103
+[03-Mar-2021 15:00:05 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103
+[03-Mar-2021 15:00:19 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103
+[03-Mar-2021 15:02:12 UTC] PHP Parse error:  syntax error, unexpected '$id' (T_VARIABLE) in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-edit.php on line 1
+[03-Mar-2021 15:05:30 UTC] PHP Parse error:  syntax error, unexpected '$id' (T_VARIABLE) in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-edit.php on line 1
+[03-Mar-2021 15:11:11 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-insert.php on line 103
+[03-Mar-2021 15:18:51 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103
+[03-Mar-2021 15:19:55 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103
+[03-Mar-2021 15:20:44 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:103
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(103): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 103

@@ -1,0 +1,35 @@
+[31-Aug-2020 16:45:47 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48
+[31-Aug-2020 16:46:00 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48
+[31-Aug-2020 16:47:11 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48
+[31-Aug-2020 16:49:04 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48
+[31-Aug-2020 16:49:09 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48
+[31-Aug-2020 16:49:31 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48
+[31-Aug-2020 16:49:40 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'cart.data' in 'field list' in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php:48
+Stack trace:
+#0 /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php(48): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/3xpro/consola/admin/carrinho/carrinho-list.php on line 48

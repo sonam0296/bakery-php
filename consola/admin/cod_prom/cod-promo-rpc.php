@@ -1,0 +1,83 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php header("Cache-Control: no-store, no-cache, must-revalidate");header("Cache-Control: post-check=0, pre-check=0", false);header("Pragma: no-cache");header("Content-type: text/html; charset=UTF-8");
+
+function geraCodigo($size = '9') {
+  $string = '';
+  $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for ($i = 0; $i < $size; $i++)
+    $string .= $characters[mt_rand(0, (strlen($characters) - 1))];  
+
+  return $string;
+}
+
+if($_POST['op'] == 'carregaProdutos') {
+	$marca = $_POST['marca'];
+	$categoria = $_POST['categoria'];
+	$sel = $_POST['sel'];
+	
+	$where = "";
+	if($marca > 0) {
+		$where .= " AND p.marca = ".$marca."";
+	}
+	if($categoria > 0) {
+		$where .= " AND (p.categoria = ".$categoria." OR c.cat_mae = ".$categoria." OR c2.cat_mae = ".$categoria.")";
+	}
+
+	$query_rsProdutos = "SELECT p.id, p.ref, p.nome FROM l_pecas_en p LEFT JOIN l_categorias_en c ON c.id = p.categoria LEFT JOIN l_categorias_en c2 ON c2.id = c.cat_mae WHERE p.id > 0 ".$where." GROUP BY p.id ORDER BY p.nome ASC";
+	$rsProdutos = DB::getInstance()->prepare($query_rsProdutos);
+	$rsProdutos->execute();
+	$totalRows_rsProdutos = $rsProdutos->rowCount();
+	DB::close();
+
+	?>
+	<select class="form-control select2me" name="produto" id="produto">
+  	<option value="">Selecionar...</option>
+		<?php if($totalRows_rsProdutos > 0) { 
+			while($row_rsProdutos = $rsProdutos->fetch()) { ?>
+    		<option value="<?php echo $row_rsProdutos['id']; ?>" <?php if($row_rsProdutos['id'] == $sel) echo "selected"; ?>><?php echo $row_rsProdutos['ref']." - ".$row_rsProdutos['nome']; ?></option>
+    	<?php } 
+    } ?>
+   </select>
+  <?php
+}
+
+if($_POST['op'] == 'carregaClientes') {
+	$grupo = $_POST['grupo'];
+	$sel = $_POST['sel'];
+	
+	$query_rsClientes = "SELECT id, nome, email FROM clientes WHERE grupo=:grupo ORDER BY nome ASC";
+	$rsClientes = DB::getInstance()->prepare($query_rsClientes);
+	$rsClientes->bindParam(':grupo', $grupo, PDO::PARAM_INT);
+	$rsClientes->execute();
+	$totalRows_rsClientes = $rsClientes->rowCount();
+	DB::close();
+	
+	?>
+	<select class="form-control select2me" name="cliente" id="cliente">
+  	<option value="">Selecionar...</option>
+		<?php if($totalRows_rsClientes > 0) { 
+			while($row_rsClientes = $rsClientes->fetch()) { ?>
+    		<option value="<?php echo $row_rsClientes['id']; ?>" <?php if($row_rsClientes['id'] == $sel) echo "selected"; ?>><?php echo $row_rsClientes['nome']." - ".$row_rsClientes['email']; ?></option>
+    	<?php } 
+    } ?>
+  </select>
+  <?php
+}
+
+if($_POST['op']=="geraCodigo") {
+	do {
+		$cod_bonus_gera = geraCodigo();
+
+		$query_rsCodProm = "SELECT * FROM codigos_promocionais WHERE codigo='$cod_bonus_gera'";
+		$rsCodProm = DB::getInstance()->prepare($query_rsCodProm);
+		$rsCodProm->execute();
+		$totalRows_rsCodProm = $rsCodProm->rowCount();
+		DB::close();
+		
+	} while($totalRows_rsCodProm>0);
+	
+	echo $cod_bonus_gera;
+}
+
+?>

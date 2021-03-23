@@ -1,0 +1,440 @@
+<?php include_once ('../inc_pages.php');?>
+
+<?php
+$query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+$rsLinguas       = DB::getInstance()->prepare($query_rsLinguas);
+$rsLinguas->execute();
+$row_rsLinguas       = $rsLinguas->fetchAll();
+$totalRows_rsLinguas = $rsLinguas->rowCount();
+
+function categoria_get($categoria_name) {
+	$query_rsCat = "SELECT id, nome, cat_mae FROM l_categorias_en WHERE nome = '$categoria_name'";
+	$rsCat       = DB::getInstance()->prepare($query_rsCat);
+	$rsCat->execute();
+	$row_rsCat = $rsCat->fetch();
+	DB::close();
+	return $row_rsCat;
+}
+
+function categoria_get_by_id($id) {
+	$query_rsCat = "SELECT id, nome, cat_mae FROM l_categorias_en WHERE id = '$id'";
+	$rsCat       = DB::getInstance()->prepare($query_rsCat);
+	$rsCat->execute();
+	$row_rsCat = $rsCat->fetch();
+	DB::close();
+	return $row_rsCat;
+}
+
+function categoria_get_all($categoria_name) {
+	$query_rsCat = "SELECT id, nome, cat_mae FROM l_categorias_en WHERE nome = '$categoria_name'";
+	$rsCat       = DB::getInstance()->prepare($query_rsCat);
+	$rsCat->execute();
+	$row_rsCat = $rsCat->fetchAll();
+	DB::close();
+	return $row_rsCat;
+}
+
+function brand_get($brand_name) {
+	$query_rsBrand = "SELECT id, nome FROM l_marcas_en WHERE nome = '$brand_name'";
+	$rsBrand       = DB::getInstance()->prepare($query_rsBrand);
+	$rsBrand->execute();
+	$row_rsBrand = $rsBrand->fetch();
+	DB::close();
+	return $row_rsBrand;
+}
+
+function import_cate($main_cate_name, $parent_cat = 0) {
+
+	$get_cate_name = categoria_get($parent_cat);
+
+	if (!empty($get_cate_name)) {
+		if (!empty($get_cate_name['id'])) {
+			$get_cate_id = $get_cate_name['id'];
+		} else {
+			$get_cate_id = 0;
+		}
+	} else {
+		$get_cate_id = 0;
+	}
+
+	$query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+	$rsLinguas       = DB::getInstance()->prepare($query_rsLinguas);
+	$rsLinguas->execute();
+	$row_rsLinguas       = $rsLinguas->fetchAll();
+	$totalRows_rsLinguas = $rsLinguas->rowCount();
+
+	//if (!empty($sub_cate_name) && !empty($get_cate_name)) {
+	$sub_sub_exist = categoria_get($main_cate_name);
+
+	$continue_insert = 1;
+
+	if (!empty($sub_sub_exist)) {
+		$continue_insert = 0;
+	}
+
+	if (!empty($sub_sub_exist) && !empty($get_cate_id)) {
+
+		$get_all_cate = categoria_get_all($main_cate_name);
+
+		if (!empty($get_all_cate)) {
+			foreach ($get_all_cate as $key => $value) {
+				$cate_iddd = categoria_get_by_id($value['cat_mae']);
+				if ($cate_iddd['nome'] == $parent_cat) {
+					$continue_insert = 0;
+					break;
+				} else {
+					$continue_insert = 1;
+				}
+			}
+		} else {
+
+			$continue_insert = 0;
+		}
+
+	}
+
+	if ($continue_insert == true) {
+
+		$insertSQL = "SELECT MAX(id) FROM l_categorias_en";
+		$rsInsert  = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->execute();
+		$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+
+		$max_id = $row_rsInsert["MAX(id)"]+1;
+
+		foreach ($row_rsLinguas as $linguas) {
+
+			$query_rsCatMae = "SELECT url FROM l_categorias_".$linguas['sufixo']." WHERE id=:categoria";
+			$rsCatMae       = DB::getInstance()->prepare($query_rsCatMae);
+			$rsCatMae->bindParam(':categoria', $get_cate_id, PDO::PARAM_INT);
+			$rsCatMae->execute();
+			$row_rsCatMae       = $rsCatMae->fetch(PDO::FETCH_ASSOC);
+			$totalRows_rsCatMae = $rsCatMae->rowCount();
+
+			if ($totalRows_rsCatMae > 0) {
+				$nome_url = $row_rsCatMae['url']."-";
+			} else {
+				$nome_url = "";
+			}
+
+			$nome_url .= strtolower(verifica_nome($main_cate_name));
+
+			$query_rsProc = "SELECT * FROM l_categorias_".$linguas['sufixo']." WHERE url like :nome_url AND id!=:max_id";
+			$rsProc       = DB::getInstance()->prepare($query_rsProc);
+			$rsProc->bindParam(':nome_url', $nome_url, PDO::PARAM_STR, 5);
+			$rsProc->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+			$rsProc->execute();
+			$totalRows_rsProc = $rsProc->rowCount();
+
+			if ($totalRows_rsProc > 0) {
+				$nome_url = $nome_url."-".$max_id;
+			}
+
+			$cat_array = [
+				'max_id'    => $max_id,
+				'nome'      => $main_cate_name,
+				'categoria' => $get_cate_id,
+				'url'       => $nome_url,
+				'title'     => $main_cate_name,
+			];
+
+			// echo "<pre>";
+			// print_r ($cat_array);
+			// echo "</pre>";
+
+			$insertSQL = 'INSERT INTO l_categorias_'.$linguas["sufixo"].' (id, nome, cat_mae, url, title) VALUES ("'.$max_id.'", "'.$main_cate_name.'", "'.$get_cate_id.'", "'.$nome_url.'", "'.$main_cate_name.'")';
+			$rsInsert  = DB::getInstance()->prepare($insertSQL);
+			// $rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+			// $rsInsert->bindParam(':nome', $main_cate_name, PDO::PARAM_STR, 5);
+			// $rsInsert->bindParam(':categoria', $get_cate_id, PDO::PARAM_INT, 5);
+			// $rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5);
+			// $rsInsert->bindParam(':title', $main_cate_name, PDO::PARAM_STR, 5);
+			$rsInsert->execute();
+		}
+
+	}
+
+	//}
+
+}
+
+?>
+
+<?php
+
+if (isset($_POST['importSubmit'])) {
+
+	// Allowed mime types
+	$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+
+	// Validate whether selected file is a CSV file
+	if (!empty($_FILES['csvfile']['name']) && in_array($_FILES['csvfile']['type'], $csvMimes)) {
+
+		// If the file is uploaded
+		if (is_uploaded_file($_FILES['csvfile']['tmp_name'])) {
+
+			// Open uploaded CSV file with read-only mode
+
+			// Skip the first line
+			$csvFile1 = fopen($_FILES['csvfile']['tmp_name'], 'r');
+			fgetcsv($csvFile1);
+
+			$i = 1;
+			while (($line1 = fgetcsv($csvFile1)) !== FALSE) {
+				//break;
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+				$main_cate_name = $line1[2];
+				if (!empty($main_cate_name)) {
+					import_cate($main_cate_name, 0);
+				}
+
+				$i++;
+			}
+			fclose($csvFile1);
+
+			$csvFile2 = fopen($_FILES['csvfile']['tmp_name'], 'r');
+			fgetcsv($csvFile2);
+
+			$i = 1;
+			while (($line2 = fgetcsv($csvFile2)) !== FALSE) {
+				//break;
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+
+				$main_cate_name = $line2[2];
+				$cate_name      = $line2[3];
+
+				if (!empty($cate_name)) {
+					import_cate($cate_name, $main_cate_name);
+				}
+
+				$i++;
+			}
+			fclose($csvFile2);
+
+			$csvFile3 = fopen($_FILES['csvfile']['tmp_name'], 'r');
+			fgetcsv($csvFile3);
+
+			$i = 1;
+			while (($line3 = fgetcsv($csvFile3)) !== FALSE) {
+				//break;
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+
+				$cate_name     = $line3[3];
+				$sub_cate_name = $line3[4];
+
+				if (!empty($sub_cate_name)) {
+					import_cate($sub_cate_name, $cate_name);
+				}
+
+				$i++;
+			}
+
+			fclose($csvFile3);
+
+			// Parse data from CSV file line by line
+
+			$csvFile4 = fopen($_FILES['csvfile']['tmp_name'], 'r');
+			fgetcsv($csvFile4);
+
+			$i = 1;
+			while (($line = fgetcsv($csvFile4)) !== FALSE) {
+				//break;
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+
+				$ref    = $line[0];
+				$imagem = $line[1];
+
+				$main_cate_name = $line[2];
+				$cate_name      = $line[3];
+				$sub_cate_name  = $line[4];
+
+				//$type = str_replace('"', "", $line[5]);
+				$nome       = str_replace('"', "", $line[5]);
+				$brand_name = str_replace("'", " ", $line[6]);
+				$brand_name = trim(preg_replace("/\r|\n/", " ", $brand_name));
+
+				$descricao = str_replace('"', "", $line[7]);
+
+				$composition_per_capsule = str_replace('"', "", $line[8]);
+
+				$modo_de_tomar = str_replace('"', "", $line[9]);
+
+				$detalhes_advertencias = str_replace('"', "", $line[10]);
+
+				$stock  = $line[14];
+				$waight = $line[15];
+				$preco  = $line[16];
+				$iva    = $line[17];
+
+				$promocao = $line[18];
+
+				$cate_check = true;
+
+				//=====================
+
+				$cate_array = array();
+
+				if (!empty($sub_cate_name)) {
+
+					$cate_array = categoria_get($sub_cate_name);
+					if (empty($cate_array)) {
+						$cate_check = false;
+					} else {
+						$cate_check = true;
+					}
+				} else {
+					$cate_check = false;
+				}
+
+				if ($cate_check == false) {
+					$cate_array = categoria_get($cate_name);
+					if (empty($cate_array)) {
+						$cate_check = false;
+					} else {
+						$cate_check = true;
+					}
+				}
+
+				if ($cate_check == false) {
+					$cate_array = categoria_get($main_cate_name);
+				}
+
+				if (!empty($cate_array)) {
+					$cate_id = $cate_array['id'];
+				} else {
+					$cate_id = 0;
+				}
+
+				//====================
+
+				$brand_array = brand_get($brand_name);
+				if (!empty($brand_array)) {
+					$brand_id = $brand_array['id'];
+				} else {
+					$brand_id = 0;
+				}
+
+				$brand_id = $brand_id['id'];
+
+				$table = 0;
+				$all   = false;
+
+				if ($_POST['linguas'] == 'all') {
+					$all = true;
+				} else {
+					$table = 'l_pecas_'.$_POST['linguas'];
+				}
+
+				$all = true;
+				if ($all == true) {
+
+					foreach ($row_rsLinguas as $value) {
+
+						$query_rsProcs = "SELECT id, nome FROM l_categorias_".$value['sufixo']." WHERE nome=:nome AND cate_mae_name=:cate_mae_name";
+						$rsProcs       = DB::getInstance()->prepare($query_rsProcs);
+						$rsProcs->bindParam(':nome', $sub_cate_name, PDO::PARAM_STR, 5);
+						$rsProcs->bindParam(':cate_mae_name', $cate_name, PDO::PARAM_STR, 5);
+						$rsProcs->execute();
+						$row_rsProcs = $rsProcs->fetch(PDO::FETCH_ASSOC);
+						//$totalRows_rsProcs = $rsProcs->rowCount();
+
+						$cate_id = $row_rsProcs['id'];
+
+						$table = 'l_pecas_'.$value['sufixo'];
+
+						$insertSQL = "SELECT MAX(id) FROM l_pecas_en";
+						$rsInsert  = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->execute();
+						$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+
+						$max_id = $row_rsInsert["MAX(id)"]+1;
+
+						$nome_url = "";
+
+						if (CATEGORIAS == 1) {
+							$query_rsCatMae = "SELECT url FROM l_categorias_".$value['sufixo']." WHERE id=:categoria";
+							$rsCatMae       = DB::getInstance()->prepare($query_rsCatMae);
+							$rsCatMae->bindParam(':categoria', $cate_id, PDO::PARAM_INT);
+							$rsCatMae->execute();
+							$row_rsCatMae       = $rsCatMae->fetch(PDO::FETCH_ASSOC);
+							$totalRows_rsCatMae = $rsCatMae->rowCount();
+
+							if ($totalRows_rsCatMae > 0) {
+								$nome_url .= $row_rsCatMae['url']."-";
+							}
+						}
+
+						$get_url_nome = preg_replace("/\r|\n/", "-", $nome);
+						$get_url_nome = str_replace('', '-', $get_url_nome);
+						$nome_url .= strtolower(verifica_nome($get_url_nome));
+
+						$nome = preg_replace("/\r|\n/", "", $nome);
+
+						$query_rsProc = "SELECT id FROM l_pecas_".$value['sufixo']." WHERE url LIKE :nome_url AND id!=:max_id";
+						$rsProc       = DB::getInstance()->prepare($query_rsProc);
+						$rsProc->bindParam(':nome_url', $nome_url, PDO::PARAM_STR, 5);
+						$rsProc->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+						$rsProc->execute();
+						$totalRows_rsProc = $rsProc->rowCount();
+
+						if ($totalRows_rsProc > 0) {
+							$nome_url = $nome_url."-".$max_id;
+						}
+
+						$insertSQL = '';
+						$insertSQL = 'INSERT INTO '.$table.' (id,ref, nome, categoria, marca, descricao, composition_per_capsule, modo_de_tomar, detalhes_advertencias, preco, iva, imagem1, imagem2, imagem3, imagem4, visivel, url) VALUES ("'.$i.'", "'.$ref.'", "'.mb_convert_encoding($nome, "HTML-ENTITIES", "UTF-8").'", "'.$cate_id.'", "'.$brand_id.'", "'.mb_convert_encoding($descricao, "HTML-ENTITIES", "UTF-8").'", "'.mb_convert_encoding($composition_per_capsule, "HTML-ENTITIES", "UTF-8").'", "'.mb_convert_encoding($modo_de_tomar, "HTML-ENTITIES", "UTF-8").'", "'.mb_convert_encoding($detalhes_advertencias, "HTML-ENTITIES", "UTF-8").'", "'.$preco.'",  "'.$iva.'", "'.$imagem.'" , "'.$imagem.'" , "'.$imagem.'", "'.$imagem.'",1,"'.$nome_url.'")';
+						// echo "<pre>";
+						// print_r ($insertSQL);
+						// echo "</pre>";
+						//  exit();
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->execute();
+						$insert_id = DB::getInstance()->lastInsertId();
+						DB::close();
+
+					}
+
+				} else {
+
+				}
+
+				$visivel        = 1;
+				$insertImageSQL = "INSERT INTO l_pecas_imagens (id_peca, imagem1, imagem2 , imagem3, imagem4, visivel) VALUES ('".$insert_id."','".$imagem."', '".$imagem."', '".$imagem."', '".$imagem."','".$visivel."')";
+				$rsInsertImg    = DB::getInstance()->prepare($insertImageSQL);
+				$rsInsertImg->execute();
+
+				$i++;
+
+			}
+			// echo "<pre>";
+			// print_r ($i);
+			// echo "</pre>";
+			exit();
+			// Close opened CSV file
+			fclose($csvFile4);
+
+			$qstring = '?status=succ';
+		} else {
+			$qstring = '?status=err';
+		}
+	} else {
+		$qstring = '?status=invalid_file';
+	}
+}
+
+// Redirect to the listing page
+header("Location: produtos.php".$qstring);
+
+?>

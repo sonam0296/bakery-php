@@ -1,0 +1,79 @@
+.breadcrumbs_cont{	
+	& .breadcrumbs{
+		margin: 0;
+	    list-style: none;
+		padding:$breadcrumbs-padding;
+		
+		& li{
+			position: relative;
+			@include displayInline(top);
+			
+			&.disabled{
+				color: $breadcrumbs-color-disabled;
+				cursor: default;
+				pointer-events: none;
+
+				&:before{
+					display: none;
+				}
+			}
+
+			&:before{
+				@if $breadcrumbs-separator-font == true{
+					@include iconFont();
+				}
+				
+				@include displayInline(top);
+				
+				@if $breadcrumbs-separator-unicode == true{
+					content: unicode($breadcrumbs-separator);
+				} @else{
+					content: $breadcrumbs-separator;
+				}
+				
+						
+				font-size: $breadcrumbs-separator-size;
+				color: $breadcrumbs-separator-color;
+
+				margin: $breadcrumbs-separator-margin;
+
+				@if $breadcrumbs-separator-font == false{
+					line-height: 1;
+					margin-top: -2px;
+				}
+			}
+
+			& a,
+			& span{
+				position: relative;
+
+				@include displayInline(top);
+				@include textos($breadcrumbs-text-class, $breadcrumbs-color, $breadcrumbs-size);
+			}
+
+			&:last-child a,
+			&:last-child span {
+				color:$breadcrumbs-color-current;
+			}
+			&:hover a,
+			&:hover span{
+				color:$secondary-color;
+				text-decoration: none;
+			}
+
+			&:first-child{
+				&:before{
+					display: none;
+				}
+			}
+		}
+	}
+
+	@include breakpoint(xxsmall down){
+		& .breadcrumbs{		
+			& li:not(.disabled):not(:last-child):not(:nth-last-child(2)){
+				display: none;
+			}
+		}
+	}
+}

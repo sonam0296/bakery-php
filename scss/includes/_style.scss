@@ -1,0 +1,50 @@
+/*PAGINAS*/
+.homepage{
+	& .icons-section{
+		background: $secondary-color;	
+		padding: 3rem 0;
+
+		& .icon{
+			@include displayInline(middle);
+			& svg{
+				max-height: 4rem;
+				margin-right: 1rem;
+				fill: $white;
+			}
+		}
+
+		& .conteudo{
+			@include displayInline(middle);	
+			& span,
+			& p{
+				@include textos(textos, $white);
+				@include dots(1,getHeightLines(textos, 1));
+			}
+			& span{
+				font-weight: 600;
+			}
+		}
+	}
+}
+
+
+.news_remover {
+
+	& .banners{
+		& .fill{
+			padding-bottom: 15% !important; 
+		}
+	}
+
+	& .news_cont{
+		padding: 6rem 0;
+
+		& .textos{
+			padding: 1rem 0;
+		}
+
+		& .button{
+			margin-top: 1rem;
+		}
+	}
+}

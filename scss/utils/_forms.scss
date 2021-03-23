@@ -1,0 +1,687 @@
+@mixin inputElements($tipo){
+	/*INPUTS*/
+	@if $tipo==all {
+		display:block;
+		width:100%;
+		
+		@include inputElements(texto);
+
+		padding: $inptPadding;
+
+		min-height:$inptHeight;
+		height:$inptHeight;
+
+		border-radius: $border-radius;
+		border:1px solid $medium-gray;
+		background: $white;
+		
+		&.has-error{
+			@include inputElements(error);
+		}
+	} 
+	@if $tipo==texto {
+		@include textos(list_txt);    
+	}
+	@if $tipo==textarea {
+		overflow:hidden;
+
+		@include Animationcss(height 0.5s linear);
+		
+		&:focus,
+		&.focused,
+		.focused &,
+		.hovered &{
+			overflow:auto;	
+			height:$inptTextareaH;	
+			@if $border-radius > 0 {
+				border-radius:20px;
+			}
+		}
+	}
+	@if $tipo==checkradio{
+		display:block;
+		position:absolute;
+		top:0;
+		left:0;
+		width:100%;
+		height:100%;
+		opacity:0;
+		
+		cursor: pointer;
+		z-index: 5;
+	}
+	@if $tipo==lineHeight {
+		/*line-height:2.8rem;
+		*/
+	} 
+	@if $tipo==error {
+		border-color: rgba($error-color,0.5);
+		color: $error-color;
+	} 
+}
+
+@mixin buttons($gerais:null, $size:null, $hover:null, $invert:null){
+	@if $gerais != none{
+		@include displayInline(top);
+		
+		position:relative;
+		overflow: hidden;
+		text-align: center;
+		border-radius: $border-radius;
+		box-shadow: none;
+
+		z-index: 1;	
+
+		&.inptsized{
+			min-height:$inptHeight;
+			line-height: 1.9;
+		}
+		&.border{
+			border: 1px solid;
+		}
+
+		&.disabled,
+		&:disabled{
+			opacity: 0.5;
+			cursor: default;
+			pointer-events: none;
+		}
+
+		&:after {
+			content: "";
+			position: absolute;
+			z-index: -1;
+			top: -2px;
+			left: -2px;
+			right: -2px;
+			bottom: -2px;
+
+			-webkit-transform-origin: 50% 0%;
+			transform-origin: 50% 0%;
+
+			@include transform(scaleY(0));
+			@include Animationcss(transform 0.3s ease-out);
+		}
+
+		@include Animationcss(all 0.5s linear);
+	}
+
+	@if $size != null{
+		@if $size == small{
+			@include textos(list_txt, null, 12px, null, 600);
+			text-transform: uppercase;
+			padding: 6px 12px;
+		}@else if $size == big{
+			@include textos(list_txt, null, 14px, null, 400);
+			text-transform: uppercase;
+			padding: 22px 45px;
+		}@else{
+			@include textos(list_txt, null, 12px, null, 600);
+			text-transform: uppercase;
+			padding: 12px 20px;
+		}
+	}
+	
+	@if $invert != null{
+		@if $invert == 1{
+			color: $white;
+			background:$primary-color;
+			border-color: $secondary-color !important;
+
+			&:after {
+				background: $secondary-color;
+			}
+		}@else if $invert == 2{
+			color: $white;
+			border-color: $white !important;
+			background:$success-color;
+
+			&:after {
+				background: $primary-color;
+			}			
+		}@else{
+			color: $secondary-color;
+			border-color: $primary-color !important;
+			background:$white;
+
+			&:after {
+				background: $primary-color;
+			}
+		}
+	}
+
+	@if $hover != null{
+		@if $hover == yes{	
+			cursor:pointer;
+
+			&:hover{
+				color:$white !important;
+
+				&:after{
+					@include transform(scaleY(1));
+				}
+			}
+		}@else{
+			cursor:default;
+		}
+	}
+}
+
+/***************** INPUTS *****************/
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px $white inset  !important;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition: color 9999s ease-out, background-color 9999s ease-out;
+    -webkit-transition-delay: 9999s;
+}
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=text], input[type=number], input[type=tel], input[type=date], input[type=radio], input[type=checkbox], input[type=search], input[type=email], input[type=submit], input[type=button]{ //deixar assim se nao, nao resulta
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	border-radius: $border-radius !important;
+
+	box-shadow: none !important; /*Safari inner shadow*/
+}
+
+
+.inpt_cells{
+	@include displayInline(top);
+
+	width:49%;
+	margin-bottom:2.5rem;
+
+	&:nth-child(odd){
+		margin-right: 1%;
+	}
+	&:nth-child(even){
+		margin-left: 1%;
+	}
+	
+	& .inpt_holder,
+	&.no_marg{
+		margin-bottom: 0;
+	}
+
+	@include breakpoint(xxsmall down){
+		&.medium{
+			width: 100%;
+
+			&:nth-child(odd),
+			&:nth-child(even){
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+	}
+	@include breakpoint(xsmall down){
+		&.xxsmall{
+			width: 100%;
+
+			&:nth-child(odd),
+			&:nth-child(even){
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+	}
+	@include breakpoint(small down){
+		&.xsmall{
+			width: 100%;
+
+			&:nth-child(odd),
+			&:nth-child(even){
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+	}
+}
+.inpt_holder{
+	position:relative;
+	display: block;
+	width: 100%;
+			
+	margin-bottom:$inptMargin;
+	text-align: left;
+	
+	&.label_inline{
+		& .inpt{
+			padding-left: 12rem !important;
+		}
+		& .inpt_label{
+			position: absolute;
+			top: 50%;
+			left: 0;
+			width: 10rem;
+
+			@include inputElements(texto);
+			line-height: 1.2;
+			
+			@include transform(translateY(-50%));
+
+			padding-left: 1rem;
+
+			&:after{
+				content: '';
+				position: absolute;
+				top: 50%;
+				left: 11rem;
+				width: 1px;
+				height: 3rem;
+				background: $dark-gray;
+
+				@include transform(translateY(-50%));
+			}
+		}
+	}
+	&[class*=" icon-"]{
+		& .inpt{
+			padding-right: 3rem !important;
+		}
+	
+		& i,
+		& svg,
+		& button,
+		&:before{
+			position: absolute;
+			right: 1rem;
+			top: auto;
+			bottom: 13px;
+
+			color: $dark-gray;
+			font-size: 1.7rem;
+			width: 1.7rem;
+
+			pointer-events: none;
+		}
+		& button{
+			pointer-events: auto;
+		}
+		& svg path,
+		& svg rect,
+		& svg circle{
+			fill: $secondary-color;
+		}
+
+		& button:hover{
+			cursor: pointer;
+			color: $primary-color;
+		}
+	}
+
+	&:not(.simple):not(.select){
+		&:after{
+			content:'';
+			
+			position:absolute;
+			bottom:0px;
+			left:$inptLineO;
+			right: 100%;
+			height:1px;
+			width:auto;
+			z-index: 1;
+			
+			background:$secondary-color;
+
+			@include Animationcss(all 0.5s linear);
+		}
+
+		&.focused,
+		&.hovered{
+			&:after{
+				right:$inptLineO;
+			}
+		}
+	}
+
+	&.select:after{
+		content: '';
+		position: absolute;
+		right: 2rem;
+		bottom: 17px;
+
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0.5rem 0.5rem 0 0.5rem;
+		border-color: $primary-color transparent transparent transparent;
+
+		pointer-events:none;
+	}
+
+
+	& .inpt_error{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: $inptHeight;
+		opacity: 0;
+		z-index: 2;
+
+		pointer-events:none;
+		border: 2px solid $error-color;
+
+		@include Animationcss(opacity 0.3s linear);
+	}
+
+	&.btn_right{
+		& .inpt{
+			padding-right: 10rem;
+		}
+		& button{
+			position: absolute;
+			top: 0;
+			right: 0;
+			height: 100%;
+		}
+	}
+	
+	&.simple{
+		border:0;
+	}
+	&.no_marg{
+		margin:0;
+	}
+
+	&.focused .passwordToggler {
+		opacity:1;
+		visibility:visible;
+		pointer-events:auto;
+	}
+
+	&.has-error{
+		border-color: rgba($error-color,0.5);
+	}
+
+	@include breakpoint(xsmall down){
+		&:not(.select):after{
+			display:none;
+		}
+
+		&.select:after{
+			top: auto;
+			bottom: 1.5rem;
+		}
+
+	}
+}
+.inpt_label{
+	@include displayInline(top);
+    @include textos(list_tit, null, null, null, 700);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+	
+	&.inpt_label_error{
+		position:absolute;
+		top:0px;
+		left: 0px;
+		color: $error-color;
+		z-index: 2;
+
+		pointer-events:none;
+		opacity: 0;
+
+		@include Animationcss(opacity 0.3s linear);
+	}
+
+	.has-error &{
+		color: $error-color;
+	}
+}
+.inpt{
+	@include inputElements(all);
+
+	&[type="date"]:not(.has-value):before{
+		content: attr(placeholder);
+	}
+
+	&.disabled,
+	&:disabled{
+		opacity:0.8 !important;
+		color: $dark-gray !important;
+		border-color: $medium-gray !important;
+		background: $medium-gray !important;
+		pointer-events: none !important;
+	}
+
+	.has-error &{
+		color: $error-color;
+	}
+}
+textarea.inpt{
+	@include inputElements(textarea);
+}
+.inpt_checkbox{
+	@include displayInline(top);
+	position:relative;
+	margin:5px 0;
+	margin-right:30px;
+	
+	&:last-child{
+		margin-right:0;
+	}
+	&:only-child{
+		margin:0;
+	}
+	
+	& input[type="checkbox"],
+	& input[type="radio"]{
+		@include inputElements(checkradio);
+	}
+	
+	& label{		
+		@include displayInline(top);
+    	@include textos(list_txt, null, null, 20px, null);
+
+		position: relative;
+		text-align:left;
+		padding-left: 30px;
+		
+		@include Animationcss(color 0.3s linear);
+		
+		& a{
+			@include displayInline(top);
+			color:$secondary-color;
+			position:relative;
+			z-index:6;
+
+			&:hover{
+				color:$primary-color;
+			}
+		}
+		
+		&:before,
+		&:after {
+			content: '';
+			position:absolute;
+			
+			cursor: pointer;
+
+			@include Animationcss(all 0.3s linear);
+		}
+		
+		&:before{
+			top:0px;
+			left: 0px;
+			
+			width: 20px;
+			height: 20px;
+			
+			border:1px solid $medium-gray;
+		}
+		
+		&:after{
+			top:5px;
+
+			opacity:0;
+			visibility:hidden;
+		}
+	}
+			
+	& input[type="checkbox"] + label{						
+		&:after{
+			left: 4px;
+			width: 12px;
+			height: 7px;
+
+			border: 2px solid $primary-color;
+			border-top: none;
+			border-right: none;
+			
+			@include transform(rotate(-45deg));
+		}
+	}
+	
+	& input[type="radio"] + label{
+		&:before,
+		&:after {
+			border-radius:50%;
+		}
+					
+		&::after {
+			background:$primary-color;
+			
+			width: 10px;
+			height: 10px;
+	
+			left: 5px;
+		}
+	}
+	
+	
+	& input[type="checkbox"]:checked + label::after,
+	& input[type="radio"]:checked + label::after{
+		opacity:1;
+		visibility:visible;
+	}
+	& input[type="checkbox"].has-error + label:before,
+	& input[type="radio"].has-error + label:before{
+		border-color:$error-color !important;
+	}
+}
+.inputfile {
+    @include inputElements(checkradio);
+	& ~ svg{
+		
+		@include Animationcss(all 0.3s linear);
+
+		&.check{
+			opacity: 0;
+			visibility: hidden;
+		}	
+	}
+
+	&.has-files ~ svg,
+	&.upl_completed ~ svg{
+		&.upl{
+			opacity: 0;
+			visibility: hidden;
+		}	
+		&.check{
+			opacity: 1;
+			visibility: visible;
+		}	
+	}
+
+	& div {	
+		height: auto;
+	}
+
+	
+		
+	&:hover + label{		
+		color: $secondary-color;
+	}
+	
+	&.has-error + label{
+		@include inputElements(error);
+	}
+}
+
+.passwordToggler{
+	position:absolute;
+	bottom:calc( (#{$inptHeight} / 2) - 6px );
+	right:15px;
+	
+	width:18px;
+	height:12px;
+		
+	cursor:pointer;
+	
+	background-image:url('../imgs/elem/show_hide.png');
+	background-position:0 0;
+	background-size:cover;
+	
+	opacity:0;
+	visibility:hidden;
+	pointer-events:none;
+	
+	&.show{
+		background-position:18px 0;
+	}
+}
+
+.captcha{
+	@include breakpoint(xxsmall down){
+		@include transform(scale(0.85));
+		transform-origin:0 0;
+	}
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { opacity:1; color:currentColor;font-weight: inherit;}
+input::-moz-placeholder, textarea::-moz-placeholder { opacity:1; color:currentColor;font-weight: inherit;} /* firefox 19+ */
+input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:1; color:currentColor;font-weight: inherit;} /* ie */
+input:-moz-placeholder, textarea:-moz-placeholder { opacity:1; color:currentColor;font-weight: inherit;}
+
+/*input:focus::-webkit-input-placeholder, textarea:focus::-webkit-input-placeholder { opacity:0; color:transparent;}
+input:focus::-moz-placeholder, textarea:focus::-moz-placeholder { opacity:0; color:transparent;}  firefox 19+ 
+input:focus:-ms-input-placeholder, textarea:focus:-ms-input-placeholder { opacity:0; color:transparent;} 
+input:focus:-moz-placeholder, textarea:focus:-moz-placeholder {opacity:0; color:transparent;}*/
+
+
+
+/***************** BUTTONS *****************/
+.button-small,
+.button,
+.button-big{
+	@include buttons(all, null, yes, null);
+}
+
+.button-small{
+	@include buttons(none, small, null, 0);
+}
+.button-small.invert{
+	@include buttons(none, null, null, 1);
+}
+.button-small.invert2{
+	@include buttons(none, null, null, 2);
+}
+.button{
+	@include buttons(none, normal, null, 0);
+}
+.button.invert{
+	@include buttons(none, null, null, 1);
+}
+.button.invert2{
+	@include buttons(none, null, null, 2);
+}
+.button-big{
+	@include buttons(none, big, null, 0);
+}
+.button-big.invert{
+	@include buttons(none, null, null, 1);
+}
+.button-big.invert2{
+	@include buttons(none, null, null, 2);
+}

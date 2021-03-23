@@ -1,0 +1,35 @@
+[06-Mar-2021 12:59:09 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[06-Mar-2021 13:01:12 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[06-Mar-2021 13:01:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[06-Mar-2021 13:01:59 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[06-Mar-2021 13:04:17 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[06-Mar-2021 13:04:28 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52
+[06-Mar-2021 13:05:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '56' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php:52
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php(52): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/paginas/paginas-blocos-insert.php on line 52

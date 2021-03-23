@@ -1,0 +1,447 @@
+<?php if($footer_small == 0) { 
+  if(tableExists(DB::getInstance(), 'met_pagamento_pt')) {
+    $query_rsPagamento = "SELECT nome, imagem2 FROM met_pagamento".$extensao." WHERE visivel = 1 AND visivel_footer = 1 AND imagem2 != '' ORDER BY ordem ASC";
+    $rsPagamento = DB::getInstance()->prepare($query_rsPagamento);
+    $rsPagamento->execute();    
+    $row_rsPagamento = $rsPagamento->fetchAll(PDO::FETCH_ASSOC);
+    $totalRows_rsPagamento = $rsPagamento->rowCount();
+  }
+  if(tableExists(DB::getInstance(), 'met_envio_pt')){
+    $query_rsEnvio = "SELECT nome, imagem2 FROM met_envio".$extensao." WHERE visivel_footer = 1 AND imagem2 != '' ORDER BY ordem ASC";
+    $rsEnvio = DB::getInstance()->prepare($query_rsEnvio);
+    $rsEnvio->execute();    
+    $row_rsEnvio = $rsEnvio->fetchAll(PDO::FETCH_ASSOC);
+    $totalRows_rsEnvio = $rsEnvio->rowCount();
+  }
+
+  $query_rsNewslleter = "SELECT imagem_news FROM homepage".$extensao;
+  $rsNewslleter = DB::getInstance()->prepare($query_rsNewslleter);
+  $rsNewslleter->execute();    
+  $row_rsNewslleter = $rsNewslleter->fetch(PDO::FETCH_ASSOC);
+  $totalRows_rsNewslleter = $rsNewslleter->rowCount();
+  
+  $query_rsHome = "SELECT * FROM homepage".$extensao;
+  $rsHome = DB::getInstance()->prepare($query_rsHome);
+  $rsHome->execute();    
+  $row_rsHome = $rsHome->fetchAll(PDO::FETCH_ASSOC);
+  $totalRows_rsHome = $rsHome->rowCount();
+  
+$query_rsRating = "SELECT * FROM l_pecas_reviews".$extensao." WHERE 1=1 ORDER BY id DESC LIMIT 4";
+$rsRating = DB::getInstance()->prepare($query_rsRating);
+$rsRating->execute();
+$row_rsRating = $rsRating->fetchAll(PDO::FETCH_ASSOC);
+$totalRows_rsRating = $rsRating->rowCount();
+DB::close();
+  
+  ?>
+  <footer class="div_100 footer">
+    <section class="div_100 section-info" id="newslatter-wrap">
+      <div class="row collapse newslatter-align-center">
+          <div class="newslatter-left-wrap inner-container-wrap" style="z-index: 1;">
+              <div class="content-wrapper">
+                <h3 class="subtitulos"><?php echo $Recursos->Resources['news_tit']; ?></h3>
+                <p>Subscreva a nossa newsletter para ficar a par das nossas novidades e promoções</p>
+              </div>
+           </div>
+          <div class="newslatter-right-wrap" style="z-index: 2;">
+          <form method="post" id="form_subscreve" name="form_subscreve" autocomplete="off" action="javascript:subs_news('form_subscreve');" onSubmit="return validaForm('form_subscreve')" novalidate class="news_cont" data-error="<?php echo $Recursos->Resources["news_subs"]; ?>">
+            
+            <div class="inpt_holder full">
+              <input class="inpt" required type="email" class="inpt" id="email_subs" name="email_subs" placeholder="<?php echo $Recursos->Resources["news_subs"]; ?>"/>
+              <button class="button" aria-label="Submit form" role="button" type="submit"><img width="10px" src="<?php echo ROOTPATH_HTTP; ?>imgs/svg/angle-right.svg" alt=""></button>
+            </div>
+            <div class="inpt_holder simple full no_marg">
+             <div class="inpt_checkbox">
+              <input type="checkbox" required name="termos_news" id="termos_news" value="1" />
+              <label for="termos_news">Aceito a <a href="politica-de-privacidade">Política de Privacidade</a><?php echo $Recursos->Resources["aceito_termos_curto"]; ?></label>
+             <!--  <label for="termos_news">Aceito a <a href="politica-de-privacidade">Política de Privacidade</a><?php echo $Recursos->Resources["aceito_termos_curto"]; ?></label> -->
+             
+            </div>
+          </div>
+        <div class="anular_subs"><a href="news_remover.php"><?php echo $Recursos->Resources["anular_subscricao"]; ?></a></div>
+      </form>
+    </div>
+  </div>
+</section>
+	
+	
+<section class="div_100 links-section">
+  <div class="inner-container-wrap">
+	<div class="row">
+    <div class="column small-6 medium-2">
+      <h3 class="list_subtit"><?php echo $Recursos->Resources["natura_online"]; ?></h3>
+      <div>
+        <ul>
+       <!--  <li><a class="list_txt" href="<?php echo get_meta_link(2); ?>"><?php echo $Recursos->Resources["contactos"]; ?></a></li>
+        <li><a class="list_txt" href="<?php echo $pagSobre['url']; ?>"><?php echo $pagSobre["nome"]; ?></a></li>
+        <li><a class="list_txt" href="<?php echo get_meta_link(5); ?>"><?php echo $Recursos->Resources["faqs"]; ?></a></li> -->
+
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$pagwhoweare['url']; ?>"><?php echo $Recursos->Resources["quem_somos"]; ?></a></li>
+        <li><a class="list_txt" href="login.php?anchor=form_regista"><?php echo $Recursos->Resources["my_account"]; ?></a></li>
+        <li><a class="list_txt" href="apoioaocliente.php"><?php echo $Recursos->Resources["apoio_ao_cliente"]; ?></a></li>
+        <li><a class="list_txt" href="store-locater.php"><?php echo $Recursos->Resources["contactos"]; ?></a></li>
+      </ul>
+      </div>
+    </div>
+  
+    <?php if(!empty($GLOBALS['divs_categorias'])) { ?>
+      <div class="column small-6 medium-2">
+        <h3 class="list_subtit"><?php echo $Recursos->Resources["loja"]; ?></h3>
+          <div>
+            <ul>
+          <li><a class="list_txt" href="loja"><?php echo $Recursos->Resources["produtos"]; ?></a></li>
+          <li><a class="list_txt" href="marcas.php"><?php echo $Recursos->Resources["Marcas"]; ?></a></li>
+          <li><a class="list_txt" href="loja?mais-vendido"><?php echo $Recursos->Resources["best_seller"]; ?></a></li>
+          <li><a class="list_txt" href="novidades"><?php echo $Recursos->Resources["novidades"]; ?></a></li>
+          <li><a class="list_txt" href="promocoes"><?php echo $Recursos->Resources["promocode"]; ?></a></li>
+        </ul>
+          </div>
+        <!-- <ul>
+          <?php foreach($GLOBALS['divs_categorias'] as $cats) {
+            $subs_cats = $cats['subs'];
+            if($cats['info']) {
+              $cats = $cats['info'];
+            }
+            ?>
+            <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$cats['url']; ?>"><?php echo $cats["nome"]; ?></a></li>
+          <?php } ?>
+        </ul> -->
+      </div>
+    <?php } ?>
+    <div class="column small-6 medium-2">
+      <h3 class="list_subtit"><?php echo $Recursos->Resources['mais_info']; ?></h3>
+      <div>
+        <ul>
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$pagMetodos['url']; ?>"><?php echo $pagMetodos['nome']; ?></a></li>
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$pagdelivery_return['url']; ?>"><?php echo $pagdelivery_return['nome']; ?></a></li>
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$pagCookies['url']; ?>"><?php echo $pagCookies['nome']; ?></a></li>
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$pagPolitica['url']; ?>"><?php echo $pagPolitica['nome']; ?></a></li>
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.'termos-e-condicoes'; ?>"><?php echo $Recursos->Resources["termos_e_condicoes"]; ?></a></li>
+
+        <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$pagRal['url']; ?>"><?php echo $pagRal['nome']; ?></a></li>
+      </ul>
+      </div>
+    </div>
+    <div class="column small-6 medium-2">
+        <h3 class="list_subtit"><?php echo $Recursos->Resources['siga']; ?></h3>
+        <div><!--
+          --><?php foreach($GLOBALS['divs_redes'] as $redes) { ?><!--
+            --><a class="share-<?php echo strtolower($redes['nome']); ?>" href="<?php echo $redes['link']; ?>" target="_blank"><?php echo $redes['nome']; ?></a><!--
+          --><?php } ?>
+        </div>
+    </div>
+	<div class="column small-12 medium-2">
+        <h3 class="list_subtit"><?php echo $Recursos->Resources['tit_contactos2']; ?></h3>
+        <div>
+          <?php if (!empty($GLOBALS['divs_contactos'][1])):
+            $telefone = $GLOBALS['divs_contactos'][1]['info']['telefone'];
+            $email = $GLOBALS['divs_contactos'][1]['info']['email'];
+          else:
+            $telefone = $GLOBALS['divs_contactos']['info']['telefone'];
+            $email = $GLOBALS['divs_contactos']['info']['email'];
+          endif ?>
+          <ul>
+            <li><a class="telephone" href="tel:<?php echo $telefone; ?>"><?php echo $telefone; ?></a></li>
+            <li><a class="share-mail" href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></li>
+        </ul>
+        </div>
+    </div>
+    
+  </div>
+</div>
+</section>
+<section class="div_100 payment-type-wraper">
+  <div class="row payment-type-row">
+    <div class="column small-12 medium-12 ">
+      <div class="pagamento">
+        <?php if($totalRows_rsPagamento > 0) { ?>
+          <div class="div_100">
+            <?php foreach($row_rsPagamento as $pagamento) { 
+              if($pagamento['imagem2'] && file_exists(ROOTPATH."imgs/carrinho/".$pagamento['imagem2'])) { ?>
+                <div class="divs_pagamentos">
+                  <div class="has_bg contain lazy" data-src="carrinho/<?php echo $pagamento['imagem2']; ?>" alt="<?php echo $pagamento['nome']; ?>" title="<?php echo $pagamento['nome']; ?>"></div>
+                </div><?php } 
+            } ?>
+        <?php } ?>
+        <?php if($totalRows_rsEnvio > 0) { ?>
+         
+            <?php foreach($row_rsEnvio as $envio) { 
+              if($envio['imagem2'] && file_exists(ROOTPATH."imgs/carrinho/".$envio['imagem2'])) { ?>
+                <div class="divs_pagamentos">
+                  <div class="has_bg contain lazy" data-src="carrinho/<?php echo $envio['imagem2']; ?>" alt="<?php echo $envio['nome']; ?>" title="<?php echo $envio['nome']; ?>"></div>
+                </div>
+              <?php } 
+            } ?>
+          </div>
+        <?php } ?>
+        </div>
+    </div>
+  </div>
+</section>
+<section class="div_100 section-direitos">
+  <div class="row align-middle">
+    <div class="column small-12 medium-2 order-2 medium-order-1">
+      <div class="div_100">
+        <a class="reclamacoes" href="https://www.livroreclamacoes.pt/inicio" target="_blank">
+          <?php echo file_get_contents(ROOTPATH."imgs/elem/reclamacoes.svg"); ?>
+        </a>
+      </div>
+    </div>
+    <div class="column medium-expand order-1 medium-order-2 text-center">
+      <h6 class="list_subtit"><?php echo $Recursos->Resources['direitos']; ?></h6>
+    </div>
+    <div class="column medium-2 text-right show-for-medium medium-order-3">
+      <a class="icon-netgocio" href="http://netgocio.pt" target="_blank"></a>
+    </div>
+  </div>
+</section>
+</footer>
+<?php } else { ?>
+  <div class="row2">
+    <div class="div_table_cell">
+      <div class="row content login_ft text-center">
+        <div class="column small-12 xxsmall-expand xxsmall-order-2 xxsmall-text-right">
+          <a class="list_txt" target="_blank" href="<?php echo ROOTPATH_HTTP_LANG.$pagTermos['url']; ?>"><?php echo $pagTermos['nome']; ?></a><!-- 
+          --><span class="list_txt"> | </span><!-- 
+          --><a class="list_txt" target="_blank" href="<?php echo ROOTPATH_HTTP_LANG.$pagPolitica['url']; ?>"><?php echo $pagPolitica['nome']; ?></a>
+        </div>
+        <div class="column small-12 xxsmall-shrink xxsmall-order-1 xxsmall-text-left">
+          <h6 class="list_txt"><?php echo $Recursos->Resources['direitos']; ?></h6>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
+<div id="voltar_acima" class="bottom-actions voltar_topo" onclick="goTo('body')">
+  <?php echo file_get_contents(ROOTPATH."imgs/elem/goTop.svg"); ?>
+</div>
+<div id="fb-root"></div>
+<?php if(file_exists(ROOTPATH.'includes/testemunhos_modal.php')) {
+  include_once(ROOTPATH.'includes/testemunhos_modal.php'); 
+} ?>
+
+<?php if(ECOMMERCE == 1) { ?>
+  <div id="cart-trigger" class="bottom-actions cart-trigger icon-cart">
+    <span class="count"></span>
+    <button class="close-button white" ntgmodal-close aria-label="Close reveal" role="button" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <?php if($menu_sel != "area_reservada" && tableExists(DB::getInstance(), 'lista_desejo')) {
+    if($row_rsCliente != 0) {
+      $id_cliente = $row_rsCliente['id'];
+      $where_list = "lista.cliente = '$id_cliente'";
+    } 
+    else {
+      $wish_session = $_COOKIE[WISHLIST_SESSION];
+      $ses_id_old = strtotime(date("YmdHis", strtotime("-5 days"))); //5 dias atrás
+      
+      if($wish_session == "" || $wish_session <= $ses_id_old) {
+        $ses_id=strtotime(date("YmdHis", time()));
+        
+        $insertSQL = "DELETE FROM lista_desejo WHERE cliente = 0 AND session < '$ses_id_old'";
+        $rsInsertSQL = DB::getInstance()->prepare($insertSQL);
+        $rsInsertSQL->execute();
+        
+        $timeout = 3600*24*5; //5 dias
+        setcookie(WISHLIST_SESSION, $ses_id, time()+$timeout, "/", "", $cookie_secure, true);
+        $wish_session = $ses_id;
+      }
+
+      $where_list = "lista.session = '$wish_session'";
+    }
+      
+    $totalRows_rsFavorito = 0;
+    if($where_list) {
+      $query_rsFavorito = "SELECT lista.id FROM lista_desejo AS lista LEFT JOIN l_pecas".$extensao." AS pecas ON lista.produto = pecas.id WHERE ".$where_list." AND pecas.visivel = 1 GROUP BY pecas.id, lista.id ORDER BY pecas.ordem ASC LIMIT 1";
+      $rsFavorito = DB::getInstance()->prepare($query_rsFavorito);
+      $rsFavorito->execute();
+      $row_rsFavorito = $rsFavorito->fetch(PDO::FETCH_ASSOC);
+      $totalRows_rsFavorito = $rsFavorito->rowCount();
+    }
+    ?>
+    <a href="area-reservada-favoritos.php" id="wish-trigger" class="bottom-actions wish-trigger icon-favorite show-for-medium <?php if($totalRows_rsFavorito>0) echo " visible";?>"></a>
+  <?php } ?>
+<?php } ?>
+
+<div id="outdated">
+  <div class="div_100" style="height:100%">
+    <div class="div_table_cell">
+    
+    </div>
+  </div>
+</div>
+
+<!-- <?php if($popup == 1 && $ishome == 1) { ?>
+  <div class="div_100 popup_container">
+    <div class="div_100" style="height: 100%">
+      <div class="div_table_cell">
+        <a href="<?php echo $row_rsPopUp['link_popup']; ?>" target="_blank">
+          <div class="popup_close"></div>
+          <img src="<?php echo ROOTPATH_HTTP; ?>imgs/popup/<?php echo $row_rsPopUp['imagem_popup']; ?>" width="100%" class="img-naturasaude-homr-screen" style="max-width:1000px; margin:auto" />
+        </a>		
+      </div>
+    </div>
+  </div>  
+<?php } ?> -->
+
+<?php
+$data = date('Y-m-d');
+$where = '';
+if($row_rsCliente['id'] > 0) {
+    $where .= " AND (cliente_registo = 1 OR cliente_registo = 3)";
+
+    if($row_rsCliente['tipo'] == 1) {
+        $where .= " AND (tipo_cliente = 1 OR tipo_cliente = 3)";
+    }
+    else if($row_rsCliente['tipo'] == 2) {
+        $where .= " AND (tipo_cliente = 2 OR tipo_cliente = 3)";
+    }
+}
+else {
+    $where .= " AND (cliente_registo = 2 OR cliente_registo = 3)";
+}
+
+if(isset($_GET['k']) && $_GET['k'] != '') {
+    $where .= " AND codigo=:codigo";
+}
+
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+if(isset($_GET['popclose']) && $_GET['popclose'] == "checking"){
+$query_rsPopUp = "SELECT * FROM config WHERE id='1'";
+$rsPopUp = DB::getInstance()->prepare($query_rsPopUp);	
+$rsPopUp->execute();
+$row_rsPopUp = $rsPopUp->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsPopUp = $rsPopUp->rowCount();
+DB::close();
+if($row_rsPopUp['tipo_popup'] == 1) {
+	$_SESSION["popup_closed"] = 1;
+	header("location: ".explode("?",$actual_link)[0]);
+}
+else {
+	$_SESSION["popup_closed"] = "";
+	header("location: ".explode("?",$actual_link)[0]);
+}
+}
+
+
+$popup = 1;
+/* echo "<pre>"; print_r($_SESSION); echo "</pre>"; */
+if($_SESSION['popup_closed'] == 1 && !$_GET['k']) {
+    $popup = 0;
+}
+
+if($popup == 1 && $menu_sel == "home") {
+    $query_rsPopUp = "SELECT * FROM banners_popups".$extensao." WHERE visivel=1 AND (datai<=:data OR datai IS NULL OR datai='') AND (dataf>=:data OR dataf IS NULL OR dataf='') ".$where." ORDER BY ordem ASC, id DESC";
+    $rsPopUp = DB::getInstance()->prepare($query_rsPopUp);
+    $rsPopUp->bindParam(':data', $data, PDO::PARAM_STR, 5);
+    if(isset($_GET['k']) && $_GET['k'] != '') {
+        $rsPopUp->bindParam(':codigo', $_GET['k'], PDO::PARAM_STR, 5); 
+    }
+    $rsPopUp->execute();
+    $row_rsPopUps = $rsPopUp->fetchAll(PDO::FETCH_ASSOC);
+    $totalRows_rsPopUp = $rsPopUp->rowCount();
+    DB::close();
+
+    if($totalRows_rsPopUp > 0) {
+        foreach ($row_rsPopUps as $row_rsPopUp) {
+          if($row_rsPopUp['tipo'] == 2 && $row_rsPopUp['cod_prom'] > 0) {
+            $query_rsCodigo = "SELECT id FROM codigos_promocionais WHERE visivel='1' AND ((datai<=:data OR datai IS NULL OR datai='') AND (dataf>=:data OR dataf IS NULL OR dataf='')) AND id=:id AND desconto >= 0";
+            $rsCodigo = DB::getInstance()->prepare($query_rsCodigo);
+            $rsCodigo->bindParam(':data', $data, PDO::PARAM_STR, 5);
+            $rsCodigo->bindParam(':id', $row_rsPopUp['cod_prom'], PDO::PARAM_INT);
+            $rsCodigo->execute();
+            $row_rsCodigo = $rsCodigo->fetch(PDO::FETCH_ASSOC);
+            $totalRows_rsCodigo = $rsCodigo->rowCount();
+            DB::close();
+          }
+  
+          $popup_timeout = $row_rsPopUp["timer"];
+  
+          //Se for um acesso direito através do link, deve abrir logo que possível o popup
+          if(isset($_GET['k']) && $_GET['k'] != '') {
+            $popup_timeout = -1;
+          }
+  
+          if($row_rsPopUp['tipo'] == 1 || ($row_rsPopUp['tipo'] == 2 && (!$row_rsPopUp['cod_prom'] || ($row_rsPopUp['cod_prom'] > 0 && $totalRows_rsCodigo > 0)))) { ?>
+              <input type="hidden" class="popup_timeout" value="<?php echo $popup_timeout; ?>" data-id="<?=$row_rsPopUp['id']?>" />
+              <div class="div_100 popup_container popup_container_<?=$row_rsPopUp['id']?> <?php if($row_rsPopUp['tipo'] == 1) echo "text-center"; ?>" data-id="<?=$row_rsPopUp['id']?>">
+                  <div class="div_100" style="height: 100%;">
+                      <div class="div_table_cell">
+                          <div class="div_100 popup_cont <?php if($row_rsPopUp['tipo'] == 1 && $row_rsPopUp['imagem1'] && file_exists(ROOTPATH.'imgs/banners/'.$row_rsPopUp['imagem1']) && ($row_rsPopUp["titulo"] != '' || $row_rsPopUp["texto"] != '' || $row_rsPopUp["link"] != '')) { ?> has_mask <?php } ?> <?php if($row_rsPopUp['tipo'] == 1 && (!$row_rsPopUp['imagem1'] || !file_exists(ROOTPATH.'imgs/banners/'.$row_rsPopUp['imagem1']))) { ?> has_background2 <?php } ?>">
+                          
+							  <div class="popup_close" data-id="<?=$row_rsPopUp['id']?>"></div>
+                              <div class="div_100" <?php if($row_rsPopUp['imagem1'] && file_exists(ROOTPATH.'imgs/banners/'.$row_rsPopUp['imagem1'])) { ?> style="background: url('<?php echo ROOTPATH_HTTP; ?>imgs/banners/<?php echo $row_rsPopUp['imagem1']; ?>') no-repeat center; background-size: cover;" <?php } ?>>
+                                <?php echo getFill('banners', 2); ?>
+                              </div>
+                              <div class="popup_conteudo <?php if($row_rsPopUp['tipo'] == 2) { ?> has_background <?php } ?> <?php if($row_rsPopUp['tipo'] == 2 && $row_rsPopUp['imagem1'] && file_exists(ROOTPATH.'imgs/banners/'.$row_rsPopUp['imagem1'])) { ?> has_img <?php } ?> <?php if($row_rsPopUp['tipo'] == 1 || ($row_rsPopUp['tipo'] == 2 && $row_rsPopUp['imagem1'] && file_exists(ROOTPATH.'imgs/banners/'.$row_rsPopUp['imagem1']))) { ?> has_padding <?php } ?>">
+                                  <div class="div_100" style="position: relative; height: 100%">
+                                      <div class="div_table_cell">
+                                        <?php if($row_rsPopUp["titulo"] != '') { ?>
+                                            <div class="div_100 popup_titulo">
+                                                <h3 class="titulos <?php if($row_rsPopUp['tipo'] == 1) { ?> type1 <?php } else { ?> type2 <?php } ?>"><?php echo $row_rsPopUp["titulo"]; ?></h3>
+                                            </div>
+                                        <?php } ?>
+                                        <?php if($row_rsPopUp["texto"] != '') { ?>
+                                            <div class="div_100 popup_texto">
+                                                <div class="textos <?php if($row_rsPopUp['tipo'] == 1) { ?> type1 <?php } else { ?> type2 <?php } ?>"><?php echo $row_rsPopUp["texto"]; ?></div>
+                                            </div>
+                                        <?php } ?>
+                                        <?php if($row_rsPopUp["tipo"] == 2) { ?>
+                                            <div class="div_100 popup_subs">
+                                                <form method="post" id="form_subscreve_popup" name="form_subscreve_popup" autocomplete="off" action="javascript:subs_news_popup('<?php echo $row_rsPopUp['id']; ?>');" onSubmit="return validaForm('form_subscreve_popup')" novalidate class="news_cont" data-error="<?php echo $Recursos->Resources["news_subs"]; ?>">
+                                                    <div class="inpt_holder simple full">
+                                                        <input class="inpt" required type="email" class="inpt" id="email_subs" name="email_subs" placeholder="<?php echo $Recursos->Resources["news_subs"]; ?>"/>
+                                                    </div>
+                                                    <div class="inpt_holder simple full no_marg">
+                                                        <div class="inpt_checkbox">
+                                                            <input type="checkbox" required name="termos_news" id="termos_news" value="1" />
+                                                            <label for="termos_news"><?php echo $Recursos->Resources["aceita_politica"]; ?></label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="button invert2 border"><?php echo $row_rsPopUp["texto_link"]; ?></button>
+                                                </form>
+                                            </div>
+                                        <?php } ?>
+                                        <?php if($row_rsPopUp["tipo"] == 1 && $row_rsPopUp["link"] != '' && $row_rsPopUp["texto_link"] != '') {
+                                          $target_txt = '';
+                                          if($row_rsPopUp['target'] != '') {
+                                            $target_txt = 'target="'.$row_rsPopUp['target'].'"';
+                                          }
+                                          ?>
+                                            <div class="div_100 popup_link <?php if($row_rsPopUp['tipo'] == 1) { ?> type1 <?php } else { ?> type2 <?php } ?>">
+                                                <a href="<?php echo $row_rsPopUp["link"]; ?>" <?php echo $target_txt; ?> class="button invert2 border" data-id="<?=$row_rsPopUp['id']?>"><?php echo $row_rsPopUp["texto_link"]; ?></a>
+                                            </div>
+                                        <?php } ?>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+			  <script>
+			  $(document).ready(function() {
+			    $(".popup_close").click(function(){
+				  var pageURL = $(location).attr("href")+"?popclose=checking";
+				  document.location.href = pageURL;
+				});
+				});
+			  </script>
+          <?php }
+        }
+    }
+}
+?>
+
+
+
+<?php DB::close(); ?>
+
+<?php if($no_scripts != 1) {
+  include_once('footer_scripts.php'); 
+} ?>
+
+ 

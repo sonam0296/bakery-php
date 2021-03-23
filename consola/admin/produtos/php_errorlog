@@ -1,0 +1,24 @@
+[01-Mar-2021 08:55:36 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/store-edit.php:164
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/store-edit.php(164): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/store-edit.php on line 164
+[08-Mar-2021 05:17:33 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'preco_f' in 'field list' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit-stocks.php:272
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit-stocks.php(272): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit-stocks.php on line 272
+[08-Mar-2021 05:17:54 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'preco_f' in 'field list' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit-stocks.php:272
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit-stocks.php(272): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit-stocks.php on line 272
+[09-Mar-2021 06:48:06 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' 
+          selling_price_franchise= , 
+          product_qulity_franchise= ,
+
+ ' at line 4 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit.php:144
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit.php(144): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/produtos/produtos-edit.php on line 144

@@ -1,0 +1,611 @@
+<?php require_once("../Connections/connADMIN.php"); ?>
+
+<?php
+
+// *** Validate request to login to this site.
+
+if (!isset($_SESSION)) {
+
+  session_start();
+
+}
+
+
+
+include_once("admin/funcoes.php");
+
+
+
+?>
+
+<?php
+
+
+
+if(isset($_SESSION['lang']) && $_SESSION['lang'] !== "") {
+
+	include_once(ROOTPATH_CONSOLA."linguas/".$_SESSION['lang'].".php");
+
+	$lingua_consola = $_SESSION['lang'] ;
+
+}
+
+else {
+
+	include_once(ROOTPATH_CONSOLA."linguas/pt.php");
+
+	$lingua_consola = "pt";
+
+}
+
+$RecursosCons = new RecursosCons();
+
+
+
+
+
+include_once("admin/activity-rpc.php");
+
+last_activity();
+
+
+
+$loginFormAction = $_SERVER["PHP_SELF"];
+
+if (isset($_GET["accesscheck"])) {
+
+  $_SESSION["PrevUrl"] = $_GET["accesscheck"];
+
+}
+
+
+
+if (isset($_POST["username"])) {
+
+  $loginUsername=$_POST["username"];
+
+  $password=$_POST["password"];
+
+  $MM_redirectLoginSuccess = "admin/dashboard5.php";
+
+  $MM_redirectLoginFailed = "index.php?error=1";
+
+  $MM_redirecttoReferrer = false;
+
+  
+
+  $LoginRS__query="SELECT password, password_salt FROM acesso WHERE username=:username AND activo=1";
+
+  $LoginRS = DB::getInstance()->prepare($LoginRS__query);
+
+  $LoginRS->bindParam(":username", $_POST["username"], PDO::PARAM_STR, 5);
+
+  $LoginRS->execute();
+
+  $row_rsLoginRS = $LoginRS->fetch(PDO::FETCH_ASSOC);
+
+  $loginFoundUser = $LoginRS->rowCount();
+
+  DB::close();
+
+  
+
+  if ($loginFoundUser) {
+
+	  
+
+    //$password = hash("sha256", $password); //encriptar password inserida
+
+	  
+
+		$password_db=$row_rsLoginRS["password"];
+
+		$password_salt_db=$row_rsLoginRS["password_salt"];
+
+		
+
+		//$password_final = hash("sha256", $password_salt_db . $password); //aplica salt à password inserida
+
+		
+
+		if($password==$password_db){
+
+			//declare two session variables and assign them
+
+			$_SESSION["ADMIN_USER"] = $loginUsername;
+
+			$_SESSION["ADMIN_PASS"] = $password;
+
+		  
+
+			if (isset($_SESSION["PrevUrl"]) && false) {
+
+			  $MM_redirectLoginSuccess = $_SESSION["PrevUrl"];	
+
+			}
+
+
+
+		include_once("admin/activity-rpc.php");
+
+		get_activity_login();
+
+		
+
+			header("Location: " . $MM_redirectLoginSuccess );
+
+		} else {
+
+			header("Location: ". $MM_redirectLoginFailed );	
+
+		}
+
+  }
+
+  else {
+
+    header("Location: ". $MM_redirectLoginFailed );
+
+  }
+
+}
+
+
+
+// recuperar password
+
+$erro=0;
+
+
+
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form15")) {
+
+	
+
+	$email=$_POST["email"];
+
+	require_once("../sendMail/send_mail.php");
+
+	
+
+	$query_rsUser="SELECT * FROM acesso WHERE email=:email AND activo=1";
+
+  $rsUser = DB::getInstance()->prepare($query_rsUser);
+
+  $rsUser->bindParam(":email", $email, PDO::PARAM_STR, 5);
+
+  $rsUser->execute();
+
+  $row_rsUser = $rsUser->fetch(PDO::FETCH_ASSOC);
+
+  $totalRows_rsUser = $rsUser->rowCount();
+
+  DB::close();
+
+	
+
+	if($totalRows_rsUser > 0) {
+
+		$link = randomCodeRecupera();
+
+
+
+	  $query_rsUpdate = "UPDATE acesso SET cod_recupera = :link WHERE id=:id";
+
+	  $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);
+
+	  $rsUpdate->bindParam(":link", $link, PDO::PARAM_STR, 5);
+
+	  $rsUpdate->bindParam(":id", $row_rsUser["id"], PDO::PARAM_INT);
+
+	  $rsUpdate->execute();
+
+		
+
+		$formcontent = getHTMLTemplate("contacto.htm");
+
+	
+
+		$titulo="Recuperação de password";
+
+		
+
+		$mensagem = "Clique no link abaixo para alterar a sua password<br><br><a href=".ROOTPATH_HTTP_CONSOLA."recuperar.php?v=$link>".ROOTPATH_HTTP_CONSOLA."recuperar.php?v=$link</a><br><br>";
+
+		
+
+		$query_rsRedesS = "SELECT * FROM redes_sociais ORDER BY id ASC";
+
+		$rsRedesS = DB::getInstance()->prepare($query_rsRedesS);
+
+		$rsRedesS->execute();
+
+		$totalRows_rsRedesS = $rsRedesS->rowCount();
+
+		DB::close();
+
+			
+
+		$facebook = 0;
+
+		$link_facebook = "";
+
+		$instagram = 0;
+
+		$link_instagram = "";
+
+		$google = 0;
+
+		$link_google = "";
+
+		$vimeo = 0;
+
+		$link_vimeo = "";
+
+		$pinterest = 0;
+
+		$link_pinterest = "";
+
+		$twitter = 0;
+
+		$link_twitter = "";
+
+		$blogger = 0;
+
+		$link_blogger = "";
+
+		while($row_rsRedesS = $rsRedesS->fetch()) {
+
+			if($row_rsRedesS["id"] == 1 && $row_rsRedesS["link"] != "") {
+
+				$facebook = 1;
+
+				$link_facebook = $row_rsRedesS["link"];
+
+			}
+
+			if($row_rsRedesS["id"] == 2 && $row_rsRedesS["link"] != "") {
+
+				$vimeo = 1;
+
+				$link_vimeo = $row_rsRedesS["link"];
+
+			}
+
+			if($row_rsRedesS["id"] == 3 && $row_rsRedesS["link"] != "") {
+
+				$twitter = 1;
+
+				$link_twitter = $row_rsRedesS["link"];
+
+			}
+
+			if($row_rsRedesS["id"] == 4 && $row_rsRedesS["link"] != "") {
+
+				$pinterest = 1;
+
+				$link_pinterest = $row_rsRedesS["link"];
+
+			}
+
+			if($row_rsRedesS["id"] == 5 && $row_rsRedesS["link"] != "") {
+
+				$instagram = 1;
+
+				$link_instagram = $row_rsRedesS["link"];
+
+			}
+
+			if($row_rsRedesS["id"] == 6 && $row_rsRedesS["link"] != "") {
+
+				$google = 1;
+
+				$link_google = $row_rsRedesS["link"];
+
+			}
+
+			if($row_rsRedesS["id"] == 7 && $row_rsRedesS["link"] != "") {
+
+				$blogger = 1;
+
+				$link_blogger = $row_rsRedesS["link"];
+
+			}
+
+		}
+
+				
+
+		$rodape="<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>";
+
+		if($link_facebook) { 
+
+			$rodape.="<td height=32 valign=middle><a href=\"".$link_facebook."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/facebook.png\" height=22 alt=\"Facebook\" style=display:block border=0 /></a></td>";
+
+		}
+
+		if($link_instagram) { 
+
+			$rodape.="<td height=32 width=\"10\">&nbsp;</td><td valign=middle><a href=\"".$link_instagram."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/instagram.png\"  height=22 alt=\"Instagram\" style=display:block border=0/></a></td>";
+
+		}
+
+		if($link_google) { 
+
+			$rodape.="<td height=32 width=\"10\">&nbsp;</td><td valign=middle><a href=\"".$link_google."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/google-plus.png\"  height=22 alt=\"Google Plus\" style=display:block border=0/></a></td>";
+
+		}
+
+		if($link_vimeo) { 
+
+			$rodape.="<td height=32 width=\"10\">&nbsp;</td><td valign=middle><a href=\"".$link_vimeo."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/vimeo.png\"  height=22 alt=\"Vimeo\" style=display:block border=0/></a></td>";
+
+		}
+
+		if($link_pinterest) { 
+
+			$rodape.="<td height=32 width=\"10\">&nbsp;</td><td valign=middle><a href=\"".$link_pinterest."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/pinterest.png\"  height=22 alt=\"Pinterest\" style=display:block border=0/></a></td>";
+
+		}
+
+		if($link_twitter) { 
+
+			$rodape.="<td height=32 width=\"10\">&nbsp;</td><td valign=middle><a href=\"".$link_twitter."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/twitter.png\"  height=22 alt=\"Twitter\" style=display:block border=0/></a></td>";
+
+		}
+
+		if($link_blogger) { 
+
+			$rodape.="<td height=32 width=\"10\">&nbsp;</td><td valign=middle><a href=\"".$link_blogger."\"><img src=\"<?php echo HTTP_DIR; ?>/imgs/elem/social/blogger2.png\"  height=22 alt=\"Blogger\" style=display:block border=0/></a></td>";
+
+		}
+
+		$rodape.="</tr></table>";
+
+	
+
+		$formcontent = str_replace ("#ctitulo#",$titulo,$formcontent);
+
+		$formcontent = str_replace ("#cmensagem#",$mensagem,$formcontent);
+
+		$formcontent = str_replace ("#tit_mail_compr#","Com os melhores cumprimentos",$formcontent);
+
+		$formcontent = str_replace ("#crodape#",$rodape,$formcontent);	
+
+	
+
+		$para=$email;
+
+	
+
+		$subject = $RecursosCons->RecursosCons['recuperacao_pass_email'];
+
+		sendMail($para,"",$formcontent,$mensagem,$subject,"","","");
+
+		####################################
+
+	} else {
+
+		header("Location: index.php?erro_change=1");
+
+	}
+
+}
+
+
+
+?>
+
+<?php include_once("admin/inc_head_1.php"); ?>
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+
+<link href="assets/admin/pages/css/login.css" rel="stylesheet" type="text/css"/>
+
+<!-- END PAGE LEVEL SCRIPTS -->
+
+<?php include_once("admin/inc_head_2.php"); ?>
+
+<?php include_once("inc_topo_login.php"); ?>
+
+<style type="text/css">
+
+html, body {
+
+	height: 100%;
+
+}
+
+.content {
+
+	margin-top: 0 !important;
+
+}
+
+</style>
+
+<!-- BEGIN BODY -->
+
+<body class="login">
+
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+
+<div class="menu-toggler sidebar-toggler"> </div>
+
+<!-- END SIDEBAR TOGGLER BUTTON --> 
+
+<!-- BEGIN LOGIN -->
+
+<div style="position:absolute; top:50%; left:50%; margin-top:-170px; margin-left:-200px;">
+
+  <div class="content"> 
+
+    <!-- BEGIN LOGIN FORM -->
+
+    <form action="<?php echo $loginFormAction; ?>" name="loginForm" id="loginForm" method="POST" class="login-form">
+
+      <h3 class="form-title">Login</h3>
+
+      <div class="alert alert-danger <?php if(isset($_GET["error"]) && $_GET["error"]==1) { ?>display-show<?php } else { ?>display-hide<?php } ?>">
+
+        <button class="close" data-close="alert"></button>
+
+        <span> <?php echo $RecursosCons->RecursosCons['error_dados']; ?> </span> 
+
+      </div>
+
+      <div class="alert alert-success display-<?php if(isset($_GET["alt"]) && $_GET["alt"]==1) echo "show"; else echo "hide"; ?>">
+
+        <button class="close" data-close="alert"></button>
+
+        <span> <?php echo $RecursosCons->RecursosCons['pass_alt']; ?> </span> 
+
+      </div>
+
+      <?php if(isset($_GET['sended']) && $_GET['sended'] == 1){ ?>
+
+      	<div class="alert alert-success">
+
+        	<button class="close" data-close="alert"></button>
+
+        	<span> <?php echo $RecursosCons->RecursosCons['email_enviado']; ?> </span> 
+
+      </div>
+
+      <?php } ?>
+
+      <div class="form-group"> 
+
+        <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+
+        <label class="control-label visible-ie8 visible-ie9"><?php echo $RecursosCons->RecursosCons['username_label']; ?></label>
+
+        <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="<?php echo $RecursosCons->RecursosCons['username_label']; ?>" name="username"/>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="control-label visible-ie8 visible-ie9"><?php echo $RecursosCons->RecursosCons['cli_password']; ?></label>
+
+        <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="<?php echo $RecursosCons->RecursosCons['cli_password']; ?>" name="password"/>
+
+      </div>
+
+      <div class="form-actions">
+
+        <button type="submit" class="btn btn-success uppercase"><?php echo $RecursosCons->RecursosCons['login']; ?></button>
+
+        <?php /*?><label class="rememberme check">
+
+			<input type="checkbox" name="remember" value="1"/><?php echo $RecursosCons->RecursosCons['lembrar_txt']; ?> </label><?php */?>
+
+        <a href="javascript:;" id="forget-password" class="forget-password"><?php echo $RecursosCons->RecursosCons['recuperar_password']; ?>?</a> </div>
+
+    </form>
+
+    <!-- END LOGIN FORM --> 
+
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+
+    <form action="<?php echo $loginFormAction; ?>" name="form15" id="form15" class="forget-form" method="post">
+
+      <h3 class="form-title"><?php echo $RecursosCons->RecursosCons['recuperar_password']; ?> </h3>
+
+      <div class="alert alert-danger display-hide alert-empty">
+
+        <button class="close" data-close="alert"></button>
+
+        <span> <?php echo $RecursosCons->RecursosCons['insira_email_label']; ?> </span> 
+
+      </div>
+
+      <?php if(isset($_GET['erro_change']) && $_GET['erro_change'] == 1) { ?>
+
+      	<div class="alert alert-danger alert-not-exist">
+
+	        <button class="close" data-close="alert"></button>
+
+	        <span> <?php echo $RecursosCons->RecursosCons['nao_existe_email']; ?> </span> 
+
+	      </div>
+
+      <?php } ?>
+
+      <p style="color:#fff;"> <?php echo $RecursosCons->RecursosCons['insira_email_abaixo']; ?> </p>
+
+      <div class="form-group">
+
+        <div class="input-icon right">
+
+          <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="<?php echo $RecursosCons->RecursosCons['cli_email']; ?>" name="email" data-required="1" />
+
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+
+        <button type="button" id="back-btn" class="btn btn-default"><?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+
+        <button type="submit" class="btn btn-success uppercase pull-right"><?php echo $RecursosCons->RecursosCons['enviar']; ?></button>
+
+      </div>
+
+      <input type="hidden" name="MM_insert" value="form15" />
+
+    </form>
+
+    <!-- END FORGOT PASSWORD FORM --> 
+
+  </div>
+
+  <?php include_once("admin/inc_footer_1.php"); ?>
+
+  <!-- BEGIN PAGE LEVEL PLUGINS --> 
+
+  <script src="assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script> 
+
+  <!-- END PAGE LEVEL PLUGINS --> 
+
+  <!-- BEGIN PAGE LEVEL SCRIPTS --> 
+
+  <script src="assets/admin/pages/scripts/login.js" type="text/javascript"></script> 
+
+  <!-- END PAGE LEVEL SCRIPTS -->
+
+  <?php include_once("admin/inc_footer_2.php"); ?>
+
+  <script>
+
+	jQuery(document).ready(function() {     
+
+		Metronic.init(); // init metronic core components
+
+		Layout.init(); // init current layout
+
+		Login.init();
+
+		Demo.init();
+
+
+
+		if('<?php echo $_GET["erro_change"]; ?>' == '1') {
+
+			jQuery('.login-form').hide();
+
+      jQuery('.forget-form').show();
+
+		}
+
+	});
+
+</script>
+
+</div>
+
+</body>
+
+<!-- END BODY -->
+
+</html>

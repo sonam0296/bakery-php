@@ -1,0 +1,74 @@
+  <?php
+$id = $_POST["data_id"];
+print_r($_POST);
+die();
+if (isset($_POST["confirm"])) {
+	$_SESSION["store_name"] = $_POST["storename"];
+	$store_session          = $_SESSION["store_name"];
+}
+
+$query_rsP1 = "SELECT * FROM store_locater WHERE id = '".$id."'";
+$rsP1       = DB::getInstance()->prepare($query_rsP1);
+//$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);
+$rsP1->execute();
+$row_rsP1       = $rsP1->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsP1 = $rsP1->rowCount();
+
+?>
+
+  <form action="" data-error="<?php echo $Recursos->Resources["comprar_preencher"];?>"  method="post" name="form" id="form" novalidate autocomplete="off" nearby-validator>
+        <table border="1" width="300px">
+                <tr>
+                    <td>Contact Details</td>
+                </tr>
+
+                <tr>
+                    <td><?php echo $row_rsP1['b_name'];?></td>
+                </tr>
+                 <tr>
+                    <td><?php echo $row_rsP1['Sreet'];
+?>, <?php echo $row_rsP1['city'];
+?>, <?php echo $row_rsP1['country'];
+?></td>
+                </tr>
+                 <tr>
+                    <td><?php echo $row_rsP1['phone'];?></td>
+                </tr>
+                 <tr>
+                    <td><?php echo $row_rsP1['email'];?></td>
+                </tr>
+                 <tr>
+                    <td>
+
+                    <input type="hidden" class="inpt inpt_conto" type="text" id="storename" name="storename" value="<?php echo $row_rsP1['b_name'];?>" />
+<?php if ($row_rsP1['b_name'] == $store_session) {?>
+	                        <a class="carrinho_btn reverse" href="<?php echo CARRINHO_VOLTAR;?>"><?php echo $Recursos->Resources["carrinho_btn_prev"];
+	?></a>
+	<?php } else {?>
+	                       <button type="submit" name="confirm" id="confirm" class="button-big uppercase btn-enviar"><?php echo $Recursos->Resources["enviar"];?></button>
+	<?php }?>
+                    </td>
+
+                </tr>
+        </table>
+      </form>
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+
+    <script>
+function myMap() {
+
+const myLatLng = { lat: <?php echo $row_rsP1['lat'];?>, lng: <?php echo $row_rsP1['lng'];?> };
+
+        const map = new google.maps.Map(document.getElementById("googleMap"), {
+          zoom: 16,
+          center: myLatLng,
+        });
+        new google.maps.Marker({
+          position: myLatLng,
+          map,
+          title: "Hello World!",
+        });
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYw1qIZUqAK4lfkB8dLIOK0XOVU9e66xE&callback=myMap"></script>

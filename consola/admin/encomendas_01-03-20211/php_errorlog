@@ -1,0 +1,47 @@
+[23-Feb-2021 14:51:14 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php:69
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php(69): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php on line 69
+[23-Feb-2021 14:52:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php:69
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php(69): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php on line 69
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 71
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 115
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 119
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 134
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 393
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 397
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 254
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 259
+[23-Feb-2021 14:57:39 UTC] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 470
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 1296
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_connection() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 664
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 71
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 115
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 119
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 134
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 393
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 397
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 254
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 259
+[23-Feb-2021 14:57:39 UTC] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 470
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 1296
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_connection() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 664
+[25-Feb-2021 09:22:28 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '== '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:149
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(149): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 149
+[25-Feb-2021 09:22:32 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '== '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:149
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(149): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 149
+[25-Feb-2021 09:25:34 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:149
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(149): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 149

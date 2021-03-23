@@ -1,0 +1,21 @@
+[24-Feb-2021 09:09:22 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php:113
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php(113): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php on line 113
+[24-Feb-2021 09:14:05 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php:113
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php(113): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php on line 113
+[24-Feb-2021 09:16:13 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php:113
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php(113): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php on line 113
+[24-Feb-2021 09:19:44 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php:261
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php(261): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_zona_portes-edit.php on line 261
+[25-Feb-2021 10:58:06 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/portes/p_met_pagamento-edit.php on line 691

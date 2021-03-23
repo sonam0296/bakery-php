@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+.tickLabel {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#333333;
+}
+
+.legendLabel {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#404040;	
+}
+
+.dados_gerais {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#567CAE;
+	font-size:14px;
+	line-height:17px;
+	font-weight:normal;
+	margin-bottom:5px;
+}
+
+.dados_gerais strong {
+	font-size:17px;
+}
+
+.datas_int {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	color:#333;
+	font-weight:bold;
+}

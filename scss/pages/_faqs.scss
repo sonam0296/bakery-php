@@ -1,0 +1,44 @@
+.faqs{	
+	& .faqs_cont{
+		margin:3.5rem auto;
+
+		& h1{
+			text-align:center;
+		}
+
+		& h3{
+			margin-top: 5rem;
+			margin-bottom: 2rem;
+		}
+
+		& .textos{
+			font-style: normal;
+			font-size:14px;
+		}
+		
+		& .faqs_cats{
+			left: auto;
+			margin-top: 5rem;
+			width: 100%;
+			max-width: 32rem;
+			padding-right: 2rem;
+
+			& a{
+				display: block;
+				font-weight: 900;
+				padding: 1rem;
+
+    			border-bottom: 1px solid $medium-gray;
+				
+				&:first-child{
+					border-top: 1px solid $medium-gray;
+				}
+
+				&:hover,
+				&.sel{
+					color:$secondary-color;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,205 @@
+var FormValidation = function () {
+
+    // advance validation
+    var PaginasForm = function() {
+        // for more info visit the official plugin documentation: 
+        // http://docs.jquery.com/Plugins/Validation
+
+        var form2 = $('#paginas_form');
+        var error2 = $('.alert-danger', form2);
+        var success2 = $('.alert-success', form2);
+
+        form2.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",  // validate all fields including form hidden input
+            rules: {
+                nome: {
+                    required: true
+                }
+            },
+
+            invalidHandler: function (event, validator) { //display error alert on form submit              
+                success2.hide();
+                error2.show();
+                Metronic.scrollTo(error2, -200);
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
+            },
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').removeClass("has-success").addClass('has-error'); // set error class to the control group   
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success2.show();
+                error2.hide();
+                document.paginas_form.submit(); // submit the form
+            }
+        });
+    }
+
+    // advance validation
+    var PaginasBlocosForm = function() {
+        // for more info visit the official plugin documentation: 
+        // http://docs.jquery.com/Plugins/Validation
+
+        var form2 = $('#paginas_blocos_form');
+        var error2 = $('.alert-danger', form2);
+        var success2 = $('.alert-success', form2);
+
+        form2.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",  // validate all fields including form hidden input
+            rules: {
+                nome: {
+                    required: true
+                },
+                tipo: {
+                    required: true
+                }
+            },
+
+            invalidHandler: function (event, validator) { //display error alert on form submit              
+                success2.hide();
+                error2.show();
+                Metronic.scrollTo(error2, -200);
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
+            },
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').removeClass("has-success").addClass('has-error'); // set error class to the control group   
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success2.show();
+                error2.hide();
+                document.paginas_blocos_form.submit(); // submit the form
+            }
+        });
+    }
+
+     // advance validation
+    var PaginasBlocosTimelineForm = function() {
+        // for more info visit the official plugin documentation: 
+        // http://docs.jquery.com/Plugins/Validation
+
+        var form2 = $('#frm_bloco_timeline');
+        var error2 = $('.alert-danger', form2);
+        var success2 = $('.alert-success', form2);
+
+        form2.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",  // validate all fields including form hidden input
+            rules: {
+                nome: {
+                    required: true
+                },
+            },
+
+            invalidHandler: function (event, validator) { //display error alert on form submit              
+                success2.hide();
+                error2.show();
+                Metronic.scrollTo(error2, -200);
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
+            },
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').removeClass("has-success").addClass('has-error'); // set error class to the control group   
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success2.show();
+                error2.hide();
+                document.frm_bloco_timeline.submit(); // submit the form
+            }
+        });
+    }
+
+
+    var initComponents = function () {
+        //init datepickers
+        $('.date-picker').datepicker({
+            rtl: Metronic.isRTL(),
+            autoclose: true
+        });
+
+        //init datetimepickers
+        $(".datetime-picker").datetimepicker({
+            isRTL: Metronic.isRTL(),
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            minuteStep: 10
+        });
+
+        //init maxlength handler
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+    }
+
+    return {
+        //main function to initiate the module
+        init: function () {
+            PaginasForm();
+            PaginasBlocosForm();
+        }
+
+    };
+
+}();

@@ -1,0 +1,616 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php
+
+header("Location: produtos.php");
+exit();
+
+$menu_sel='ec_produtos_produtos';
+$menu_sub_sel='';
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "frm_atualiza_precos")) {
+  $atualizar_precos = 0;
+  if(isset($_POST['atualizar_precos'])) {
+    $atualizar_precos = 1;
+  }
+
+  if($atualizar_precos == 1 && $_POST['tipo'] != '' && $_POST['valor'] != '') {
+    $tipo = $_POST['tipo'];
+    $valor = $_POST['valor'];
+
+    $query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+    $rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
+    $rsLinguas->execute();
+    $row_rsLinguas = $rsLinguas->fetchAll();
+
+    //Reset aos "preços old" para depois existir a possibilidade de reverter a última atualização
+    foreach($row_rsLinguas as $lingua) {      
+      $query_rsUpdate = "UPDATE l_pecas_".$lingua["sufixo"]." SET preco_old=0";
+      $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);  
+      $rsUpdate->execute();
+    }
+
+    $query_rsUpdate = "UPDATE l_pecas_tamanhos SET preco_old=0";
+    $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);  
+    $rsUpdate->execute();
+
+    $geral = 1;
+    $id_marca = 0;
+    $id_categoria = 0;
+
+    $where = '';
+    $join = '';
+    if($_POST['marca'] != '') {
+      $where = ' AND p.marca = :marca';
+
+      $geral = 0;
+      $id_marca = $_POST['marca'];
+    }
+    if($_POST['categoria'] != '') {
+      $join = ' LEFT JOIN l_categorias_en c ON c.id = p.categoria LEFT JOIN l_categorias_en c2 ON c2.id = c.cat_mae';
+      $where .= ' AND (p.categoria = :categoria OR c.cat_mae = :categoria OR c2.cat_mae = :categoria)';
+
+      $geral = 0;
+      $id_categoria = $_POST['categoria'];
+    }
+
+    $query_rsProdutos = "SELECT p.id, p.preco FROM l_pecas_en p ".$join." WHERE p.id > 0 ".$where." GROUP BY p.id ORDER BY p.id ASC";
+    $rsProdutos = DB::getInstance()->prepare($query_rsProdutos);
+    if($_POST['marca'] != '') {
+      $rsProdutos->bindParam(':marca', $id_marca, PDO::PARAM_INT);    
+    }
+    if($_POST['categoria'] != '') {
+      $rsProdutos->bindParam(':categoria', $id_categoria, PDO::PARAM_INT);    
+    } 
+    $rsProdutos->execute();
+    $totalRows_rsProdutos = $rsProdutos->rowCount();
+
+    if($totalRows_rsProdutos > 0) {
+      while($row_rsProdutos = $rsProdutos->fetch()) {
+        $id_prod = $row_rsProdutos['id'];
+        $preco_prod = $row_rsProdutos['preco'];
+
+        if($tipo == 1) {
+          $novo_preco = $preco_prod + ($preco_prod * ($valor / 100));
+        }
+        else if($tipo == 2) {
+          $novo_preco = $preco_prod - ($preco_prod * ($valor / 100));
+        }
+
+        foreach($row_rsLinguas as $lingua) {      
+          $query_rsUpdate = "UPDATE l_pecas_".$lingua["sufixo"]." SET preco=:preco, preco_old=:preco_old WHERE id=:id";
+          $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);
+          $rsUpdate->bindParam(':preco', $novo_preco, PDO::PARAM_STR, 5);
+          $rsUpdate->bindParam(':preco_old', $preco_prod, PDO::PARAM_STR, 5);
+          $rsUpdate->bindParam(':id', $id_prod, PDO::PARAM_INT);  
+          $rsUpdate->execute();
+        }
+
+        //Aplicar aos tamanhos também
+        $query_rsTamanhos = "SELECT id, preco FROM l_pecas_tamanhos WHERE peca=:peca";
+        $rsTamanhos = DB::getInstance()->prepare($query_rsTamanhos);
+        $rsTamanhos->bindParam(':peca', $id_prod, PDO::PARAM_INT);  
+        $rsTamanhos->execute();
+        $totalRows_rsTamanhos = $rsTamanhos->rowCount();
+
+        if($totalRows_rsTamanhos > 0) {
+          while($row_rsTamanhos = $rsTamanhos->fetch()) {
+            $id_tamanho = $row_rsTamanhos['id'];
+            $preco_tamanho = $row_rsTamanhos['preco'];
+
+            if($tipo == 1) {
+              $novo_preco_tam = $preco_tamanho + ($preco_tamanho * ($valor / 100));
+            }
+            else if($tipo == 2) {
+              $novo_preco_tam = $preco_tamanho - ($preco_tamanho * ($valor / 100));
+            }
+
+            $query_rsUpdate = "UPDATE l_pecas_tamanhos SET preco=:preco, preco_old=:preco_old WHERE id=:id AND peca=:peca";
+            $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);
+            $rsUpdate->bindParam(':preco', $novo_preco_tam, PDO::PARAM_STR, 5);
+            $rsUpdate->bindParam(':preco_old', $preco_tamanho, PDO::PARAM_STR, 5);
+            $rsUpdate->bindParam(':peca', $id_prod, PDO::PARAM_INT);
+            $rsUpdate->bindParam(':id', $id_tamanho, PDO::PARAM_INT); 
+            $rsUpdate->execute();
+          }
+        }
+      }
+
+      //Guarda o historial caso existam produtos atualizados
+      $insertSQL = "SELECT MAX(id) FROM l_precos_historial";
+      $rsInsert = DB::getInstance()->prepare($insertSQL);
+      $rsInsert->execute();
+      $row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+      
+      $max_id = $row_rsInsert["MAX(id)"] + 1;
+      $data = date('Y-m-d H:i:s');
+
+      $query_rsInsert = "INSERT INTO l_precos_historial (id, geral, id_categoria, id_marca, tipo, valor, data) VALUES (:id, :geral, :id_categoria, :id_marca, :tipo, :valor, :data)";
+      $rsInsert = DB::getInstance()->prepare($query_rsInsert);
+      $rsInsert->bindParam(':data', $data, PDO::PARAM_INT);
+      $rsInsert->bindParam(':valor', $valor, PDO::PARAM_INT);
+      $rsInsert->bindParam(':tipo', $tipo, PDO::PARAM_INT);
+      $rsInsert->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+      $rsInsert->bindParam(':id_marca', $id_marca, PDO::PARAM_INT);
+      $rsInsert->bindParam(':geral', $geral, PDO::PARAM_INT);
+      $rsInsert->bindParam(':id', $max_id, PDO::PARAM_INT); 
+      $rsInsert->execute();
+    }
+
+    DB::close();
+
+    header("Location: produtos-atualiza-precos.php?alt=1");
+  }
+}
+
+if(isset($_GET['rev']) && $_GET['rev'] == 1 && isset($_GET['reg']) && $_GET['reg'] > 0) {
+  $query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+  $rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
+  $rsLinguas->execute();
+  $row_rsLinguas = $rsLinguas->fetchAll();
+
+  //Verificar se existem produtos com preco_old > 0
+  $query_rsProdutos = "SELECT p.id, p.preco, p.preco_old FROM l_pecas_en p LEFT JOIN l_pecas_tamanhos t ON t.peca = p.id WHERE p.preco_old > 0 OR t.preco_old > 0 GROUP BY p.id ORDER BY p.id ASC";
+  $rsProdutos = DB::getInstance()->prepare($query_rsProdutos);
+  $rsProdutos->execute();
+  $totalRows_rsProdutos = $rsProdutos->rowCount();
+
+  if($totalRows_rsProdutos > 0) {
+    while($row_rsProdutos = $rsProdutos->fetch()) {
+      $id_prod = $row_rsProdutos['id'];
+      $preco_prod = $row_rsProdutos['preco'];
+      $preco_prod_old = $row_rsProdutos['preco_old'];
+
+      foreach($row_rsLinguas as $lingua) {      
+        $query_rsUpdate = "UPDATE l_pecas_".$lingua["sufixo"]." SET preco=:preco, preco_old=0 WHERE id=:id";
+        $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);
+        $rsUpdate->bindParam(':preco', $preco_prod_old, PDO::PARAM_STR, 5);
+        $rsUpdate->bindParam(':id', $id_prod, PDO::PARAM_INT);  
+        $rsUpdate->execute();
+      }
+
+      //Aplicar aos tamanhos também
+      $query_rsTamanhos = "SELECT id, preco, preco_old FROM l_pecas_tamanhos WHERE peca=:peca";
+      $rsTamanhos = DB::getInstance()->prepare($query_rsTamanhos);
+      $rsTamanhos->bindParam(':peca', $id_prod, PDO::PARAM_INT);  
+      $rsTamanhos->execute();
+      $totalRows_rsTamanhos = $rsTamanhos->rowCount();
+
+      if($totalRows_rsTamanhos > 0) {
+        while($row_rsTamanhos = $rsTamanhos->fetch()) {
+          $id_tamanho = $row_rsTamanhos['id'];
+          $preco_tamanho = $row_rsTamanhos['preco'];
+          $preco_tamanho_old = $row_rsTamanhos['preco_old'];
+
+          $query_rsUpdate = "UPDATE l_pecas_tamanhos SET preco=:preco, preco_old=0 WHERE id=:id AND peca=:peca";
+          $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);
+          $rsUpdate->bindParam(':preco', $preco_tamanho_old, PDO::PARAM_STR, 5);
+          $rsUpdate->bindParam(':peca', $id_prod, PDO::PARAM_INT);
+          $rsUpdate->bindParam(':id', $id_tamanho, PDO::PARAM_INT); 
+          $rsUpdate->execute();
+        }
+      }
+    }
+  }
+
+  $query_rsUpdate = "UPDATE l_precos_historial SET revertido = 1 WHERE id=:id";
+  $rsUpdate = DB::getInstance()->prepare($query_rsUpdate);
+  $rsUpdate->bindParam(':id', $_GET['reg'], PDO::PARAM_INT);  
+  $rsUpdate->execute();
+
+  DB::close();
+
+  header("Location: produtos-atualiza-precos.php?alt=1");
+}
+
+$query_rsCategorias = "SELECT id, nome FROM l_categorias_en WHERE cat_mae='0' ORDER BY nome ASC";
+$rsCategorias = DB::getInstance()->prepare($query_rsCategorias);
+$rsCategorias->execute();
+$totalRows_rsCategorias = $rsCategorias->rowCount();
+$row_rsCategorias = $rsCategorias->fetchAll();
+
+$query_rsMarcas = "SELECT id, nome FROM l_marcas_pt ORDER BY nome ASC";
+$rsMarcas = DB::getInstance()->prepare($query_rsMarcas);
+$rsMarcas->execute();
+$totalRows_rsMarcas = $rsMarcas->rowCount();
+$row_rsMarcas = $rsMarcas->fetchAll();
+
+$query_rsList = "SELECT * FROM l_precos_historial ORDER BY data DESC";
+$rsList = DB::getInstance()->prepare($query_rsList);
+$rsList->execute();
+$totalRows_rsList = $rsList->rowCount();
+
+$query_rsReverter = "SELECT COUNT(p.id) as total FROM l_pecas_en p LEFT JOIN l_pecas_tamanhos t ON t.peca = p.id WHERE p.preco_old > 0 OR t.preco_old > 0 GROUP BY p.id";
+$rsReverter = DB::getInstance()->prepare($query_rsReverter);
+$rsReverter->execute();
+$totalRows_rsReverter = $rsReverter->rowCount();
+$row_rsReverter = $rsReverter->fetch(PDO::FETCH_ASSOC);
+
+DB::close();
+
+?>
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+<body class="<?php echo $body_info; ?>">
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+<div class="clearfix"> </div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content"> 
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> <?php echo $RecursosCons->RecursosCons['produtos']; ?> <small><?php echo $RecursosCons->RecursosCons['listagem']; ?> </small> </h3>
+      <div class="page-bar">
+        <ul class="page-breadcrumb">
+          <li>
+            <i class="fa fa-home"></i>
+            <a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?> </a>
+            <i class="fa fa-angle-right"></i>
+          </li>
+          <li>
+            <a href="produtos.php"><?php echo $RecursosCons->RecursosCons['produtos']; ?> </a>
+          </li>
+        </ul>
+      </div>
+      <!-- END PAGE HEADER-->      
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+        <div class="col-md-12">
+          <form id="frm_atualiza_precos" name="frm_atualiza_precos" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <input type="hidden" name="manter" id="manter" value="0">
+            <input type="hidden" name="tab_sel" id="tab_sel" value="<?php echo $tab_sel; ?>">
+            <input type="hidden" name="img_remover1" id="img_remover1" value="0">
+            <div class="portlet">
+              <div class="portlet-title">
+                <div class="caption"> <i class="fa fa-pencil-square"></i><?php echo $RecursosCons->RecursosCons['produtos']; ?> - <?php echo $RecursosCons->RecursosCons['tab_precos_produtos']; ?></div>
+                <div class="form-actions actions btn-set">
+                  <button type="button" name="back" class="btn default" onClick="document.location='produtos.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+                  <button type="button" class="btn green" href="#modal_confirm" data-toggle="modal"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar']; ?></button>
+                </div>
+                <div class="modal fade" id="modal_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title"><?php echo $RecursosCons->RecursosCons['atualizar_precos_tit']; ?></h4>
+                      </div>
+                      <div class="modal-body"> 
+                        <?php echo $RecursosCons->RecursosCons['atualizar_precos_texto']; ?>  
+                        <div class="alert alert-danger display-hide" style="margin-top: 20px;">
+                          <button class="close" data-close="alert"></button>
+                          <?php echo $RecursosCons->RecursosCons['msg_required']; ?> 
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn blue"><?php echo $RecursosCons->RecursosCons['txt_ok']; ?></button>
+                        <button type="button" class="btn default" data-dismiss="modal"><?php echo $RecursosCons->RecursosCons['txt_cancelar']; ?></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="portlet-body">
+                <div class="form-body">
+                  <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <?php echo $RecursosCons->RecursosCons['msg_required']; ?> 
+                  </div>
+                  <?php if($_GET['alt'] == 1) { ?>
+                    <div class="alert alert-success display-show">
+                      <button class="close" data-close="alert"></button>
+                      <?php echo $RecursosCons->RecursosCons['alt']; ?> 
+                    </div>
+                  <?php } ?>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="atualizar_precos"><?php echo $RecursosCons->RecursosCons['atualizar_precos']; ?>? <span class="required"> * </span></label>
+                    <div class="col-md-8" style="padding-top: 7px;">
+                      <input type="checkbox" class="form-control" name="atualizar_precos" id="atualizar_precos" value="1">
+                      <p class="help-block"><?php echo $RecursosCons->RecursosCons['atualizar_precos_txt']; ?></p>
+                    </div>
+                  </div> 
+                  <div class="form-group" style="padding-top: 20px;">
+                    <label class="col-md-2 control-label" for="tipo"><?php echo $RecursosCons->RecursosCons['tipo_label']; ?>: <span class="required"> * </span></label>
+                    <div class="col-md-3" style="padding-top: 4px;">
+                      <div class="md-radio-inline">
+                        <div class="md-radio">
+                          <input type="radio" value="1" id="tipo_1" name="tipo" class="md-radiobtn">
+                          <label for="tipo_1">
+                          <span></span>
+                          <span class="check"></span>
+                          <span class="box"></span>
+                          <?php echo $RecursosCons->RecursosCons['somar']; ?> </label>
+                        </div>
+                        <div class="md-radio">
+                          <input type="radio" value="2" id="tipo_2" name="tipo" class="md-radiobtn">
+                          <label for="tipo_2">
+                          <span></span>
+                          <span class="check"></span>
+                          <span class="box"></span>
+                          <?php echo $RecursosCons->RecursosCons['retirar']; ?> </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="valor"><?php echo $RecursosCons->RecursosCons['valor_label']; ?>: <span class="required"> * </span></label>
+                    <div class="col-md-3">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="valor" id="valor" value="<?php echo $_POST['valor']; ?>" maxlength="8" onkeyup="onlyDecimal(this)" onblur="onlyDecimal(this)">
+                        <span class="input-group-addon">%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" style="padding-top: 30px;">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                      <span class="label label-danger"><?php echo $RecursosCons->RecursosCons['nota_txt']; ?>:</span> <strong><?php echo $RecursosCons->RecursosCons['atualizar_precos_txt2']; ?></strong>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="categoria"><?php echo $RecursosCons->RecursosCons['categoria_label']; ?>: </label>
+                    <div class="col-md-8">
+                      <div id="div_categorias">
+                        <select class="form-control select2me" name="categoria" id="categoria">
+                          <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+                          <?php if($totalRows_rsCategorias > 0) {
+                            foreach($row_rsCategorias as $categoria) { ?>
+                              <option value="<?php echo $categoria['id']; ?>"><?php echo $categoria['nome']; ?></option>
+                              <?php
+                              $query_rsCategorias2 = "SELECT id, nome FROM l_categorias_en WHERE cat_mae = :cat_mae ORDER BY nome ASC";
+                              $rsCategorias2 = DB::getInstance()->prepare($query_rsCategorias2);
+                              $rsCategorias2->bindParam(':cat_mae', $categoria['id'], PDO::PARAM_INT);
+                              $rsCategorias2->execute();
+                              $totalRows_rsCategorias2 = $rsCategorias2->rowCount();
+                              $row_rsCategorias2 = $rsCategorias2->fetchAll();
+                              DB::close();
+
+                              if($totalRows_rsCategorias2 > 0) {
+                                foreach($row_rsCategorias2 as $categoria2) { ?>
+                                  <option value="<?php echo $categoria2['id']; ?>"><?php echo $categoria['nome']." » ".$categoria2['nome']; ?></option>
+                                  <?php
+                                  $query_rsCategorias3 = "SELECT id, nome FROM l_categorias_en WHERE cat_mae = :cat_mae ORDER BY nome ASC";
+                                  $rsCategorias3 = DB::getInstance()->prepare($query_rsCategorias3);
+                                  $rsCategorias3->bindParam(':cat_mae', $categoria2['id'], PDO::PARAM_INT);
+                                  $rsCategorias3->execute();
+                                  $totalRows_rsCategorias3 = $rsCategorias3->rowCount();
+                                  $row_rsCategorias3 = $rsCategorias3->fetchAll();
+                                  DB::close();
+
+                                  if($totalRows_rsCategorias3 > 0) {
+                                    foreach($row_rsCategorias3 as $categoria3) { ?>
+                                      <option value="<?php echo $categoria3['id']; ?>"><?php echo $categoria['nome']." » ".$categoria2['nome']." » ".$categoria3['nome']; ?></option>
+                                    <?php }
+                                  }
+                                }
+                              }
+                            }
+                          } ?>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" style="padding-bottom: 30px;">
+                    <label class="col-md-2 control-label" for="marca"><?php echo $RecursosCons->RecursosCons['marca_label']; ?>: </label>
+                    <div class="col-md-8">
+                      <div id="div_marcas">
+                        <select class="form-control select2me" name="marca" id="marca">
+                          <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+                          <?php if($totalRows_rsMarcas > 0) {
+                            foreach($row_rsMarcas as $marca) { ?>
+                              <option value="<?php echo $marca['id']; ?>"><?php echo $marca['nome']; ?></option>
+                            <?php }
+                          } ?>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <?php if($totalRows_rsList > 0) { ?>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-12" style="padding-top: 30px;">
+                        <div class="portlet box green">
+                          <div class="portlet-title">
+                            <div class="caption">
+                              <i class="fa fa-list"></i><?php echo $RecursosCons->RecursosCons['historial_precos']; ?>
+                            </div>
+                            <div class="tools">
+                              <a href="javascript:;" class="collapse">
+                              </a>
+                              <a href="javascript:;" class="reload">
+                              </a>
+                            </div>
+                          </div>
+                          <div class="portlet-body">
+                            <div class="table-scrollable">
+                              <table class="table table-hover">
+                                <thead>
+                                  <tr>
+                                    <th style="width: 5%;">&nbsp;</th>
+                                    <th style="width: 10%;"><?php echo $RecursosCons->RecursosCons['movimento']; ?></th>
+                                    <th style="width: 10%;"><?php echo $RecursosCons->RecursosCons['geral_label']; ?></th>
+                                    <th style="width: 30%;"><?php echo $RecursosCons->RecursosCons['categoria_label']; ?></th>
+                                    <th style="width: 20%;"><?php echo $RecursosCons->RecursosCons['marca_label']; ?></th>
+                                    <th style="width: 15%;"><?php echo $RecursosCons->RecursosCons['data']; ?></th>
+                                    <th style="width: 10%;"></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                <?php $cont=0; while($row_rsList = $rsList->fetch()) { $cont++; ?>
+                                  <tr>
+                                    <td><?php echo $cont; ?></td>
+                                    <td>
+                                      <?php if($row_rsList['tipo'] == 1) { 
+                                        echo '+ '.$row_rsList['valor']." %"; 
+                                      } 
+                                      else { 
+                                        echo '- '.$row_rsList['valor']." %"; 
+                                      } ?>
+                                    </td>
+                                    <td><?php if($row_rsList['geral'] == 1) echo "Sim"; else echo "Não"; ?></td>
+                                    <td>
+                                      <?php 
+                                      $nome_categoria = '---';
+
+                                      if($row_rsList['id_categoria'] > 0) {
+                                        $query_rsCategoria = "SELECT cat_mae, nome FROM l_categorias_en WHERE id=:id";
+                                        $rsCategoria = DB::getInstance()->prepare($query_rsCategoria);
+                                        $rsCategoria->bindParam(':id', $row_rsList['id_categoria'], PDO::PARAM_INT);
+                                        $rsCategoria->execute();
+                                        $row_rsCategoria = $rsCategoria->fetch(PDO::FETCH_ASSOC);
+                                        $totalRows_rsCategoria = $rsCategoria->rowCount();
+                                        DB::close();
+
+                                        if($totalRows_rsCategoria > 0) {
+                                          $nome_categoria = $row_rsCategoria['nome'];
+
+                                          if($row_rsCategoria['cat_mae'] > 0) {
+                                            $query_rsCategoria2 = "SELECT cat_mae, nome FROM l_categorias_en WHERE id=:id";
+                                            $rsCategoria2 = DB::getInstance()->prepare($query_rsCategoria2);
+                                            $rsCategoria2->bindParam(':id', $row_rsCategoria['cat_mae'], PDO::PARAM_INT);
+                                            $rsCategoria2->execute();
+                                            $row_rsCategoria2 = $rsCategoria2->fetch(PDO::FETCH_ASSOC);
+                                            $totalRows_rsCategoria2 = $rsCategoria2->rowCount();
+                                            DB::close();
+
+                                            if($totalRows_rsCategoria2 > 0) {
+                                              $nome_categoria = $row_rsCategoria2['nome']." » ".$row_rsCategoria['nome'];
+
+                                              if($row_rsCategoria2['cat_mae'] > 0) {
+                                                $query_rsCategoria3 = "SELECT cat_mae, nome FROM l_categorias_en WHERE id=:id";
+                                                $rsCategoria3 = DB::getInstance()->prepare($query_rsCategoria3);
+                                                $rsCategoria3->bindParam(':id', $row_rsCategoria2['cat_mae'], PDO::PARAM_INT);
+                                                $rsCategoria3->execute();
+                                                $row_rsCategoria3 = $rsCategoria3->fetch(PDO::FETCH_ASSOC);
+                                                $totalRows_rsCategoria3 = $rsCategoria3->rowCount();
+                                                DB::close();
+
+                                                if($totalRows_rsCategoria3 > 0) {
+                                                  $nome_categoria = $row_rsCategoria3['nome']." » ".$row_rsCategoria2['nome']." » ".$row_rsCategoria['nome'];
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+
+                                      echo $nome_categoria; 
+                                      ?>
+                                    </td>
+                                    <td>
+                                      <?php 
+                                      $nome_marca = '---';
+
+                                      if($row_rsList['id_marca'] > 0) {
+                                        $query_rsMarca = "SELECT nome FROM l_marcas_pt WHERE id=:id";
+                                        $rsMarca = DB::getInstance()->prepare($query_rsMarca);
+                                        $rsMarca->bindParam(':id', $row_rsList['id_marca'], PDO::PARAM_INT);
+                                        $rsMarca->execute();
+                                        $row_rsMarca = $rsMarca->fetch(PDO::FETCH_ASSOC);
+                                        $totalRows_rsMarca = $rsMarca->rowCount();
+                                        DB::close();
+
+                                        if($totalRows_rsMarca > 0) {
+                                          $nome_marca = $row_rsMarca['nome'];
+                                        }
+                                      }
+
+                                      echo $nome_marca; 
+                                      ?>
+                                    </td>
+                                    <td><?php echo $row_rsList['data']; ?></td>
+                                    <td>
+                                      <?php 
+                                      //Só permite reverter a última atualização
+                                      if($cont == 1) { 
+                                        if($row_rsReverter['total'] > 0 && $row_rsList['revertido'] == 0) { ?>
+                                          <a href="#modal_reverter" data-toggle="modal" class="btn btn-sm red"><i class="fa fa-remove"></i> <?php echo $RecursosCons->RecursosCons['reverter']; ?></a>
+                                          <div class="modal fade" id="modal_reverter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                  <h4 class="modal-title"><?php echo $RecursosCons->RecursosCons['reverter_tit']; ?></h4>
+                                                </div>
+                                                <div class="modal-body"> <?php echo $RecursosCons->RecursosCons['reverter_txt']; ?> </div>
+                                                <div class="modal-footer">
+                                                  <button type="button" class="btn blue" onClick="document.location='produtos-atualiza-precos.php?rev=1&reg=<?php echo $row_rsList['id']; ?>'"><?php echo $RecursosCons->RecursosCons['txt_ok']; ?></button>
+                                                  <button type="button" class="btn default" data-dismiss="modal"><?php echo $RecursosCons->RecursosCons['txt_cancelar']; ?></button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        <?php }
+                                        else if($row_rsList['revertido'] == 1) { ?>
+                                          <i class="fa fa-check"></i> <span class="hidden-480"> <?php echo $RecursosCons->RecursosCons['revertido']; ?> </span>
+                                        <?php }
+                                        else {
+                                          echo '---';
+                                        }
+                                      }
+                                      else {
+                                        echo '---';
+                                      } ?>
+                                    </td>
+                                  </tr>
+                                <?php } ?>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <?php } ?>
+                </div> 
+              </div>
+            </div>
+            <input type="hidden" name="MM_insert" value="frm_atualiza_precos" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+  </div>
+  <!-- END CONTENT -->
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+</div>
+<!-- END CONTAINER -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/jquery.fancybox.min.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/plupload/js/plupload.full.min.js" type="text/javascript"></script> 
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckeditor/ckeditor.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.js"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+<script src="form-validation.js"></script> 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+jQuery(document).ready(function() {    
+  Metronic.init(); // init metronic core components
+  Layout.init(); // init current layout
+  QuickSidebar.init(); // init quick sidebar
+  Demo.init(); // init demo features
+  FormValidation.init();
+});
+</script> 
+</body>
+<!-- END BODY -->
+</html>

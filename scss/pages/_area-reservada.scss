@@ -1,0 +1,634 @@
+/*MENU*/
+.area_reservada {
+  margin-top: 5rem;
+  margin-bottom: 10rem;
+
+  & .area_reservada_menu {
+    margin-top: 6rem;
+    margin-bottom: 3.5rem;
+
+    & a.links {
+      display: block;
+      position: relative;
+
+      background: $medium-gray;
+      margin-bottom: 2px;
+
+      padding: 14px 20px;
+
+      &:before {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+
+        font-size: 1.3rem;
+        margin-top: -0.65rem;
+      }
+
+      &:hover,
+      &.sel {
+        background: $secondary-color;
+        color: $white;
+      }
+    }
+    & a.button {
+      margin-left: 2rem;
+    }
+  }
+
+  & .titles {
+    margin-bottom: 3.5rem;
+  }
+
+  & .area_reservada_convidar {
+    padding-bottom: 5rem;
+  }
+
+  &.entrada {
+    & .area_reservada_menu {
+      margin-top: 0;
+    }
+    & .listagem {
+      @include divOutter(-5px);
+      padding-left: 10px;
+    }
+    & .area_bloco {
+      @include displayInline(top);
+      width: 50%;
+
+      overflow: hidden;
+
+      padding: 0 5px;
+      margin-bottom: 10px;
+
+      &.type1 {
+        & > div {
+          position: relative;
+          display: block;
+          overflow: hidden;
+        }
+        & figcaption {
+          padding: 5rem 2.5rem;
+          display: flex;
+
+          & p {
+            margin-top: 2rem;
+          }
+
+          & a {
+            opacity: 1;
+          }
+        }
+
+        &:nth-child(2) {
+          & figcaption {
+            align-items: flex-end;
+          }
+        }
+
+        &.hoverable {
+          & picture {
+            position: relative;
+
+            @include transform(scale(1.2));
+            @include Animationcss(transform 0.3s linear);
+          }
+
+          &:hover {
+            & picture {
+              @include transform(scale(1));
+            }
+            & a.linker {
+              box-shadow: 0px 0px 111px 0px rgba(0, 0, 0, 0.8) inset;
+            }
+          }
+        }
+      }
+      &.type2 {
+        & figure {
+          background: $medium-gray;
+          padding: 3rem;
+
+          & figcaption {
+            position: relative;
+            height: auto;
+
+            margin-top: 3.5rem;
+
+            & h3 {
+              color: $secondary-color;
+            }
+            & div.textos {
+              @include divOverflow(getHeightLines(textos, 5));
+
+              margin-top: 1rem;
+            }
+            & a.button {
+              margin-top: 2rem;
+            }
+          }
+        }
+      }
+      &.type3 {
+        & > .div_100 {
+          position: relative;
+          padding: 3rem 2rem;
+          background: $secondary-color;
+
+          z-index: 1;
+
+          &:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            background: $primary-color;
+
+            -webkit-transform-origin: 50% 0%;
+            transform-origin: 50% 0%;
+
+            @include transform(scaleY(0));
+            @include Animationcss(transform 0.3s ease-out);
+          }
+        }
+
+        &:hover {
+          & > .div_100 {
+            &:before {
+              @include transform(scaleY(1));
+            }
+          }
+        }
+      }
+
+      &.type1,
+      &.type3 {
+        & h2 {
+          @include textos(subtitulos, $white);
+          text-transform: uppercase;
+          font-style: italic;
+        }
+        & p {
+          @include textos(titulos, $white, 6.5rem, null, null, 25);
+        }
+      }
+    }
+  }
+  &.encomendas {
+    & .limpar_filtros {
+      text-transform: uppercase;
+      color: $primary-color;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 700;
+      text-decoration: underline;
+      display: block;
+      margin-top: 2rem;
+
+      &:hover {
+        color: $secondary-color;
+      }
+    }
+
+    & .filter_cont {
+      @include displayInline(top);
+      margin-right: 10px;
+      margin-bottom: 10px;
+      background: $medium-gray;
+      min-width: 250px;
+      max-width: 420px !important;
+
+      &:before {
+        @include displayInline(top);
+        font-size: 1.4rem;
+        background: $medium-gray;
+        padding: 1.1rem 1.5rem;
+        margin-top: 6px;
+        float: right;
+      }
+
+      & .inpt_search,
+      & > a {
+        @include displayInline(top);
+        padding: 1.1rem 1.5rem;
+        width: calc(100% - 45px);
+      }
+    }
+    & .dropdown {
+      @include displayInline(top);
+      position: relative;
+
+      z-index: 10;
+
+      &.menu {
+        width: 100%;
+        max-width: 420px !important;
+
+        & .filter_cont {
+          width: 100%;
+          padding-right: 1rem;
+
+          & a {
+            width: 100%;
+          }
+
+          & .list_subtit {
+          }
+
+          & label {
+            &:before,
+            &:after {
+              border-color: $primary-color;
+            }
+          }
+
+          & input {
+            border-color: $white;
+          }
+        }
+      }
+      & .is-dropdown-submenu {
+        margin-top: 0;
+
+        & > li {
+          padding: 0;
+        }
+      }
+    }
+
+    & .filter_container {
+      padding: 1.1rem 1.5rem;
+      background: $medium-gray;
+
+      & .groups:not(:first-child) {
+        h1 {
+          margin-top: 2.5rem;
+        }
+      }
+      & .inpt_checkbox {
+        padding: 0 5px;
+        width: 50%;
+        margin: 0;
+        margin-top: 1.5rem;
+
+        & label::before {
+          border-color: $primary-color;
+        }
+      }
+      & .inpt_cells {
+        margin-top: 1.5rem;
+        margin-bottom: 0;
+
+        & .picker__holder {
+          width: 360px;
+        }
+
+        & .inpt {
+          border-color: $primary-color;
+        }
+      }
+    }
+
+    .custom_table {
+      & .numero {
+        width: 100px;
+      }
+      & .produtos {
+        width: 100px;
+      }
+      & .data {
+        width: 150px;
+      }
+      & .valor {
+        width: 160px;
+      }
+      & .detalhe {
+        width: 45px;
+
+        & a {
+          @include displayInline(middle);
+        }
+      }
+    }
+  }
+
+  &.tickets {
+    & .tickets_divs {
+      border: 1px solid $medium-gray;
+      overflow: hidden;
+      margin-bottom: 2rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      & .head {
+        background: $light-gray;
+        padding: 1.5rem 2rem;
+
+        & h3,
+        & h5 {
+          @include displayInline(middle);
+        }
+        & h3 {
+          text-transform: none;
+        }
+        & h5 {
+          margin-left: 10px;
+        }
+      }
+
+      & .body {
+        padding: 1.5rem 2rem;
+
+        & > h4 {
+          margin-bottom: 5px;
+        }
+
+        & > div {
+          @include divOverflow("", getHeightLines(list_txt));
+        }
+
+        &.full > div {
+          max-height: unset;
+        }
+      }
+
+      & .foot {
+        padding: 2rem;
+        padding-top: 0;
+
+        & .ficheiros {
+          padding-top: 1.5rem;
+
+          & .divs {
+            margin-top: 1.5rem;
+
+            & i,
+            & span {
+              @include displayInline(middle);
+              @include Animationcss(all 0.3s linear);
+            }
+
+            & span {
+              max-width: 100%;
+              text-transform: lowercase;
+              word-wrap: break-word;
+            }
+
+            & i {
+              width: 3rem;
+              height: 3rem;
+              margin-right: 1.5rem;
+
+              & .st1 {
+                fill: $secondary-color;
+              }
+            }
+
+            &:hover {
+              & i {
+                opacity: 0.7;
+              }
+              & span {
+                color: $secondary-color;
+              }
+            }
+          }
+        }
+      }
+
+      &.det {
+        & .head {
+          background: $primary-color;
+        }
+        & .body {
+          background: $light-gray;
+        }
+      }
+    }
+  }
+
+  &.favoritos {
+    & .filter_cont {
+      @include displayInline(top);
+      margin-right: 10px;
+      margin-bottom: 10px;
+      background: $medium-gray;
+
+      &:before {
+        @include displayInline(top);
+        font-size: 1.4rem;
+        padding: 1.1rem 1.5rem;
+        margin-top: 6px;
+        float: right;
+      }
+
+      & .inpt_search,
+      & > a {
+        @include displayInline(top);
+        padding: 1.1rem 1.5rem;
+      }
+    }
+
+    & .listagem {
+      @include divOutter(-1.5rem);
+    }
+
+    & .favoritos_login {
+      margin-bottom: 2.5rem;
+
+      & a {
+        color: $secondary-color;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+
+    & .custom_table {
+      & .data {
+        width: 190px;
+      }
+      & .valor {
+        width: 150px;
+      }
+      & .comprar {
+        width: 170px;
+      }
+      & .detalhe {
+        width: 65px;
+
+        & a {
+          @include displayInline(middle);
+        }
+      }
+    }
+  }
+
+  &.notificacoes {
+    & .notificacoes_cont li {
+      position: relative;
+
+      & .noti-wrapper {
+        @include displayInline(middle);
+        position: relative;
+
+        width: 8rem;
+        height: 3rem;
+        cursor: pointer;
+
+        border-radius: 50px;
+        overflow: hidden;
+
+        & input[type="checkbox"] {
+          @include inputElements(checkradio);
+          opacity: 1;
+
+          background: $medium-gray;
+
+          &:checked {
+            background: $success-color;
+          }
+        }
+
+        & span {
+          position: absolute;
+          top: 0;
+          left: 0;
+
+          width: 3rem;
+          height: 3rem;
+
+          border-radius: 50%;
+          background: #fff;
+
+          box-shadow: 0 0 5px rgba($black, 0.5);
+
+          z-index: 5;
+          pointer-events: none;
+
+          @include transform(scale(0.7));
+          @include Animationcss(all 0.2s ease-in-out);
+        }
+
+        input[type="checkbox"]:checked + span {
+          left: calc(100% - 3rem);
+        }
+      }
+
+      & label {
+        @include displayInline(middle);
+        margin-left: 1.5rem;
+      }
+    }
+  }
+
+  & .area_margin {
+    margin-top: 8.5rem;
+  }
+  & .area_reservada_resultados {
+    text-align: center;
+    padding: 7rem 0;
+  }
+
+  @include breakpoint(medium down) {
+    margin-bottom: 7.5rem;
+  }
+  @include breakpoint(xxsmall down) {
+    & .area_reservada_menu {
+      margin-top: 0rem;
+    }
+    &.encomendas {
+      & .filter_cont {
+        width: 100%;
+        margin-right: 0;
+
+        & > a {
+          width: calc(100% - 45px);
+        }
+      }
+      & .filter_container {
+        margin-top: 43px;
+
+        & .inpt_checkbox {
+          width: 100%;
+          padding: 0 !important;
+          margin-top: 1rem;
+        }
+      }
+      & .dropdown {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+  @include breakpoint(xsmall down) {
+    &.entrada {
+      & .listagem {
+        margin: auto;
+        padding-left: 0px;
+      }
+
+      & .area_bloco {
+        width: 100%;
+        padding: 0;
+
+        &.type1 {
+          & figcaption {
+            padding: 3.5rem 2rem;
+            & p {
+              margin-top: 1rem;
+            }
+          }
+        }
+        &.type2 {
+          & figure {
+            padding: 2rem;
+
+            & figcaption {
+              margin-top: 2rem;
+            }
+          }
+        }
+      }
+    }
+    &.favoritos {
+      & .custom_table {
+        margin-top: 2rem;
+      }
+    }
+  }
+  @include breakpoint(small down) {
+    &.tickets {
+      & .tickets_divs {
+        & .head {
+          & h5 {
+            display: block;
+            margin-left: 0;
+          }
+        }
+        & .body {
+          & > div {
+            max-height: 5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+#form_outras_moradas {
+  & .button.cancel,
+  & .button.guardar {
+    display: none;
+  }
+  & .button.cancel {
+    margin-left: 1rem;
+  }
+}

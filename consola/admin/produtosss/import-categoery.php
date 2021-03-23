@@ -1,0 +1,163 @@
+<?php include_once('../inc_pages.php'); ?>
+
+<?php   
+  $query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+  $rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
+  $rsLinguas->execute();
+  $row_rsLinguas = $rsLinguas->fetchAll();
+  $totalRows_rsLinguas = $rsLinguas->rowCount();
+
+  DB::close();
+
+  function categoria_get($categoria_name)
+  { 
+
+    $query_rsCat = "SELECT id, nome FROM l_categorias_en WHERE nome = '$categoria_name'";
+    $rsCat = DB::getInstance()->prepare($query_rsCat);
+    $rsCat->execute();
+    $row_rsCat = $rsCat->fetch();
+    DB::close();   
+    return $row_rsCat;
+  }
+
+  function brand_get($brand_name)
+  {
+    $query_rsBrand = "SELECT id, nome FROM l_marcas_pt WHERE nome = '$brand_name'";
+    $rsBrand = DB::getInstance()->prepare($query_rsBrand);
+    $rsBrand->execute();
+    $row_rsBrand = $rsBrand->fetch();
+    DB::close();  
+    return $row_rsBrand;
+  }
+
+?>
+
+<?php 
+
+    if(isset($_POST['importSubmit'])){
+    
+    // Allowed mime types
+    $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+    
+    // Validate whether selected file is a CSV file
+    if(!empty($_FILES['csvfile']['name']) && in_array($_FILES['csvfile']['type'], $csvMimes)){
+        
+        // If the file is uploaded
+        if(is_uploaded_file($_FILES['csvfile']['tmp_name'])){
+            
+            // Open uploaded CSV file with read-only mode
+            $csvFile = fopen($_FILES['csvfile']['tmp_name'], 'r');
+            
+            // Skip the first line
+            fgetcsv($csvFile);
+            
+            // Parse data from CSV file line by line
+
+            $i=1;
+            while(($line = fgetcsv($csvFile)) !== FALSE){
+                if ($i < 4) {
+                   $i++; 
+                   continue;  
+                }   
+;
+                    $ref = $line[0];
+                    $imagem = $line[1];
+                    $cod_barras = $line[2];
+
+                    $main_cate_name = $line[3];
+                    $cate_name = $line[4];
+                    $sub_cate_name = $line[5];
+
+                    $nome = str_replace('"', "", $line[6]);
+                    $brand_name = str_replace("'", " ", $line[7]);
+                    $brand_name = trim(preg_replace( "/\r|\n/", " ", $brand_name));
+
+                    $descricao = str_replace('"', "", $line[8]);
+
+                    $composition_per_capsule = str_replace('"', "", $line[9]);
+                    $modo_de_tomar = str_replace('"', "`",$line[10]);
+                    $detalhes_advertencias = str_replace('"', "",$line[11]);
+                    $filtro_1 = $line[12];
+                    $filtro_2 = $line[13];
+                    $filtro_3 = $line[14];
+
+                    $stock = $line[15];
+                    $waight = $line[16];
+                    $preco = $line[17];
+                    $iva = $line[18];
+                    $iva = $line[18];
+
+                    $get_cate_name = array();
+                    $promocao = $line[19];
+
+                    $get_cate_name = categoria_get($cate_name);
+                        
+                    if (!empty($sub_cate_name) && !empty($get_cate_name)) {
+                        $sub_sub_exist = categoria_get($sub_cate_name);
+                        if (!empty($sub_sub_exist)) {
+
+                            foreach ($row_rsLinguas as $linguas) {
+
+                                // $updateSQL = "UPDATE l_pecas_".$linguas["sufixo"]." SET categoria=:categoria WHERE ref=:ref";
+                                // $rsUpdateUrl = DB::getInstance()->prepare($updateSQL);
+                                // $rsUpdateUrl->bindParam(':categoria', $sub_sub_exist['id'], PDO::PARAM_STR, 5);
+                                // $rsUpdateUrl->bindParam(':ref', $ref, PDO::PARAM_STR, 5); 
+                                // $rsUpdateUrl->execute();
+
+                                // $cat_array = [
+                                //     'max_id' => $max_id,
+                                //     'nome' => $sub_cate_name,
+                                //     'categoria' => $get_cate_name['id'],
+                                //     'url' => $nome_url,
+                                //     'title' => $sub_cate_name,
+                                // ];
+
+                                // echo "<pre>";
+                                // print_r ($cat_array);
+                                // echo "</pre>";
+                                    
+                                // $insertSQL = "INSERT INTO l_categorias_".$linguas["sufixo"]." (id, nome, cat_mae, url, title) VALUES (:max_id, :nome, :categoria, :url, :title)";
+                                // $rsInsert = DB::getInstance()->prepare($insertSQL);
+                                // $rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);       
+                                // $rsInsert->bindParam(':nome', $sub_cate_name, PDO::PARAM_STR, 5);
+                                // $rsInsert->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT, 5);
+                                // $rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5); 
+                                // $rsInsert->bindParam(':title', $sub_cate_name, PDO::PARAM_STR, 5);
+                                // $rsInsert->execute();
+                            }
+
+                            $i++;
+
+                        }
+                    }
+                    // echo "<pre>";
+                    // print_r ($get_cate_name);
+                    // echo "</pre>";
+                    // echo "<pre>";
+                    // print_r ($sub_cate_name);
+                    // echo "</pre>";
+
+                
+
+            }
+            echo "<pre>";
+            print_r ($i);
+            echo "</pre>";
+            exit();
+            // Close opened CSV file
+            fclose($csvFile);
+            
+            $qstring = '?status=succ';
+        }else{
+            $qstring = '?status=err';
+        }
+    }else{
+        $qstring = '?status=invalid_file';
+    }
+}
+
+// Redirect to the listing page
+header("Location: produtos.php".$qstring);
+
+
+ ?>

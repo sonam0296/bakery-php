@@ -1,0 +1,83 @@
+<?php include_once('pages_head.php');
+
+$pesq = urldecode($_GET['search']);
+if(!$pesq) {
+  header('location: '.ROOTPATH_HTTP);
+  exit();
+}
+
+$tablesSearch = array();
+if(tableExists(DB::getInstance(), 'destaques_pt')) array_push($tablesSearch, $Recursos->Resources["pesq_destaques"]);
+if(tableExists(DB::getInstance(), 'noticias_pt')) array_push($tablesSearch, $Recursos->Resources["pesq_noticias"]);
+if(tableExists(DB::getInstance(), 'blog_posts_pt')) array_push($tablesSearch, "Blog");
+if(tableExists(DB::getInstance(), 'l_categorias_en')) array_push($tablesSearch, $Recursos->Resources["pesq_categorias"]);
+if(tableExists(DB::getInstance(), 'l_pecas_en')) array_push($tablesSearch, $Recursos->Resources["pesq_produtos"]);
+if(tableExists(DB::getInstance(), 'paginas_pt')) array_push($tablesSearch, $Recursos->Resources["pesq_outros"]);
+
+$menu_sel = "pesquisa";
+?>
+<main class="page-load pesquisa">   
+  <div class="search-page">
+    <div class="row content">
+      <div class="column">
+        <nav class="breadcrumbs_cont" aria-label="You are here:" role="navigation">
+          <div class="row collapse">
+            <div class="column">
+              <ul class="breadcrumbs">
+                <li class="disabled"><span><?php echo $Recursos->Resources["bread_tit"]; ?></span></li>
+                <li><a href="<?php echo get_meta_link(1); ?>" data-ajaxurl="<?php echo ROOTPATH_HTTP; ?>includes/pages/index.php" data-remote="false"><?php echo $Recursos->Resources["home"]; ?></a></li>
+                <li><span><?php echo $Recursos->Resources["pesquisa"]; ?></span></li>
+                <li> <span class="pesq_termo"><?php echo $pesq; ?></span></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="list_tit pesquisa_tit"></div>
+        <div class="div_100 pesq_filters">
+          <div class="row collapse">
+            <div class="column pesq_inpt small-12 xxsmall-shrink">
+              <div class="inpt_holder icon-search">
+                <input class="inpt refresh" name="search" id="pesquisa_inpt" type="search" data-name="search" placeholder="<?php echo $Recursos->Resources["pesquisa_msg"]; ?>" autocomplete="search" autocorrect="off" autocapitalize="off" spellcheck="false" value="<?php echo $pesq; ?>" />
+              </div>
+            </div>
+            <?php if(!empty($tablesSearch)) { ?>
+              <div class="column pesq_inpt small-12 xxsmall-shrink">
+                <div class="inpt_holder simple select">
+                  <select class="inpt" name="search_order" id="search_order" data-name="ordem">
+                    <option value="0"><?php echo $Recursos->Resources["pesq_ordenar"]; ?></option>
+                    <?php foreach($tablesSearch as $table) { ?>
+                      <option value="<?php echo strtolower($table); ?>"<?php if($_GET['ordem'] == strtolower($table)) echo " selected"; ?>><?php echo $table; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+            <?php } ?>
+            <?php if(!empty($tablesSearch)) { ?>
+              <div class="column pesq_inpt small-12 xxsmall-shrink">
+                <div class="inpt_holder simple select">
+                  <select class="inpt" name="search_filter" id="search_filter" data-name="filtro">
+                    <option value="0"><?php echo $Recursos->Resources["pesq_filtrar"]; ?></option>
+                    <?php foreach($tablesSearch as $table) { ?>
+                      <option value="<?php echo strtolower($table); ?>"<?php if($_GET['filtro'] == strtolower($table)) echo " selected"; ?>><?php echo $table; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+            <?php } ?>
+          </div>
+        </div>   
+        <div class="div_100 pesq_listings" id="<?php echo $menu_sel; ?>">
+          <?php //include_once(ROOTPATH.'includes/pesquisa-list.php'); ?>   
+        </div>                       
+      </div>
+    </div>
+  </div>            
+</main>
+
+<?php include_once('pages_footer.php'); ?>
+
+<?php if(!$pesq) { ?>
+  <script>
+    window.location = '<?php echo ROOTPATH_HTTP; ?>';
+  </script>
+<?php } ?>

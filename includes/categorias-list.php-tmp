@@ -1,0 +1,295 @@
+<?php require_once ('../Connections/connADMIN.php');?>
+<?php
+
+if (!isset($_SESSION)) {
+	session_start();
+}
+
+//ini_set('display_errors',1);
+
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/html; charset=UTF-8");
+
+// ini_set('display_errors', 1);
+
+if ($_POST['op'] == 'carrega_meta') {
+	$id          = $_POST['id'];
+	$loja_online = $_POST['loja_online'];
+
+	$query_rsCategoria = "SELECT title, description, keywords, nome, url FROM l_categorias".$extensao." WHERE id=:id";
+	$rsCategoria       = DB::getInstance()->prepare($query_rsCategoria);
+	$rsCategoria->bindParam(':id', $id, PDO::PARAM_INT, 5);
+	$rsCategoria->execute();
+	$row_rsCategoria       = $rsCategoria->fetch(PDO::FETCH_ASSOC);
+	$totalRows_rsCategoria = $rsCategoria->rowCount();
+	DB::close();
+
+	$url = $row_rsCategoria['url'];
+	if ($loja_online == 1) {
+		$url = "store-".$row_rsCategoria['url'];
+	}
+	echo $row_rsCategoria['title']."__".$row_rsCategoria['description']."__".$row_rsCategoria['keywords']."__".$url;
+}
+
+if ($_POST['op'] == "elementos") {
+	//ini_set('display_errors',1);
+	$where     = "";
+	$left_join = "";
+
+	//O que o cliente quer:  1 - Listagem de subcategorias / 2 - listagem das linhas das subcategorias
+	$client_want = 2;
+
+	$id          = $_POST['id'];
+	$loja_online = $_POST['loja_online'];
+	$url_final   = $_POST['url'];
+	$url_param   = explode("?", $url_final);
+	$url         = $url_param[0];
+	$parametro   = explode("&", $url_param[1]);
+
+	if ($client_want == 1) {
+		if ($id > 0) {
+			$categoria = $id;
+			$where     = ' AND cat_mae =:cat';
+		}
+
+		$query_rsCategorias = "SELECT * FROM l_categorias".$extensao." WHERE visivel = '1' ".$where." ORDER BY ordem ASC";
+		$rsCategorias       = DB::getInstance()->prepare($query_rsCategorias);
+		if (hasParameter($query_rsCategorias, ':cat')) {$rsCategorias->bindParam(':cat', $categoria, PDO::PARAM_INT);
+		}
+
+		$rsCategorias->execute();
+		$row_rsCategorias       = $rsCategorias->fetchAll();
+		$totalRows_rsCategorias = $rsCategorias->rowCount();
+		DB::close();
+	} else if ($client_want == 2) {
+
+		if ($id > 0) {
+			$categoria = $id;
+			$where     = ' AND cat.cat_mae =:cat';
+		}
+
+		/* QUERY QUE ESTAVA... NAO RETORNAVA AS SUB CATEGORIAS QUE NAO TINHA LINHAS ASSOCIADAS
+		$query_rsCategorias = "SELECT cat.id, cat.nome as cat_nome, cat_linhas.id_linha as id_linha, linhas.nome as nome_linha, linhas.imagem1, linhas.imagem2, cat.url FROM l_categorias".$extensao." cat, l_categorias_linhas as cat_linhas, l_linhas_pt as linhas, l_pecas_en as peca WHERE cat.visivel = '1'".$where." AND cat_linhas.id_cat = cat.id AND linhas.id = cat_linhas.id_linha AND peca.linha = cat_linhas.id_linha AND peca.categoria = cat.id AND peca.visivel = 1 GROUP BY cat.id, linhas.id ORDER BY cat.ordem, linhas.ordem ASC"; */
+
+		/* ALTERAÇÕES NOVAS */
+		$row_rsCategorias       = [];
+		$totalRows_rsCategorias = 0;
+
+		$query_rsCategorias        = "SELECT cat.id, cat.nome as cat_nome, cat.url FROM l_categorias".$extensao." AS cat, l_pecas_en as peca WHERE cat.cat_mae > 0 AND cat.visivel = '1'".$where." AND peca.categoria = cat.id AND peca.visivel = 1 GROUP BY cat.id ORDER BY cat.ordem ASC, cat.id DESC";
+		$query_rsCategorias_parent = "SELECT cat.id, cat.nome as cat_nome, cat.url FROM l_categorias".$extensao." AS cat, l_pecas_en as peca WHERE cat.cat_mae > 0 AND cat.visivel = '1'".$where." AND peca.categoria = cat.id AND peca.visivel = 1 GROUP BY cat.id ORDER BY cat.ordem ASC, cat.id DESC";
+
+		$rsCategorias_parent = DB::getInstance()->prepare($query_rsCategorias_parent);
+		if (hasParameter($query_rsCategorias_parent, ':cat')) {$rsCategorias_parent->bindParam(':cat', $categoria, PDO::PARAM_INT);
+		}
+
+		$rsCategorias_parent->execute();
+		$row_rsCategorias_parent       = $rsCategorias_parent->fetchAll(PDO::FETCH_ASSOC);
+		$totalRows_rsCategorias_parent = $rsCategorias_parent->rowCount();
+		DB::close();
+
+		//echo "TOTAL: ".$totalRows_rsCategorias_parent;
+		//echo "CATEGORIA: ".$categoria.PHP_EOL;
+		//echo $query_rsCategorias_parent;
+
+		//Verificar se Esta Categoria TEM LINHAS ASSOCIADAS - ERA AQUI QUE ESTAVA O BUG POR ISSO FIZ DESTA FORMA
+		if ($totalRows_rsCategorias_parent > 0) {
+			foreach ($row_rsCategorias_parent as $rsCategorias_parent) {
+				$id_categoria = $rsCategorias_parent['id'];
+				$cat_nome     = $rsCategorias_parent['cat_nome'];
+				$url          = $rsCategorias_parent['url'];
+
+				$query_linhas_this_cate = "SELECT
+																			cat_linhas.id_linha,
+																			linhas.nome as nome_linha,
+																			linhas.imagem1,
+																			linhas.imagem2
+																		FROM
+																			l_categorias_linhas AS cat_linhas
+																		LEFT JOIN
+																			l_linhas".$extensao." AS linhas
+																			ON
+																			cat_linhas.id_linha = linhas.id
+																		WHERE
+																			cat_linhas.id_cat = '$id_categoria'
+																			AND
+																			linhas.visivel = '1'
+																		ORDER BY
+																			linhas.ordem ASC,
+																			linhas.id DESC
+																		LIMIT 1";
+
+				//echo $query_linhas_this_cate.PHP_EOL;
+
+				$rsLinhasCate = DB::getInstance()->prepare($query_linhas_this_cate);
+				$rsLinhasCate->execute();
+				$row_rsLinhasCate       = $rsLinhasCate->fetch(PDO::FETCH_ASSOC);
+				$totalRows_rsLinhasCate = $rsLinhasCate->rowCount();
+				DB::close();
+
+				if ($totalRows_rsLinhasCate == 1) {
+
+					$id_linha = NULL;
+					if (!empty($row_rsLinhasCate['id_linha'])) {
+						$id_linha = $row_rsLinhasCate['id_linha'];
+					}
+					$nome_linha = NULL;
+					if (!empty($row_rsLinhasCate['nome_linha'])) {
+						$nome_linha = $row_rsLinhasCate['nome_linha'];
+					}
+					$imagem1 = NULL;
+					if (!empty($row_rsLinhasCate['imagem1'])) {
+						$imagem1 = $row_rsLinhasCate['imagem1'];
+					}
+					$imagem2 = NULL;
+					if (!empty($row_rsLinhasCate['imagem2'])) {
+						$imagem2 = $row_rsLinhasCate['imagem2'];
+					}
+
+					$array_line = array('id' => $id_categoria, 'cat_nome' => $cat_nome, 'id_linha' => $id_linha, 'nome_linha' => $nome_linha, 'imagem1' => $imagem1, 'imagem2' => $imagem2, 'url' => $url);
+
+				} else {
+					$array_line = array('id' => $id_categoria, 'cat_nome' => $cat_nome, 'id_linha' => NULL, 'nome_linha' => NULL, 'imagem1' => NULL, 'imagem2' => NULL, 'url' => $url);
+				}
+
+				array_push($row_rsCategorias, $array_line);
+
+			}
+		}
+		/* FIM DAS ALTERAÇÕES NOVAS */
+
+		$totalRows_rsCategorias = count($row_rsCategorias);
+
+	}
+
+	$total_prods = $totalRows_rsCategorias;
+
+	//necessário por causa dos caracteres especiais
+	header("Content-type: text/html; charset=UTF-8");
+
+	$is_first = $_POST['start'];
+	if ($is_first == 1) {
+		$page = 1;
+	} else {
+		$page = (int) (!isset($_POST['first']))?1:$_POST['first'];
+	}
+
+	//$limit = $_POST['limit']; #item per page
+	$limit = $totalRows_rsCategorias;#item per page
+
+	# find out query stat point
+	$start = ($page*$limit)-$limit;
+	# query for page navigation
+	if ($totalRows_rsCategorias > ($page*$limit)) {
+		$next = ++$page;
+	}
+
+	/*
+	$query_rsCategorias = $query_rsCategorias. " LIMIT {$start}, {$limit}";
+	$rsCategorias = DB::getInstance()->prepare($query_rsCategorias);
+	if(hasParameter($query_rsCategorias, ':cat')) $rsCategorias->bindParam(':cat', $categoria, PDO::PARAM_INT);
+	$rsCategorias->execute();
+	$row_rsCategorias = $rsCategorias->fetchAll();
+	$totalRows_rsCategorias = $rsCategorias->rowCount();
+	DB::close(); */
+
+	?>
+
+
+	<?php
+	if ($client_want == 1) {
+		if ($totalRows_rsCategorias > 0) {?>
+						<?php if ($is_first == 1) {?>
+								<input type="hidden" name="total_prods" id="total_prods" value="<?php echo $total_prods;?>" />
+				<?php }?>
+						<?php foreach ($row_rsCategorias as $categoria) {
+				$img = "elem/geral.svg";
+
+				if ($categoria['imagem2'] && file_exists(ROOTPATH.'imgs/categorias/'.$categoria['imagem2'])) {
+					$img = "categorias/".$categoria['imagem2'];
+				}
+
+				$url_cat = $categoria['url'];
+				if ($loja_online == 1) {
+					$url_cat = "store-".$categoria['url'];
+				}
+				?>
+									<div class="categorias_divs column">
+										<figure>
+											<picture class="catImg img has_bg lazy" data-src="<?php echo $img;?>">
+				<?php echo getFill('categorias', 3);?>
+														</picture>
+														<figcaption class="info">
+															<h1 class="titulos after uppercase"><?php echo $categoria['nome'];?></h1>
+															<h2 class="subtitulos"><?php echo $categoria['resumo'];?></h2>
+															<button class="button invert2 border "><?php echo $Recursos->Resources["saiba_mais"];?></button>
+														</figcaption>
+														<a class="linker" href="<?php echo $url_cat;?>" data-ajaxurl="<?php echo ROOTPATH_HTTP;?>includes/pages/produtos-detalhe.php" data-ajaxTax="<?php echo $categoria['id'];?>" data-remote="false" data-pagetrans="produtos-detalhe" data-product="true" data-detail="1"></a>
+										</figure>
+									</div>
+				<?php }?>
+					<?php } else {?>
+						<h6 class="sem_prods"><?php echo $Recursos->Resources["sem_produtos"];?></h6>
+			<?php }
+	}?>
+
+	<?php /* LISTAR AS LINHAS QUE PERTENCEM ÀS SUBCATEGORIAS DA CAT PRINCIPAL SELECIONADA */?>
+
+	<?php
+	if ($client_want == 2) {
+		if ($totalRows_rsCategorias > 0 && $client_want == 2) {?>
+						<?php if ($is_first == 1) {?>
+								<input type="hidden" name="total_prods" id="total_prods" value="<?php echo $total_prods;?>" />
+				<?php }?>
+						<?php foreach ($row_rsCategorias as $categoria) {
+				$img  = "elem/geral.svg";
+				$img2 = "";
+
+				if ($categoria['imagem2'] && file_exists(ROOTPATH.'imgs/linhas/'.$categoria['imagem2'])) {
+					$img = "linhas/".$categoria['imagem2'];
+				}
+
+				if ($categoria['imagem1'] && file_exists(ROOTPATH.'imgs/linhas/'.$categoria['imagem1'])) {
+					$img2 = "linhas/".$categoria['imagem1'];
+				}
+
+				$url_cat = $categoria['url'];
+				if ($loja_online == 1) {
+					$url_cat = "store-".$categoria['url'];
+				}?>
+									<div class="linhas_divs column">
+										<figure>
+											<picture class="catImg img has_bg lazy" data-src="<?php echo $img;?>">
+				<?php echo getFill('linhas', 2);?>
+				</picture>
+														<figcaption class="info">
+
+				<?php if ($img2 != '') {?>
+																	<img class="img has_bg lazy" src="<?php echo ROOTPATH_HTTP."imgs/".$img2;?>">
+					<?php } else {
+					$nome_h1 = $categoria['nome_linha'];
+					if (empty($nome_h1)) {
+						$nome_h1 = $categoria['cat_nome'];
+					}?>
+																		<h1 class="titulos after uppercase"><?php echo $nome_h1;?></h1>
+					<?php }?>
+
+
+				<?php if (!empty($categoria['id_linha'])) {?>
+																	<button class="button invert border " onclick="carregaCategoriaLinha('<?php echo ROOTPATH_HTTP.$url_cat;?>', <?php echo $categoria['id_linha'];?>)"><?php echo $Recursos->Resources["saiba_mais"];
+					?></button>
+					<?php } else {?>
+																	<button class="button invert border " onclick="window.location.href='<?php echo ROOTPATH_HTTP.$url_cat;?>'"><?php echo $Recursos->Resources["saiba_mais"];
+					?></button>
+					<?php }?>
+				</figcaption>
+										</figure>
+									</div>
+				<?php }?>
+					<?php } else {?>
+						<h6 class="sem_prods"><?php echo $Recursos->Resources["sem_produtos"];?></h6>
+			<?php }
+	}?>
+
+	<?php }?>

@@ -1,0 +1,114 @@
+[23-Feb-2021 14:51:14 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php:69
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php(69): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php on line 69
+[23-Feb-2021 14:52:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php:69
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php(69): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-edit.php on line 69
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 71
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 115
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 119
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 134
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 393
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 397
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 254
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 259
+[23-Feb-2021 14:57:39 UTC] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 470
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 1296
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_connection() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 664
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 71
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 115
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 119
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 134
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 393
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 397
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_mail() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 254
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 259
+[23-Feb-2021 14:57:39 UTC] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 470
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 1296
+[23-Feb-2021 14:57:39 UTC] PHP Deprecated:  Non-static method FUNC::is_connection() should not be called statically in /home/customer/www/bbakery.co.uk/public_html/beta/sendMail/smtp.php on line 664
+[25-Feb-2021 09:22:28 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '== '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:149
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(149): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 149
+[25-Feb-2021 09:22:32 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '== '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:149
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(149): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 149
+[25-Feb-2021 09:25:34 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:149
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(149): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 149
+[06-Mar-2021 14:33:29 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:33:40 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:34:04 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:34:13 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero desc' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:34:41 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'HEATH BRANCH AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero ' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:34:49 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'HEATH BRANCH AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero ' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:35:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'HEATH BRANCH AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero ' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:167
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(167): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 167
+[06-Mar-2021 14:46:05 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'HEATH BRANCH AND txn_id != '' OR met_pagamt_id = 9 AND id > '0' ORDER BY numero ' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php:181
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php(181): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 181
+[12-Mar-2021 08:24:36 UTC] PHP Parse error:  syntax error, unexpected ''<a href="imprime_encomenda.ph' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 368
+[12-Mar-2021 08:24:40 UTC] PHP Parse error:  syntax error, unexpected ''<a href="imprime_encomenda.ph' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/encomendas-list.php on line 368
+[12-Mar-2021 09:05:24 UTC] PHP Parse error:  syntax error, unexpected ''imgs/carrinho/fill.gif" heigh' (T_ENCAPSED_AND_WHITESPACE) in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 4775
+[13-Mar-2021 07:26:31 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 5092
+[13-Mar-2021 07:27:05 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 5092
+[13-Mar-2021 07:27:06 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 5092
+[13-Mar-2021 07:27:09 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 5092
+[13-Mar-2021 07:28:49 UTC] PHP Parse error:  syntax error, unexpected 'entrega_id' (T_STRING) in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 5091
+[13-Mar-2021 08:23:43 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function &pound;() in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php:2971
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php(4729): Carrinho::mostraPrecoEnc('7', 44.8)
+#1 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/imprime_encomenda.php(53): Carrinho::emailEncomenda('7', 1)
+#2 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 2971
+[13-Mar-2021 08:50:37 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting case (T_CASE) or default (T_DEFAULT) or '}' in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 8349
+[13-Mar-2021 08:51:58 UTC] PHP Parse error:  syntax error, unexpected '.', expecting ')' in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 5258
+[13-Mar-2021 11:34:35 UTC] PHP Fatal error:  Uncaught Error: Call to a member function emailEncomenda() on null in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/imprime_encomenda.php:53
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/imprime_encomenda.php on line 53
+[13-Mar-2021 11:45:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db7u9msfz8mqrn.l_pecas' doesn't exist in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php:7836
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php(7836): PDOStatement->execute()
+#1 /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php(7682): Carrinho::carrinhoDivs('dropdown', NULL)
+#2 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/encomendas/imprime_encomenda.php(53): Carrinho::emailEncomenda('7', 1)
+#3 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/helpers/carrinho.php on line 7836

@@ -1,0 +1,423 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php 
+
+$menu_sel='portes';
+$menu_sub_sel='zona_portes';
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "zona_portes_form")) {
+	if($_POST['nome'] != '') {
+		$insertSQL = "SELECT MAX(id) FROM zonas";
+		$rsInsert = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->execute();
+		$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+		DB::close();
+		
+		$max_id = $row_rsInsert["MAX(id)"]+1;
+		
+		$insertSQL = "INSERT INTO zonas (id, nome, portes_gratis1, peso_max) VALUES (:id, :nome, :portes_gratis1, :peso_max)";
+		$rsInsert = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->bindParam(':nome', $_POST["nome"], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':portes_gratis1', $_POST["portes_gratis1"], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':peso_max', $_POST["peso_max"], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':id', $max_id, PDO::PARAM_INT);	
+		$rsInsert->execute();
+		
+		$query_rsMetPagamento = "SELECT * FROM met_pagamento_$lingua_consola ORDER BY ordem ASC";
+		$rsMetPagamento = DB::getInstance()->prepare($query_rsMetPagamento);
+		$rsMetPagamento->execute();
+		$totalRows_rsMetPagamento = $rsMetPagamento->rowCount();
+		
+		if($totalRows_rsMetPagamento > 0) {
+			while($row_rsMetPagamento = $rsMetPagamento->fetch()) {
+				$id_metodo = $row_rsMetPagamento['id'];
+				
+				$query_rsP2 = "SELECT * FROM zonas_met_pagamento WHERE id_zona=:max_id AND id_metodo=:id_metodo";
+				$rsP2 = DB::getInstance()->prepare($query_rsP2);
+				$rsP2->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+				$rsP2->bindParam(':id_metodo', $id_metodo, PDO::PARAM_INT);
+				$rsP2->execute();
+				$row_rsP2 = $rsP2->fetch(PDO::FETCH_ASSOC);
+				$totalRows_rsP2 = $rsP2->rowCount();
+				
+				if(isset($_POST['met_pagamento_'.$id_metodo])) {
+					$portes = $_POST['valor_'.$id_metodo];
+					$tipo = $_POST['tipoP_'.$id_metodo];
+					
+					if($totalRows_rsP2 > 0) {
+						$id_zona_met = $row_rsP2['id'];
+						
+						$insertSQL = "UPDATE zonas_met_pagamento SET portes=:portes, tipo=:tipo WHERE id=:id_zona_met";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':portes', $portes, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':tipo', $tipo, PDO::PARAM_INT);
+						$rsInsert->bindParam(':id_zona_met', $id_zona_met, PDO::PARAM_INT);
+						$rsInsert->execute();
+					}
+					else {
+						$insertSQL = "INSERT INTO zonas_met_pagamento (id_zona, id_metodo, portes, tipo) VALUES (:max_id, :id_metodo, :portes, :tipo)";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+						$rsInsert->bindParam(':id_metodo', $id_metodo, PDO::PARAM_INT);
+						$rsInsert->bindParam(':portes', $portes, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':tipo', $tipo, PDO::PARAM_INT);
+						$rsInsert->execute();
+					}
+				}
+				else {
+					$id_zona_met = $row_rsP2['id'];
+					
+					$insertSQL = "DELETE FROM zonas_met_pagamento WHERE id=:id_zona_met";
+					$rsInsert = DB::getInstance()->prepare($insertSQL);
+					$rsInsert->bindParam(':id_zona_met', $id_zona_met, PDO::PARAM_INT);
+					$rsInsert->execute();
+				}
+			}
+		}
+		
+		$query_rsMetEnvio = "SELECT * FROM met_envio_$lingua_consola ORDER BY met_envio_$lingua_consola.ordem ASC";
+		$rsMetEnvio = DB::getInstance()->prepare($query_rsMetEnvio);
+		$rsMetEnvio->execute();
+		$totalRows_rsMetEnvio = $rsMetEnvio->rowCount();
+		
+		if($totalRows_rsMetEnvio > 0) {
+			while($row_rsMetEnvio = $rsMetEnvio->fetch()) {
+				$id_metodo = $row_rsMetEnvio['id'];
+				
+				$query_rsP2 = "SELECT * FROM zonas_met_envio WHERE id_zona=:max_id AND id_metodo=:id_metodo";
+				$rsP2 = DB::getInstance()->prepare($query_rsP2);
+				$rsP2->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+				$rsP2->bindParam(':id_metodo', $id_metodo, PDO::PARAM_INT);
+				$rsP2->execute();
+				$row_rsP2 = $rsP2->fetch(PDO::FETCH_ASSOC);
+				$totalRows_rsP2 = $rsP2->rowCount();
+				
+				if(isset($_POST['met_envio_'.$id_metodo])) {
+					$custo = $_POST['custo_'.$id_metodo];
+					
+					if($_POST['tabela_'.$id_metodo] != 0) {			
+						$portes=0;
+						$tipo=0;
+						$tabela=$_POST['tabela_'.$id_metodo];
+					}
+					else {						
+						$portes=$_POST['portes_'.$id_metodo];
+						$tipo=$_POST['tipoE_'.$id_metodo];
+						$tabela=0;
+					}
+					
+					if($totalRows_rsP2 > 0) {
+						$id_zona_met = $row_rsP2['id'];
+
+						if($portes<=0 || $portes=='') { 
+							$tipo=0; 
+						}
+						
+						$insertSQL = "UPDATE zonas_met_envio SET portes=:portes, custo=:custo, tipo=:tipo, tabela=:tabela WHERE id=:id_zona_met";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':portes', $portes, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':custo', $custo, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':tipo', $tipo, PDO::PARAM_INT);
+						$rsInsert->bindParam(':tabela', $tabela, PDO::PARAM_INT);
+						$rsInsert->bindParam(':id_zona_met', $id_zona_met, PDO::PARAM_INT);
+						$rsInsert->execute();
+					}
+					else {
+						if($portes<=0 || $portes=='') { 
+							$tipo=0; 
+						}
+						
+						$insertSQL = "INSERT INTO zonas_met_envio (id_zona, id_metodo, portes, custo, tipo, tabela) VALUES (:max_id, :id_metodo, :portes, :custo, :tipo, :tabela)";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':portes', $portes, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':custo', $custo, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':tipo', $tipo, PDO::PARAM_INT);
+						$rsInsert->bindParam(':tabela', $tabela, PDO::PARAM_INT);
+						$rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+						$rsInsert->bindParam(':id_metodo', $id_metodo, PDO::PARAM_INT);
+						$rsInsert->execute();
+					}
+				}
+				else {
+					$id_zona_met = $row_rsP2['id'];
+					
+					$insertSQL = "DELETE FROM zonas_met_envio WHERE id='$id_zona_met'";
+					$rsInsert = DB::getInstance()->prepare($insertSQL);
+					$rsInsert->bindParam(':id_zona_met', $id_zona_met, PDO::PARAM_INT);
+					$rsInsert->execute();
+				}
+			}
+		}
+
+		DB::close();
+		
+		header("Location: p_zona_portes-edit.php?id=".$max_id."&ins=1");
+	}
+}
+
+$query_rsMetPagamento = "SELECT * FROM met_pagamento_$lingua_consola WHERE visivel='1' ORDER BY ordem ASC";
+$rsMetPagamento = DB::getInstance()->prepare($query_rsMetPagamento);
+$rsMetPagamento->execute();
+$totalRows_rsMetPagamento = $rsMetPagamento->rowCount();
+
+$query_rsMetEnvio = "SELECT * FROM met_envio_$lingua_consola ORDER BY met_envio_$lingua_consola.ordem ASC";
+$rsMetEnvio = DB::getInstance()->prepare($query_rsMetEnvio);
+$rsMetEnvio->execute();
+$totalRows_rsMetEnvio = $rsMetEnvio->rowCount();
+DB::close();
+
+?>
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+<body class="<?php echo $body_info; ?>">
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+<div class="clearfix"> </div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content"> 
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> <?php echo $RecursosCons->RecursosCons['portes_page_title']; ?> </h3>
+      <div class="page-bar">
+        <ul class="page-breadcrumb">
+          <li> <i class="fa fa-home"></i> <a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?></a> </li>
+        </ul>
+      </div>
+      <!-- END PAGE HEADER--> 
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+        <div class="col-md-12">
+          <form id="zona_portes_form" name="zona_portes_form" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <div class="portlet">
+              <div class="portlet-title">
+                <div class="caption"> <i class="fa fa-pencil-square"></i><?php echo $RecursosCons->RecursosCons['novo_registo']; ?></div>
+                <div class="form-actions actions btn-set">
+                  <button type="button" name="back" class="btn default" onClick="document.location='p_zona_portes.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+                  <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar']; ?></button>
+                  <button type="submit" class="btn green"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar']; ?></button>
+                </div>
+              </div>
+              <div class="portlet-body">
+                <div class="form-body">
+                  <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <?php echo $RecursosCons->RecursosCons['msg_required']; ?> 
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="nome"><?php echo $RecursosCons->RecursosCons['nome_label']; ?>: <span class="required"> * </span> </label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="nome" id="nome" value="<?php echo $_POST['nome']; ?>" data-required="1">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="portes_gratis1"><?php echo $RecursosCons->RecursosCons['portes_gratis_label']; ?>: </label>
+                    <div class="col-md-2">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="portes_gratis1" id="portes_gratis1" value="<?php echo $_POST['portes_gratis1']; ?>">
+                        <span class="input-group-addon">&pound;</span> 
+                      </div>
+                    </div>
+                    <label class="col-md-2 control-label" for="peso_max"><?php echo $RecursosCons->RecursosCons['peso_max_portes']; ?>: </label>
+                    <div class="col-md-2">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="peso_max" id="peso_max" value="<?php echo $_POST['peso_max']; ?>" onkeyup="onlyDecimal(this)" onblur="onlyDecimal(this)">
+                        <span class="input-group-addon">kg</span> 
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top:20px;">
+                    <div class="col-md-12">
+                      <div class="col-md-2">&nbsp;</div>
+                      <div class="col-md-4">
+                        <div class="table-scrollable">
+                          <table class="table table-hover portes">
+                            <thead>
+                              <tr>
+                                <th width="60%"><?php echo $RecursosCons->RecursosCons['met_pagamento']; ?></th>
+                                <th style="text-align:center !important"><?php echo $RecursosCons->RecursosCons['custo_adicional']; ?></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php $cor="#EDEDED"; while($row_rsMetPagamento = $rsMetPagamento->fetch()) { if($cor=="#EDEDED") $cor="#CCCCCC"; else $cor="#EDEDED"; 
+														  	$id_metodo=$row_rsMetPagamento['id'];
+															
+																$query_rsP2 = "SELECT * FROM zonas_met_pagamento WHERE id_zona=:id_zona AND id_metodo=:id_metodo";
+														    $rsP2 = DB::getInstance()->prepare($query_rsP2);
+														    $rsP2->bindParam(':id_zona', $id, PDO::PARAM_INT);
+														    $rsP2->bindParam(':id_metodo', $id_metodo, PDO::PARAM_INT);
+														    $rsP2->execute();
+																$row_rsP2 = $rsP2->fetch(PDO::FETCH_ASSOC);
+														    $totalRows_rsP2 = $rsP2->rowCount();
+														    DB::close();
+														  	?>
+	                              <tr bgcolor="<?php echo $cor;?>">
+	                                <td style="vertical-align:middle"><label>
+	                                    <input type="checkbox" name="met_pagamento_<?php echo $row_rsMetPagamento['id']; ?>" id="met_pagamento_<?php echo $row_rsMetPagamento['id']; ?>" onclick="sel_met_pagamento(this, <?php echo $row_rsMetPagamento['id']; ?>);" <?php if($totalRows_rsP2>0){?>checked="checked"<?php }?> />
+	                                    <?php echo $row_rsMetPagamento['nome_interno']; ?></label></td>
+	                                <td align="center"><table border="0" cellspacing="0" cellpadding="0">
+	                                    <tr>
+	                                      <td align="left"><input class="form-control" name="valor_<?php echo $row_rsMetPagamento['id']; ?>" id="valor_<?php echo $row_rsMetPagamento['id']; ?>" type="text" value="<?php echo $row_rsP2['portes'];?>" onkeyup="onlyDecimal(this)" maxlength="8" <?php if($totalRows_rsP2==0){?>disabled="disabled"<?php }?> style="width:80px; text-align:right;" /></td>
+	                                      <td width="10">&nbsp;</td>
+	                                      <td><div class="md-radio">
+	                                          <input type="radio" id="tipoP_<?php echo $row_rsMetPagamento['id']; ?>_0" name="tipoP_<?php echo $row_rsMetPagamento['id']; ?>" class="md-radiobtn" value="1" checked>
+	                                          <label for="tipoP_<?php echo $row_rsMetPagamento['id']; ?>_0"> <span></span> <span class="check"></span> <span class="box"></span> € </label>
+	                                        </div>
+	                                        <div class="md-radio">
+	                                          <input type="radio" id="tipoP_<?php echo $row_rsMetPagamento['id']; ?>_1" name="tipoP_<?php echo $row_rsMetPagamento['id']; ?>" class="md-radiobtn" value="2">
+	                                          <label for="tipoP_<?php echo $row_rsMetPagamento['id']; ?>_1"> <span></span> <span class="check"></span> <span class="box"></span> % </label>
+	                                        </div></td>
+	                                    </tr>
+	                                  </table></td>
+	                              </tr>
+                              <?php } ?>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="table-scrollable">
+                          <table class="table table-hover portes">
+                            <thead>
+                              <tr>
+                                <th><?php echo $RecursosCons->RecursosCons['met_envio']; ?></th>
+                                <th width="10%" style="text-align:center !important"><?php echo $RecursosCons->RecursosCons['custo_fixo']; ?></th>
+                                <th width="40%" style="text-align:center !important"><?php echo $RecursosCons->RecursosCons['portes']; ?></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php $cor="#EDEDED"; while($row_rsMetEnvio = $rsMetEnvio->fetch()) { if($cor=="#EDEDED") $cor="#CCCCCC"; else $cor="#EDEDED"; 
+							  								$id_metodo=$row_rsMetEnvio['id'];
+								
+																$query_rsP2 = "SELECT * FROM zonas_met_envio WHERE id_zona=:id_zona AND id_metodo=:id_metodo";
+														    $rsP2 = DB::getInstance()->prepare($query_rsP2);
+														    $rsP2->bindParam(':id_zona', $id, PDO::PARAM_INT);
+														    $rsP2->bindParam(':id_metodo', $id_metodo, PDO::PARAM_INT);
+														    $rsP2->execute();
+																$row_rsP2 = $rsP2->fetch(PDO::FETCH_ASSOC);
+														    $totalRows_rsP2 = $rsP2->rowCount();
+																
+																$query_rsTabTransp = "SELECT * FROM transportadoras ORDER BY transportadoras.nome ASC";
+																$rsTabTransp = DB::getInstance()->prepare($query_rsTabTransp);
+																$rsTabTransp->execute();
+																$totalRows_rsTabTransp = $rsTabTransp->rowCount();
+																DB::close();
+															  ?>
+	                              <tr bgcolor="<?php echo $cor;?>">
+	                                <td style="vertical-align:middle"><label>
+	                                    <input type="checkbox" name="met_envio_<?php echo $row_rsMetEnvio['id']; ?>" id="met_envio_<?php echo $row_rsMetEnvio['id']; ?>" <?php if($totalRows_rsP2>0){?>checked="checked"<?php }?> onclick="sel_met_envio(this, <?php echo $row_rsMetEnvio['id']; ?>);" />
+	                                    <?php echo $row_rsMetEnvio['nome']; ?></label></td>
+	                                <td style="vertical-align:middle" align="center"><div class="input-group">
+	                                    <input name="custo_<?php echo $row_rsMetEnvio['id']; ?>" type="text" class="form-control" id="custo_<?php echo $row_rsMetEnvio['id']; ?>" value="<?php echo $row_rsP2['custo']; ?>" <?php if($totalRows_rsP2==0){?>disabled="disabled"<?php }?> style="width:90px; text-align:right;" maxlength="8" onkeyup="onlyDecimal(this)" onblur="onlyDecimal(this)" />
+	                                    <span class="input-group-addon">&pound;</span> </div></td>
+	                                <td align="right"><table border="0" cellspacing="0" cellpadding="0">
+	                                    <tr>
+	                                      <td><div class="input-group">
+	                                          <input name="portes_<?php echo $row_rsMetEnvio['id']; ?>" type="text" class="form-control" id="portes_<?php echo $row_rsMetEnvio['id']; ?>" value="<?php echo $row_rsP2['portes']; ?>" <?php if($totalRows_rsP2==0){?>disabled="disabled"<?php }?> style="width:90px; text-align:right;" maxlength="8" onkeyup="onlyDecimal(this)" onblur="onlyDecimal(this)" />
+	                                          <span class="input-group-addon">&pound;</span> </div></td>
+	                                      <td width="10">&nbsp;</td>
+	                                      <td height="35"><div class="md-radio">
+	                                          <input type="radio" id="tipoE_<?php echo $row_rsMetEnvio['id']; ?>_0" name="tipoE_<?php echo $row_rsMetEnvio['id']; ?>" class="md-radiobtn" value="1" checked>
+	                                          <label for="tipoE_<?php echo $row_rsMetEnvio['id']; ?>_0"> <span></span> <span class="check"></span> <span class="box"></span> <?php echo $RecursosCons->RecursosCons['p_uni_label']; ?></label>
+	                                        </div>
+	                                        <div class="md-radio">
+	                                          <input type="radio" id="tipoE_<?php echo $row_rsMetEnvio['id']; ?>_1" name="tipoE_<?php echo $row_rsMetEnvio['id']; ?>" class="md-radiobtn" value="2">
+	                                          <label for="tipoE_<?php echo $row_rsMetEnvio['id']; ?>_1"> <span></span> <span class="check"></span> <span class="box"></span> <?php echo $RecursosCons->RecursosCons['p_kg_label']; ?></label>
+	                                        </div></td>
+	                                    </tr>
+	                                  </table>
+	                                  <table border="0" cellspacing="0" cellpadding="0">
+	                                    <tr>
+	                                      <td align="left"><select name="tabela_<?php echo $row_rsMetEnvio['id']; ?>" id="tabela_<?php echo $row_rsMetEnvio['id']; ?>" style="width:200px;" class="form-control" <?php if($totalRows_rsP2==0){?>disabled="disabled"<?php }?>>
+	                                      <option value="0" <?php if (!(strcmp(0, $row_rsP2['tabela']))) {echo "selected=\"selected\"";} ?>></option>
+	                                      <?php while($row_rsTabTransp = $rsTabTransp->fetch()) { ?>
+	                                      <option value="<?php echo $row_rsTabTransp['id']?>" <?php if (!(strcmp($row_rsTabTransp['id'], $row_rsP2['tabela']))) {echo "selected=\"selected\"";} ?>><?php echo $row_rsTabTransp['nome']?></option>
+	                                      <?php } ?>
+	                                    </select></td>
+	                                    </tr>
+	                                  </table></td>
+	                              </tr>
+                              <?php } ?>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="MM_insert" value="zona_portes_form" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+  </div>
+  <!-- END CONTENT -->
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+</div>
+<!-- END CONTAINER -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+<!-- LINGUA PORTUGUESA --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script> 
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+<script src="form-validation.js"></script> 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+jQuery(document).ready(function() {    
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	QuickSidebar.init(); // init quick sidebar
+	Demo.init(); // init demo features
+	FormValidation.init();
+});
+</script> 
+<script type="text/javascript">
+function sel_met_pagamento(obj, id) {
+	if(obj.checked) {
+		document.getElementById('valor_'+id).value=document.getElementById('valor_'+id).defaultValue;
+		document.getElementById('valor_'+id).disabled=false;
+		document.getElementById('valor_'+id).focus();
+	}
+	else {
+		document.getElementById('valor_'+id).value='';
+		document.getElementById('valor_'+id).disabled=true;
+	}
+}
+
+function sel_met_envio(obj, id) {
+	if(obj.checked) {
+		document.getElementById('portes_'+id).value=document.getElementById('portes_'+id).defaultValue;
+		document.getElementById('portes_'+id).disabled=false;
+		document.getElementById('custo_'+id).value=document.getElementById('custo_'+id).defaultValue;
+		document.getElementById('custo_'+id).disabled=false;
+		document.getElementById('tabela_'+id).disabled=false;
+		document.getElementById('custo_'+id).focus();
+	}
+	else {
+		document.getElementById('portes_'+id).value='';
+		document.getElementById('portes_'+id).disabled=true;
+		document.getElementById('custo_'+id).value='';
+		document.getElementById('custo_'+id).disabled=true;
+		document.getElementById('tabela_'+id).disabled=true;
+	}
+}
+</script>
+</body>
+<!-- END BODY -->
+</html>

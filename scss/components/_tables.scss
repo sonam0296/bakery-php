@@ -1,0 +1,274 @@
+.custom_table{
+	display: table;
+    table-layout: fixed;
+    width: 100%;
+
+	overflow: hidden;
+	
+	& .thead,
+	& .tbody,
+	& .tfoot{
+		display: table-row;
+		vertical-align: top;
+	}
+
+	& .table-tr{
+		display: table;
+	    table-layout: fixed;
+	    width: 100%;
+	}
+
+	& .table-th, 
+	& .table-td{
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	& .thead,
+	& .tfoot{
+		background:$primary-color;
+
+		& .table-th, 
+		& .table-td{
+			display: table-cell;
+			vertical-align: middle;
+
+			@include textos(list_subtit, $white, null, null, 900);
+
+			padding:1.4rem 1.5rem;
+			vertical-align: middle;
+		}
+
+		& .sort{
+			cursor:pointer;
+			
+			& i{
+				@include displayInline(middle);
+				
+				margin-left:10px;
+				margin-top: -3px;
+
+				width: 13px;
+				height: 13px;
+
+				background-image:url('../imgs/elem/sort.png');
+				background-position: 0 0;
+				background-size: cover;
+				background-repeat: no-repeat;
+
+				@include Animationcss(none);
+			}
+			&.desc i{
+				background-position: 50% 0;
+			}
+			&.asc i{
+				background-position: 100% 0;
+			}
+			
+			&:hover{
+				color:$secondary-color;
+			}
+		}
+	}
+
+	
+	& .tbody {
+		& .table-tr{
+			position: relative;
+			background-color:$light-gray;		
+			@include Animationcss(background-color 0.3s linear);
+
+			&:hover{
+				background-color:$white;
+			}
+		}
+
+		& .table-td{
+			color: $primary-color;
+			font-weight:400;
+		 	padding:1.5rem;	
+
+		 	position: relative;
+
+			@include textos(list_tit, null, null, null, 400);
+			text-transform: none;
+
+			vertical-align: middle;
+			height: auto;	    
+
+			border-bottom: 2px solid $medium-gray;
+		
+		    &:before{
+				content:attr(data-tit);
+		    	display: none;
+		    	padding-right: 5px;
+
+				font-weight:700;
+				line-height: 20px;
+		    }
+
+		    & a:not(.button){
+		    	color: $primary-color;
+				font-weight:600;
+
+		    	&:hover{
+		    		color: $secondary-color;
+		    	}
+		    }
+
+		    & progress{
+				display: block;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+
+				width: 100%;
+				height: 2px;
+
+				z-index: 5;
+
+				color: $success-color;
+				
+				border: none;
+				border-radius: 0;
+				overflow: hidden;
+		
+				&[value="0"] {
+				   opacity: 0;
+				}
+				&::-webkit-progress-bar {
+				  background: $medium-gray;
+				}
+
+				&::-webkit-progress-value {
+				  background-color: $success-color;
+				}
+
+				&::-moz-progress-bar {
+				  background-color: $success-color;
+				}
+
+				&.upl_error{
+					color: $error-color;
+
+					&::-webkit-progress-value {
+					  background-color: $error-color;
+					}
+
+					&::-moz-progress-bar {
+					  background-color: $error-color;
+					}
+				}
+
+
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				appearance: none;		
+			}
+
+		}
+	}
+	
+
+	
+	@include breakpoint(medium down){
+		border-radius: 0;
+
+		& .thead{
+			display: none;
+		}
+		& .tbody {
+			& .table-tr{
+				@include displayInline(top);
+				padding:2rem 0;
+
+				width: 50%;
+				text-align: center;		
+				
+				margin-bottom:10px;
+
+				&:hover{
+					background:$dark-gray;
+				}
+			}
+
+			& .table-td{
+				display: inline-block !important;
+				vertical-align: top;
+				
+				padding:0.5rem 1rem;
+
+				border-bottom: 0;
+
+				width: 100% !important;
+
+				&:before{
+					display: inline-block;
+				}
+			}
+		}
+	
+
+		&.padded .tbody .table-tr{
+			width: calc(50% - 5px);
+
+			&:nth-child(odd){
+				margin-right: 5px;
+			}
+			&:nth-child(even){
+				margin-left: 5px;
+			}
+		}
+		&.bordered .tbody{
+			& .table-tr{
+				border: 1px solid $dark-gray;
+
+				&:nth-child(even){
+					border-left: 0;
+				}
+			}
+			& .table-td{
+				border-bottom: 1px solid $dark-gray;
+
+				&:last-child{
+					border-bottom:0;
+				}
+			}
+		}
+		&.bordered.padded .tbody tr{
+			border: 1px solid $dark-gray;
+
+			&:nth-child(even){
+				border-left: 1px solid $dark-gray;
+			}
+		}
+	}
+	
+	@include breakpoint(xsmall down){
+		& .tbody .table-tr{
+			width: 100%;
+		}
+		
+		&.padded .tbody .table-tr{
+			width: 100%;
+
+			&:nth-child(odd){
+				margin-right: 0px;
+			}
+			&:nth-child(even){
+				margin-left: 0px;
+			}
+		}
+		&.bordered .tbody{
+			& .table-tr{
+				&:nth-child(even){
+					border-left: 1px solid $dark-gray;
+				}
+			}
+		}
+	}
+}
+.table-scrollable{
+	max-width: 100%; 
+	overflow-y: auto;
+}

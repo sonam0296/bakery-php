@@ -1,0 +1,195 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php 
+
+$menu_sel='store';
+$menu_sub_sel='';
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "categorias_form")) {
+		$insertSQL = "SELECT MAX(id) FROM store_locater";
+		$rsInsert = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->execute();
+		$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+		
+		$max_id = $row_rsInsert["MAX(id)"]+1;
+	
+		$insertSQL = "INSERT INTO store_locater ( id, b_name, Sreet,city,country,pincode, phone, email, visivel ) VALUES ('".$max_id."' , '".$_POST['b_name']."', '".$_POST['Sreet']."', '".$_POST['city']."','".$_POST['country']."','".$_POST['pincode']."', '".$_POST['phone']."', '".$_POST['email']."',0)";
+		$rsInsert = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->execute();
+		
+
+		DB::close();
+
+		alteraSessions('categorias');
+
+		header("Location: store-edit.php?env=1&id=".$max_id);
+	
+}
+
+
+?>
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+<body class="<?php echo $body_info; ?>">
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+<div class="clearfix"> </div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content"> 
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> Store <small><?php echo $RecursosCons->RecursosCons['inserir_registo']; ?></small> </h3>
+			<div class="page-bar">
+				<ul class="page-breadcrumb">
+					<li>
+						<i class="fa fa-home"></i>
+						<a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?></a>
+						<i class="fa fa-angle-right"></i>
+					</li>
+					<li>
+						<a href="produtos.php"><?php echo $RecursosCons->RecursosCons['produtos']; ?></a>
+						<i class="fa fa-angle-right"></i>
+					</li>
+					<li>
+						<a href="store.php">Store <i class="fa fa-angle-right"></i></a>
+					</li>
+					<li>
+						<a href="javascript:"><?php echo $RecursosCons->RecursosCons['inserir_registo']; ?></a>
+					</li>
+				</ul>
+			</div>
+      <!-- END PAGE HEADER--> 
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+        <div class="col-md-12">
+          <form id="categorias_form" name="categorias_form" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <div class="portlet">
+              <div class="portlet-title">
+                <div class="caption"> <i class="fa fa-pencil-square"></i>Store - New Registration</div>
+                <div class="form-actions actions btn-set">
+                  <button type="button" name="back" class="btn default" onClick="document.location='store.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+                  <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar']; ?></button>
+                  <button type="submit" class="btn green"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar']; ?></button>
+                </div>
+              </div>
+              <div class="portlet-body">
+                <div class="form-body">
+                  <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <?php echo $RecursosCons->RecursosCons['msg_required']; ?> </div>                  
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="b_name"><?php echo $RecursosCons->RecursosCons['nome_label']; ?>: <span class="required"> * </span></label>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="b_name" id="b_name" value="<?php echo $_POST['nome']; ?>">
+                    </div>
+                  </div> 
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="Sreet">Address: </label>
+                    <div class="col-md-6">
+                      <textarea class="form-control" rows="3" id="Sreet" name="Sreet"><?php echo $row_rsP['Sreet']; ?></textarea>
+                    </div>
+                  </div>  
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="city">City: <span class="required"> * </span></label>
+                      <div class="col-md-3">
+                        <input type="text" class="form-control" name="city" id="city" value="<?php echo $row_rsP['city']; ?>">
+                      </div>
+
+                      <label class="col-md-2 control-label" for="country">Country: <span class="required"> * </span></label>
+                      <div class="col-md-3">
+                        <?php
+                        $query_rsP = "SELECT * FROM paises";
+                        $rsP = DB::getInstance()->prepare($query_rsP);  
+                        $rsP->execute();
+                        $row_rsP = $rsP->fetchAll();
+                        $totalRows_rsP = $rsP->rowCount();
+                        ?>
+
+                        <select name="country" id="country">
+                          <?php foreach ($row_rsP as $value) { ?>
+                          <option><?php echo $value["nome"]; ?></option>
+                        <?php } ?>
+                        </select>
+                      </div>
+                  </div>  
+
+
+                        <div class="form-group">
+                          <label class="col-md-2 control-label" for="phone">Phone Number: <span class="required"> * </span></label>
+                          <div class="col-md-3">
+                            <input type="number" class="form-control" name="phone" id="phone" value="<?php echo $row_rsP['phone']; ?>">
+                          </div>
+                          <label class="col-md-2 control-label" for="city">Pincode: <span class="required"> * </span></label>
+                <div class="col-md-3">
+                  <input type="text" class="form-control" name="pincode" id="pincode" value="<?php echo $row_rsP['pincode']; ?>">
+                </div>
+                      </div>
+
+                   <div class="form-group">
+                    <label class="col-md-2 control-label" for="email">Email Id: <span class="required"> * </span></label>
+                    <div class="col-md-3">
+                      <input type="email" class="form-control" name="email" id="email" value="<?php echo $_POST['nome']; ?>">
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="MM_insert" value="categorias_form" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+  </div>
+  <!-- END CONTENT -->
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+</div>
+<!-- END CONTAINER -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckeditor/ckeditor.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.js"></script> 
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+<script src="form-validation.js"></script> 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+jQuery(document).ready(function() {    
+   Metronic.init(); // init metronic core components
+   Layout.init(); // init current layout
+   QuickSidebar.init(); // init quick sidebar
+   Demo.init(); // init demo features
+   FormValidation.init();
+});
+</script> 
+<script type="text/javascript">
+CKEDITOR.replace('Sreet', {
+  filebrowserBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html',
+  filebrowserImageBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Images',
+  filebrowserFlashBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Flash',
+  filebrowserUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+  filebrowserImageUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+  filebrowserFlashUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+  toolbar : "Basic2"
+});
+</script>
+</body>
+<!-- END BODY -->
+</html>

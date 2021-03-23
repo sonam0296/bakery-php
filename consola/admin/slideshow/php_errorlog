@@ -1,0 +1,20 @@
+[22-Feb-2021 12:49:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db7u9msfz8mqrn.banners_h_' doesn't exist in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-list.php:181
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-list.php(181): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-list.php on line 181
+[22-Feb-2021 12:49:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db7u9msfz8mqrn.banners_h_' doesn't exist in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-list.php:181
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-list.php(181): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-list.php on line 181
+[26-Feb-2021 05:43:59 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '6' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-insert.php:44
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-insert.php(44): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-insert.php on line 44
+[26-Feb-2021 05:44:09 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '6' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-insert.php:44
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-insert.php(44): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/slideshow/slideshow-insert.php on line 44

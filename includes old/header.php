@@ -1,0 +1,465 @@
+<?php
+
+if(tableExists(DB::getInstance(), "clientes")) {
+  $id_cliente = 0;
+
+  if(!empty($row_rsCliente)) {
+    $id_cliente = $row_rsCliente['id'];
+
+    if(substr_count($row_rsCliente['nome'], ' ') >= 2) {
+      $parts = explode(' ', $row_rsCliente['nome']);
+      $firstname = array_shift($parts);
+      $lastname = array_pop($parts);  
+      $login_txt = $firstname." ".$lastname;
+    }else {
+      $login_txt = $row_rsCliente['nome'];
+    }
+  }
+}
+
+$nome_lingua = arraySearch($GLOBALS['divs_linguas'], "sufixo", $lang, "nome");
+$nome_moeda = $moeda;
+
+$lang_txt = "";
+if($nome_moeda || $nome_lingua) {
+  if($nome_lingua) {
+    $lang_txt .= $nome_lingua;
+  }
+  if($nome_lingua && $nome_moeda) {
+    $lang_txt .= " | ";
+  }
+  if($nome_moeda) {
+    $lang_txt .= $nome_moeda;
+  }
+}
+
+$row_rsContactos = $GLOBALS['divs_contactos'];
+if($GLOBALS['divs_contactos']['info']["id"]) {
+  $row_rsContactos = $GLOBALS['divs_contactos']['info'];
+}
+
+$paginasInfo = $GLOBALS['divs_paginas'];
+$pagCookies = $paginasInfo[2]['info'];
+$pagPolitica = $paginasInfo[3]['info'];
+$pagRal = $paginasInfo[4]['info'];
+$pagSobre = $paginasInfo[5]['info'];
+$pagTermos = $paginasInfo[6]['info'];
+$pagdelivery_return = $paginasInfo[7]['info'];
+$pagMetodos = $paginasInfo[8]['info'];
+
+$pagwhoweare = $paginasInfo[9]['info'];
+
+//exit();
+
+$id = 1;
+$query_rsP = "SELECT * FROM homepage".$extensao." WHERE id = :id";
+$rsP = DB::getInstance()->prepare($query_rsP);
+$rsP->bindParam(':id', $id, PDO::PARAM_INT);	
+$rsP->execute();
+$row_rsP = $rsP->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsP = $rsP->rowCount();
+DB::close();
+
+$query_rsLang = "SELECT * FROM linguas";
+$rsLang = DB::getInstance()->prepare($query_rsLang);
+$rsLang->bindParam(':id', $id, PDO::PARAM_INT);	
+$rsLang->execute();
+$row_rsLang = $rsLang->fetchAll(PDO::FETCH_ASSOC);
+$totalRows_rsLang = $rsLang->rowCount();
+DB::close();
+
+?>
+      
+<header class="div_100 header">
+  <div class="div_100 top show-for-medium">
+    <div class="row align-middle">
+	
+	<!--CHANGE LANGUAGE-->
+	
+      <?php //if(!empty($GLOBALS['divs_linguas']) && count(array_filter($GLOBALS['divs_linguas'])) > $numberLang) { ?>
+        <!--<div class="column small-3">
+          <div class="wrapper_linguas">
+            <ul class="actions header_linguas dropdown menu" dropdown accordion-absolute accordion-icon="icon-down">
+              <li accordion-item>
+                <a href="javascript:;" class="nav-linguas icon-arrow-down" onclick="menuLinguas()" accordion-title><img class="lg-atual" src="<?php //echo ROOTPATH_HTTP.'imgs/elem/'.$lang.'.png'; ?>" title="<?php //echo $nome_lingua; ?>" ><?php //echo $nome_lingua; ?></a>
+                <ul class="menu" accordion-nested>
+                  <?php //foreach ($GLOBALS['divs_linguas'] as $lingua_cli) {
+                    //$linguas_link = ${'pagina_'.$lingua_cli['sufixo']}."lg=".$lingua_cli['id'];
+                    //$nome_ling = $lingua_cli['nome'];
+                    //if ($extensao!="_".$lingua_cli['sufixo']) { ?>
+                      <li accordion-item><a class="nav-linguas" href="<?php //echo $linguas_link; ?>" accordion-title><img src="<?php //echo ROOTPATH_HTTP.'imgs/elem/'.$lingua_cli['sufixo'].'.png'; ?>"><?php //echo $lingua_cli['nome']?></a></li>
+                    <?php //}
+                  //} ?>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>-->
+      <?php //} ?>
+	  
+	  <?php if($totalRows_rsLang > 0) { ?>
+        <div class="column small-3">
+          <div class="wrapper_linguas">
+            <ul class="actions header_linguas dropdown menu" dropdown accordion-absolute accordion-icon="icon-down">
+              <li accordion-item>
+                <a href="javascript:;" class="nav-linguas icon-arrow-down" onclick="menuLinguas()" accordion-title><img class="lg-atual" src="<?php echo ROOTPATH_HTTP.'imgs/elem/'.$lang.'.png'; ?>" title="<?php echo $nome_lingua; ?>" ><?php echo $nome_lingua; ?></a>
+                <ul class="menu" accordion-nested>
+                  <?php foreach ($row_rsLang as $lingua_cli) {
+                    $linguas_link = ${'pagina_'.$lingua_cli['sufixo']}."lg=".$lingua_cli['id'];
+                    $nome_ling = $lingua_cli['nome'];
+                    if ($extensao!="_".$lingua_cli['sufixo']) { ?>
+                      <li accordion-item><a class="nav-linguas" href="<?php echo $linguas_link; ?>" accordion-title><img src="<?php echo ROOTPATH_HTTP.'imgs/elem/'.$lingua_cli['sufixo'].'.png'; ?>"><?php echo $lingua_cli['nome']?></a></li>
+                    <?php }
+                  } ?>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      <?php } ?>
+	
+      <!--LEFT TEXT-->
+      <?php //if($row_rsP['titulo1'] || $row_rsP['titulo2'] || $row_rsP['titulo3']){ ?>
+        <div class="column small-6 text-center">
+      		<div class="MagicScroll headline text-center" data-options="items: 1; autoplay: 3000; width:100%;  height: auto; arrows: off;">
+      			<?php if($row_rsP['titulo1']){ ?><div class="txt_delivery"><a href="<?php echo $row_rsP['titulo_link1']; ?>" title=""><?php echo $row_rsP['titulo1']; ?></a></div><?php } ?>
+      			<?php if($row_rsP['titulo2']){ ?><div class="txt_delivery"><a href="<?php echo $row_rsP['titulo_link2']; ?>" title=""><?php echo $row_rsP['titulo2']; ?></a></div><?php } ?>
+      			<?php if($row_rsP['titulo3']){ ?><div class="txt_delivery"><?php echo $row_rsP['titulo3']; ?></div><?php } ?>
+      		</div>
+        </div>
+      <?php //} ?>
+
+       <!--Links-->
+	   <?php 
+	   if($row_rsP['texto_header']){ ?>
+      <div class="column small-3 text-right">
+	  
+	    <h3 class="uppercase"><a class="telephone"></a><?php echo $Recursos->Resources["apoio_ao_cliente"]; ?> <a href="tel:<?php echo $GLOBALS['divs_contactos'][1]['info']['telefone']; ?>"><span class="pnumber"><?php echo $GLOBALS['divs_contactos'][1]['info']['telefone']; ?></span></a></h3>
+       <!-- <a href="<?php //echo get_meta_link(2); ?>" class="list_txt links"><?php //echo $Recursos->Resources["contactos"]; ?></a>
+       <a href="<?php //echo $pagSobre['url']; ?>" class="list_txt links"><?php //echo $pagSobre['nome']; ?></a>
+        <a href="<?php //echo get_meta_link(2); ?>" class="list_txt links"><?php //echo $Recursos->Resources["orcamento"]; ?></a>-->
+      </div>
+	   <?php } ?>
+
+    </div>
+  </div>
+  <div class="div_100 middle">
+    <div class="row align-middle" style="position: static;">
+
+      <div class="column shrink hide-for-medium menu-icon">
+        <a href="javascript:;" class="menu_holder icons nav-trigger"><span></span></a>
+      </div>
+
+      <div class="column open_menu_hidden">
+        <!--<div class="header_help">
+          <a href="tel:<?php //echo $row_rsContactos['telefone']; ?>" class="uppercase"><span><?php //echo $Recursos->Resources["txt_help"]; ?></span><?php //echo $row_rsContactos['telefone']; ?></a>
+        </div> -->
+		
+		    <a href="index.php" class="logo" data-ajaxurl="<?php echo ROOTPATH_HTTP; ?>includes/pages/index.php" data-remote="false">
+          <img height="100px" width="150px" src="<?php echo ROOTPATH_HTTP; ?>imgs/elem/bismillahBakery.png" width="100%" />
+        </a>
+      </div>
+
+      <div class="column shrink medium-expand">
+        <!-- SEARCH SECTION ____ DELETE WHAT YOU DONT USE-->
+      <!--<a href="javascript:;" class="column shrink search-btn search-trigger actions">
+        <span class="icon-search"></span>
+      </a>-->
+	   <?php if(ECOMMERCE_ATIVO == 1) { ?>
+      <form class="column shrink search_form_head" action="<?php echo ROOTPATH_HTTP_LANG; ?>pesquisa.php" method="get" autocomplete="off" novalidate id="pesq_form" name="pesq_form" onsubmit="return validaForm('pesq_form')">
+        <div class="inpt_holder no_marg simple icon-pesq">
+          <input class="inpt" name="search" type="search" value="<?php echo $_GET['pesq']; ?>" placeholder="<?php echo $Recursos->Resources["pesquisa_msg"]; ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />        
+          <button type="submit" class="icon-search"></button>
+        </div>
+        <div class="search-result">
+        </div>
+      </form>
+      <?php }else{ ?>
+      <form class="column shrink search_form" action="<?php echo ROOTPATH_HTTP_LANG; ?>pesquisa.php" method="get" autocomplete="off" novalidate id="pesq_form" name="pesq_form" onsubmit="return validaForm('pesq_form')">
+        <div class="inpt_holder no_marg simple icon-pesq">
+          <input class="inpt" name="search" type="search" placeholder="<?php echo $Recursos->Resources["pesquisa_msg"]; ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />   
+          <button type="submit" class="icon-search"></button>
+        </div>
+      </form> 
+      <?php } ?>
+      <!-- SEARCH SECTION ____ DELETE WHAT YOU DONT USE-->
+      </div>
+
+       <!--LOGIN-->
+      <div class="column text-right login-wrap open_menu_hidden">
+        <?php if(ECOMMERCE_ATIVO == 1) { ?>
+          <div class="login_header show-for-medium">
+            <?php if($row_rsCliente != 0) { ?>
+              <a href="<?php echo ROOTPATH_HTTP_LANG; ?>logout.php" class="logout"><?php echo file_get_contents(ROOTPATH."imgs/elem/logout.svg"); ?></a><!-- 
+              --><span class="textos separator">|</span><!--
+              --><a href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada.php" class="<?php if($menu_sel=="area-reservada") echo "sel"; ?>"><?php echo $Recursos->Resources["bem_vindo"]." ".$login_txt; ?></a>
+            <?php } else { ?>
+                <a href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php" class="<?php if($menu_sel=="login") echo " sel"; ?>"><?php echo $Recursos->Resources["login"]; ?></a><!-- 
+              --><span class="textos separator">|</span><!--
+              --><a href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php?anchor=form_regista" class="<?php if($menu_sel=="registo") echo " sel"; ?>"><?php echo $Recursos->Resources["criar_registo"]; ?></a>
+            <?php } ?>
+          </div>
+          <div class="search-icon-top hide-for-medium">
+            <a href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php" class="<?php if($menu_sel=="login") echo " sel"; ?>">
+              <img width="20" src="<?php echo ROOTPATH_HTTP; ?>imgs/svg/search.svg" alt="shield">
+            </a>
+          </div>
+          <div class="user-icon">
+            <a href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php" class="<?php if($menu_sel=="login") echo " sel"; ?>">
+              <img src="<?php echo ROOTPATH_HTTP; ?>imgs/svg/user.svg" alt="shield">
+            </a>
+          </div>
+        <?php } ?>
+        <?php
+          $user_is_logged = $class_user->isLogged(); 
+          if($user_is_logged != 0): ?>
+            <a class="fav_btn links_top text-center show-for-medium" href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php" id="favs">
+              <i class="icon-favorite">
+                <span class="count"><small>0</small></span>
+              </i>
+            </a>
+          <?php endif ?>
+        <div class="cart-sec">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 90.06"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path id="Caminho_10035" data-name="Caminho 10035" d="M0,0V90.06l29.17-9.42L60,90.06,60,0Z"/></g></g></svg>
+           <a href="<?php echo ROOTPATH_HTTP_LANG; ?>carrinho.php" class="cart-btn text-center" data-sel="carrinho"> 
+              <i class="icon-bag"></i>
+              <span class="count"><small>0</small></span>
+            </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="div_100 bottom show-for-medium to_sticky head_menu" id="header">
+    <div class="row align-middle">
+      
+      <ul  class="column navbar-nav">
+         <li class="menu-item show-for-medium">
+              <a href="javascript:;" class="nav-link uppercase <?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' active';?> <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">home</a>
+        </li>
+        
+        <?php
+		if(!empty($GLOBALS['divs_categorias'])){ 
+      
+          foreach($GLOBALS['divs_categorias'] as $cats) {
+
+            $subs_cats = $cats['subs'];
+            if($cats['info']){
+                $cats = $cats['info'];
+            }
+
+      ?>
+            <li class="menu-item show-for-medium">
+              <a href="<?php echo ROOTPATH_HTTP_LANG.$cats['url']; ?>" class="nav-link uppercase <?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' active';?> <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>"><?php echo $cats["nome"]; ?></a>
+            </li>
+
+      <?php
+
+        }
+      }
+
+       ?>
+
+        <li class="menu-item show-for-medium">
+              <a href="javascript:;" class="nav-link uppercase  <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">Frenchise</a>
+  
+           <!--  <ul>
+              <li class="menu-item show-for-medium">
+                <a href="javascript:;" class="nav-link uppercase <?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' active';?> <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">WHY CHOOSE US</a>
+              </li>
+
+              <li class="menu-item show-for-medium">
+                <a href="javascript:;" class="nav-link uppercase <?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' active';?> <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">WHAT WE LOOK</a>
+              </li>
+
+              <li class="menu-item show-for-medium">
+                <a href="javascript:;" class="nav-link uppercase <?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' active';?> <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">THE PROCESS</a>
+              </li>
+            </ul> -->
+        </li>
+
+         <li class="menu-item show-for-medium">
+              <a href="javascript:;" class="nav-link uppercase <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">MY ACCOUNT</a>
+        </li>
+
+        <li class="menu-item show-for-medium">
+              <a href="store-locater.php" class="nav-link uppercase <?php if(!empty($subs_cats)) echo "header_drop"; ?>" data-id="<?php echo $cats['id']; ?>">STORE LOCATER</a>
+        </li>
+      </ul>
+       <h1 style="color: red; font-size: 20px;"><?php if($_SESSION["store_update_name"] == "") { echo $_SESSION["store_name"]; } else { echo $_SESSION["store_update_name"]; } ?></h1>
+      <div class="chat-wrap">
+        <a href="consultorioonline.php" class="chat-btn" title="">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.53 54.38"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path d="M30.26,11.82A1.19,1.19,0,1,0,31.45,13,1.18,1.18,0,0,0,30.26,11.82Z"/><path d="M10.64,33.1a1.18,1.18,0,1,0-1.18-1.18A1.18,1.18,0,0,0,10.64,33.1Z"/><path d="M39.72,0c-10.64,0-19.38,7.34-20,16.58C9.53,17.09,0,24.4,0,34.28A16.51,16.51,0,0,0,4.61,45.59a7.18,7.18,0,0,1-1.9,6.77,1.18,1.18,0,0,0,.84,2,13,13,0,0,0,9-3.65A27,27,0,0,0,20.81,52c10.64,0,19.37-7.34,20.05-16.58A26.76,26.76,0,0,0,48,34.18a13,13,0,0,0,9,3.65,1.19,1.19,0,0,0,.84-2A7.16,7.16,0,0,1,55.92,29a16.55,16.55,0,0,0,4.61-11.31C60.53,7.46,50.26,0,39.72,0ZM20.81,49.65a24.09,24.09,0,0,1-8.1-1.39,1.17,1.17,0,0,0-1.31.3,10.71,10.71,0,0,1-5.31,3.15,9.54,9.54,0,0,0,.72-7,1.1,1.1,0,0,0-.29-.5,14.21,14.21,0,0,1-4.16-9.89c0-8.33,8.45-15.36,18.45-15.36,9.44,0,17.73,6.56,17.73,15.36C38.54,42.76,30.58,49.65,20.81,49.65ZM54,27.62a1.18,1.18,0,0,0-.28.5,9.54,9.54,0,0,0,.72,7A10.66,10.66,0,0,1,49.13,32a1.16,1.16,0,0,0-1.31-.3,23.31,23.31,0,0,1-7,1.36,17,17,0,0,0-6.39-11.79H49.89a1.18,1.18,0,1,0,0-2.36h-19A21.91,21.91,0,0,0,22,16.59c.68-7.94,8.35-14.23,17.68-14.23,10,0,18.44,7,18.44,15.37A14.16,14.16,0,0,1,54,27.62Z"/><path d="M30.26,30.74H15.37a1.18,1.18,0,0,0,0,2.36H30.26a1.18,1.18,0,1,0,0-2.36Z"/><path d="M30.26,37.83H10.64a1.18,1.18,0,1,0,0,2.36H30.26a1.18,1.18,0,1,0,0-2.36Z"/><path d="M49.89,11.82H35a1.19,1.19,0,0,0,0,2.37h14.9a1.19,1.19,0,0,0,0-2.37Z"/></g></g></svg>
+          <span><?php echo strtoupper($Recursos->Resources["online_office"]); ?></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu_desktop header_menu_drop">
+        
+  </div>
+</header>
+
+
+<?php /* if ECOMMERCE == 0  ?>
+<form class="search_form" action="<?php echo ROOTPATH_HTTP_LANG; ?>pesquisa.php" method="get" autocomplete="off" novalidate id="pesq_form" name="pesq_form" onsubmit="return validaForm('pesq_form')">
+  <div class="inpt_holder no_marg simple icon-pesq">
+    <input class="inpt" name="search" type="search" placeholder="<?php echo $Recursos->Resources["pesquisa_msg"]; ?>..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />    
+    <button type="submit" class="icon-search"></button>
+  </div>
+</form> 
+
+<?php /* if ECOMMERCE == 1  ?>
+<form class="search_form_head" action="<?php echo ROOTPATH_HTTP_LANG; ?>loja" method="get" autocomplete="off" novalidate id="pesq_form" name="pesq_form" onsubmit="return validaForm('pesq_form')">
+  <div class="inpt_holder no_marg simple icon-pesq">
+    <input class="inpt" name="pesq" type="pesq" value="<?php echo $_GET['pesq']; ?>" placeholder="<?php echo $Recursos->Resources["pesquisa_msg"]; ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />        
+    <button type="submit" class="icon-search"></button>
+  </div>
+</form>
+<?php /* In dev delete comments and other form! :D */?>
+            
+<?php if(PESQ_TYPE == 1) {?>
+  <div class="search">
+    <button id="btn-search-close" class="close-button btn-search-close" onclick="closeSearch();" aria-label="Close search form">&times;</button>
+    <div class="div_100 search_inner search_inner-up">
+      <form class="search_form" action="<?php echo ROOTPATH_HTTP_LANG; ?>pesquisa.php" method="get" autocomplete="off" novalidate id="pesq_form" name="pesq_form" onsubmit="return validaForm('pesq_form')">
+        <input class="search_input" name="search" type="search" placeholder="<?php echo $Recursos->Resources["pesquisa_msg"]; ?>..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <span class="search_info"><?php echo $Recursos->Resources["pesquisa_txt"]; ?></span>
+      </form>
+    </div>
+    <div class="div_100 search_inner search_inner-down"></div>
+  </div>
+<?php } ?>
+
+<nav id="menu" class="menu_mobile left-side">
+  <div class="menu_mobile_scroller">
+    <?php if(ECOMMERCE_ATIVO == 1) { ?>
+      <!-- <div class="div_100 section">
+        <?php if($row_rsCliente == 0) { ?>
+          <a href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php" class="textos"><?php echo $Recursos->Resources["iniciar_sessao"]; ?></a>
+        <?php } else { ?>
+          <a href="<?php echo ROOTPATH_HTTP_LANG; ?>logout.php" class="textos"><?php echo $Recursos->Resources["logout"]; ?></a>
+        <?php } ?>
+      </div> -->
+    <?php } ?> 
+
+    <?php if(!empty($GLOBALS['divs_categorias'])){ ?>
+      <div class="div_100 section">
+
+        <div class="wrapper_linguas mobile_menu_linguas" style="display: none;">
+          <ul class="actions header_linguas dropdown menu" dropdown accordion-absolute accordion-icon="icon-down">
+            <li accordion-item>
+              <a href="javascript:;" class="nav-linguas icon-arrow-down" onclick="menuLinguas()" accordion-title><img class="lg-atual" src="<?php echo ROOTPATH_HTTP.'imgs/elem/'.$lang.'.png'; ?>" title="<?php echo $nome_lingua; ?>" ><?php echo $nome_lingua; ?></a>
+              <ul class="menu" accordion-nested>
+                <?php foreach ($row_rsLang as $lingua_cli) {
+                  $linguas_link = ${'pagina_'.$lingua_cli['sufixo']}."lg=".$lingua_cli['id'];
+                  $nome_ling = $lingua_cli['nome'];
+                  if ($extensao!="_".$lingua_cli['sufixo']) { ?>
+                    <li accordion-item><a class="nav-linguas" href="<?php echo $linguas_link; ?>" accordion-title><img src="<?php echo ROOTPATH_HTTP.'imgs/elem/'.$lingua_cli['sufixo'].'.png'; ?>"><?php echo $lingua_cli['nome']?></a></li>
+                  <?php }
+                } ?>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- <span class="textos"><?php echo $Recursos->Resources["loja_online"]; ?></span> -->
+        <ul>
+          <!-- <li class="<?php if($file_to_include == 'produtos.php' && $cat_redirect == 0) echo ' is-active';?>"><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG;?>loja"><?php echo $Recursos->Resources["ver_todos"]; ?></a></li> -->
+          <?php foreach($GLOBALS['divs_categorias'] as $cats) {
+            $subs_cats = $cats['subs'];
+            if($cats['info']){
+              $cats = $cats['info'];
+            }
+            ?>
+            <li class="<?php if(!empty($subs_cats)) echo 'has-sub'; ?><?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' is-active';?>">
+              <a class="list_txt<?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' active';?>" href="<?php if(!empty($subs_cats)) echo 'javascript:;'; else echo ROOTPATH_HTTP_LANG.$cats['url']; ?>"><?php echo $cats["nome"]; ?></a>
+              <?php if(!empty($subs_cats)) { ?>
+                <ul<?php if($cat_redirect == $cats['id'] || $sub_redirect == $cats['id']) echo ' style="display:block;"'; ?>>
+                  <?php foreach($subs_cats as $subs) { 
+                    $subssubs = $subs['subs'];
+                    if($subs['info']) {
+                      $subs = $subs['info'];
+                    }
+                    ?>
+                    <li class="<?php if($cat_redirect == $subs['id']) echo ' is-active';?>"><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$subs['url']; ?>"><?php echo $subs["nome"]; ?></a></li>  
+                  <?php } ?>
+                  <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG.$cats['url']; ?>"><?php echo $Recursos->Resources["ver_todos"]; ?></a></li>
+                </ul>
+              <?php } ?>
+            </li>
+          <?php } ?>
+          <!-- <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG; ?>novidades"><?php echo $Recursos->Resources["novidades"]; ?></a></li> -->
+          <!-- <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG; ?>promocoes"><?php echo $Recursos->Resources["promocoes"]; ?></a></li> -->
+        </ul>
+      </div>
+    <?php } ?>
+    <?php if(ECOMMERCE_ATIVO == 0) { ?>
+      <div class="div_100 section">
+        <span class="textos"><?php echo $Recursos->Resources["minha_area"]; ?></span>
+        <ul>
+          <?php if($row_rsCliente != 0) { ?>
+            <li><a class="list_txt<?php if($menu_sel_area == "entrada") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada.php"><?php echo $Recursos->Resources["area_reservada"]; ?></a></li>
+            <li><a class="list_txt<?php if($menu_sel_area == "encomendas") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada-encomendas.php"><?php echo $Recursos->Resources["minhas_encomendas"]; ?></a></li>
+            <li><a class="list_txt<?php if($menu_sel_area == "dados") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada-dados.php"><?php echo $Recursos->Resources["meus_dados"]; ?></a></li>
+            <?php if(tableExists(DB::getInstance(), 'lista_desejo')) { ?>
+              <li><a class="list_txt<?php if($menu_sel_area == "favoritos") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada-favoritos.php"><?php echo $Recursos->Resources["meus_favoritos"]; ?></a></li>
+            <?php } ?>
+            <li><a class="list_txt<?php if($menu_sel_area == "tickets") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada-tickets.php"><?php echo $Recursos->Resources["meus_tickets"]; ?></a></li>
+            <?php if(CARRINHO_CONVIDAR == 1) { ?>
+              <li><a class="list_txt<?php if($menu_sel_area == "convidar") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada-convidar.php"><?php echo $Recursos->Resources["meus_amigos"]; ?></a></li>
+            <?php } ?>
+            <li><a class="list_txt" href="<?php echo ROOTPATH_HTTP_LANG; ?>logout.php"><?php echo $Recursos->Resources["logout"]; ?></a></li>
+          <?php } else { ?>                            
+            <li><a class="list_txt<?php if($menu_sel == 'login') echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php"><?php echo $Recursos->Resources["iniciar_sessao"]; ?></a></li>
+            <li><a class="list_txt<?php if($menu_sel == 'registo') echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>login.php?reg=1"><?php echo $Recursos->Resources["criar_registo"]; ?></a></li>
+            <?php if(CARRINHO_CONVIDAR == 1) { ?>
+              <li><a class="list_txt<?php if($menu_sel == $pagConvidar['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagConvidar['url']; ?>"><?php echo $pagConvidar['nome']; ?></a></li>
+            <?php } ?>
+          <?php } ?>
+          <?php if($row_rsCliente == 0) { ?>
+            <li><a class="list_txt<?php if($menu_sel_area == "favoritos") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>area-reservada-favoritos.php"><?php echo $Recursos->Resources["meus_favoritos"]; ?></a></li>
+          <?php } ?>
+          <li><a class="list_txt<?php if($menu_sel == 'carrinho') echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG; ?>carrinho.php"><?php echo $Recursos->Resources["carrinho"]; ?></a></li>
+        </ul>
+      </div>
+    <?php } ?> 
+    <!-- <div class="div_100 section">
+      <span class="textos"><?php echo $Recursos->Resources["o_projeto"]; ?></span>
+      <ul>
+        <li><a class="list_txt <?php if($menu_sel == $pagSobre['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagSobre['url']; ?>"><?php echo $pagSobre['nome']; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel == "contactos") echo ' active'; ?>" href="<?php echo get_meta_link(2); ?>"><?php echo $Recursos->Resources["tit_contactos2"]; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel == "blog") echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_BLOG_LANG; ?>"><?php echo $Recursos->Resources["blog"]; ?></a> </li>
+      </ul>
+    </div> -->
+    <!-- <div class="div_100 section">
+      <span class="textos"><?php echo $Recursos->Resources["mais_info"]; ?></span>
+      <ul>
+        <li><a class="list_txt <?php if($menu_sel=="faqs") echo ' active'; ?>" href="<?php echo get_meta_link(5); ?>"><?php echo $Recursos->Resources["faqs"]; ?></a> </li>
+        <li><a class="list_txt <?php if($menu_sel==$pagPolitica['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagPolitica['url']; ?>"><?php echo $pagPolitica['nome']; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel==$pagTermos['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagTermos['url']; ?>"><?php echo $pagTermos['nome']; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel==$pagMetodos['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagMetodos['url']; ?>"><?php echo $pagMetodos['nome']; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel==$pagEntregas['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagEntregas['url']; ?>"><?php echo $pagEntregas['nome']; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel==$pagRal['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagRal['url']; ?>"><?php echo $pagRal['nome']; ?></a></li>
+        <li><a class="list_txt <?php if($menu_sel==$pagCookies['url']) echo ' active'; ?>" href="<?php echo ROOTPATH_HTTP_LANG.$pagCookies['url']; ?>"><?php echo $pagCookies['nome']; ?></a></li>
+      </ul>
+    </div> -->
+    <div class="chat-wrap">
+        <a href="javscript:;" class="chat-btn" title="">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.53 54.38"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path d="M30.26,11.82A1.19,1.19,0,1,0,31.45,13,1.18,1.18,0,0,0,30.26,11.82Z"/><path d="M10.64,33.1a1.18,1.18,0,1,0-1.18-1.18A1.18,1.18,0,0,0,10.64,33.1Z"/><path d="M39.72,0c-10.64,0-19.38,7.34-20,16.58C9.53,17.09,0,24.4,0,34.28A16.51,16.51,0,0,0,4.61,45.59a7.18,7.18,0,0,1-1.9,6.77,1.18,1.18,0,0,0,.84,2,13,13,0,0,0,9-3.65A27,27,0,0,0,20.81,52c10.64,0,19.37-7.34,20.05-16.58A26.76,26.76,0,0,0,48,34.18a13,13,0,0,0,9,3.65,1.19,1.19,0,0,0,.84-2A7.16,7.16,0,0,1,55.92,29a16.55,16.55,0,0,0,4.61-11.31C60.53,7.46,50.26,0,39.72,0ZM20.81,49.65a24.09,24.09,0,0,1-8.1-1.39,1.17,1.17,0,0,0-1.31.3,10.71,10.71,0,0,1-5.31,3.15,9.54,9.54,0,0,0,.72-7,1.1,1.1,0,0,0-.29-.5,14.21,14.21,0,0,1-4.16-9.89c0-8.33,8.45-15.36,18.45-15.36,9.44,0,17.73,6.56,17.73,15.36C38.54,42.76,30.58,49.65,20.81,49.65ZM54,27.62a1.18,1.18,0,0,0-.28.5,9.54,9.54,0,0,0,.72,7A10.66,10.66,0,0,1,49.13,32a1.16,1.16,0,0,0-1.31-.3,23.31,23.31,0,0,1-7,1.36,17,17,0,0,0-6.39-11.79H49.89a1.18,1.18,0,1,0,0-2.36h-19A21.91,21.91,0,0,0,22,16.59c.68-7.94,8.35-14.23,17.68-14.23,10,0,18.44,7,18.44,15.37A14.16,14.16,0,0,1,54,27.62Z"/><path d="M30.26,30.74H15.37a1.18,1.18,0,0,0,0,2.36H30.26a1.18,1.18,0,1,0,0-2.36Z"/><path d="M30.26,37.83H10.64a1.18,1.18,0,1,0,0,2.36H30.26a1.18,1.18,0,1,0,0-2.36Z"/><path d="M49.89,11.82H35a1.19,1.19,0,0,0,0,2.37h14.9a1.19,1.19,0,0,0,0-2.37Z"/></g></g></svg>
+          <span><?php echo strtoupper($Recursos->Resources["online_office"]); ?></span>
+        </a>
+      </div>
+    <?php if(!empty($GLOBALS['divs_redes'])) { ?>
+      <div class="div_100 mt-0 section redes soical_mobile_menu">
+        <?php foreach($GLOBALS['divs_redes'] as $redes) { ?>
+          <div class="div_table_cell">
+            <a class="share-<?php echo strtolower($redes['nome']); ?>" href="<?php echo $redes['link']; ?>" target="_blank"></a>
+          </div>
+        <?php } ?>
+      </div>
+    <?php } ?>
+  </div>
+</nav>

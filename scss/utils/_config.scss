@@ -1,0 +1,134 @@
+// 1. Variaveis
+// ---------
+$icon-font-name: "goldensofas";
+$global-font-size: 10px;
+$global-lineheight: inherit;
+
+$global-width: 1400px;
+$global-max-width: 1400px;
+//$global-width: 100%;
+
+$max_width_pag: 81rem;
+
+$globalMedia: 350;
+
+$body-font-family: 'Poppins', sans-serif;
+$border-radius: 0px;
+$white: #fff;
+$black: #000;
+$primary-color: #000000;
+$secondary-color: #FF7200;
+/*$light-gray: rgba($primary-color, 0.05);
+$medium-gray: rgba($primary-color, 0.15);
+$dark-gray: rgba($primary-color, 0.5);*/
+$light-gray: #F3F2F3;
+$medium-gray: #EBEBEB;
+$dark-gray: #8B898A;
+$success-color: #5FC333;
+$error-color: #FF0000;
+
+$area-reservada-gray: #D0D0D0;
+
+
+/*GRID*/
+$grid-row-alias: 'row';
+$grid-row-width: $global-width;
+$grid-column-count: 12;
+$grid-column-alias: 'column';
+$grid-column-gutter: 5px;
+
+/*HEADER & FOOTER*/
+$headerHeight: 326px;
+$headerHeightMob: 126px;
+
+
+/*INPUTS*/
+$inptMargin: 2.5rem;
+$inptPadding: 10px 15px;
+$inptPaddingMobile: 8px 10px;
+$inptHeight: 45px;
+$inptTextareaH: 13rem;
+$inptLineO: 0rem;
+
+/*MENU MOBILE*/
+$mmob_header_padd: $headerHeightMob;
+$mmob_width: 25rem;
+$mmob_bg: $white;
+$mmob_marg:5rem;
+$mmob_padd:10px;
+$mmob_paddSide:25px;
+$mmob_bgInsde: $light-gray;
+$mmob_border: 1px solid $light-gray;
+
+/*CLOSE BUTTON*/
+$closeButton-offset: 20px;
+$closeButton-offset-mob: 10px;
+$closeButton-size: 6rem;
+$closeButton-size-mob: 3.5rem;
+$closeButton-color: $primary-color;
+$closeButton-color-hover: $secondary-color;
+
+/*CARRINHO*/
+$carrinho_radius: 50px;
+$cart-size: 4rem;
+
+/*BREADCRUMBS*/
+$breadcrumbs-padding: 2.5rem 0;
+$breadcrumbs-text-class: list_subtit;
+$breadcrumbs-size: null; //null para deixar o default da class
+$breadcrumbs-color: $dark-gray;
+$breadcrumbs-color-current: $primary-color;
+$breadcrumbs-color-disabled: $medium-gray;
+$breadcrumbs-separator: \203A;
+$breadcrumbs-separator-font: false;
+$breadcrumbs-separator-unicode: true;
+$breadcrumbs-separator-size: 2rem;
+$breadcrumbs-separator-margin: 0 5px;
+$breadcrumbs-separator-color: $dark-gray;
+
+/*MODAL*/
+$modal-overlay: rgba(34,34,34,0.4);
+$modal-background: $white;
+$modal-padding-header:1.5rem 2rem;
+$modal-padding-body:2rem;
+$modal-padding-footer:1.5rem 2rem;
+$modal-border-color: $medium-gray;
+$modal-radius: $border-radius;
+$modal-zindex: 10000005;
+
+/*TOOLTIPS*/
+$tooltips-text: list_txt;
+$tooltips-background: $white;
+$tooltips-padding: 20px;
+$tooltips-radius: 10px;
+$tooltips-triangle: 20px;
+$tooltips-border-color: $dark-gray;
+$tooltips-border: 1px solid $tooltips-border-color;
+$tooltips-shadow: 0 -1px 10px rgba(0,0,0,0.025), 0 10px 20px rgba(0,0,0,0.05);
+$tooltips-zindex: 100005;
+
+// 2. Breakpoints
+// --------------
+$breakpoints: (
+	small: 0,
+	xsmall:550px,
+	xxsmall: 750px,
+	medium: 950px,
+	xmedium: 1150px,
+	xxmedium: 1280px,
+	large: 1370px,
+	xlarge: 1580px,
+	xxlarge: 1925px,
+	retin: 2500px,
+	xretin: 3000px,
+);
+$print-breakpoint: medium;
+$breakpoint-classes: (small xsmall xxsmall medium xmedium xxmedium large xlarge xxlarge);
+
+// 3. paddings
+// ---------
+$p_column: 5px;
+$p_small: 20px;
+$p_medium: 25px;
+$p_large: 45px;
+$p_retina: 100px;

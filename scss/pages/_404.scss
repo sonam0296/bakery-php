@@ -1,0 +1,42 @@
+.page-404{
+	@include positions(fixed);
+	z-index: 10000000;
+}
+.page-404,
+.manutencao{
+	& .container_404{ 
+		position: relative;
+		@include displayInline(top);
+		z-index: 999;
+
+		& .logo_404 {
+			& img {
+				max-width: 200px;
+				margin: auto;
+			}
+		}
+
+		& h1{
+			@include textos(subtitulos, null, 85px, 1, 700, 30);
+			margin-bottom: 0;
+			color: white;
+		}
+		& h3{
+			@include textos(subtitulos);			
+			margin-top: 1rem;
+			color: white;
+		}
+
+		& a.button{
+			margin-top: 3rem;
+		}
+
+		@include breakpoint(xxsmall down){
+			& .logo_404 {
+				& img {
+					max-width: 180px;
+				}
+			}
+		}
+	}
+}

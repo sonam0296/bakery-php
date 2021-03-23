@@ -1,0 +1,356 @@
+<?php require_once('Connections/connADMIN.php'); ?>
+<?php
+session_start();
+if(ECOMMERCE_ATIVO == 0) {
+  header("Location: ".ROOTPATH_HTTP."carrinho-contacto.php");
+  exit();
+}
+
+$query_rsMeta = "SELECT * FROM metatags".$extensao." WHERE id = '1'";
+$rsMeta = DB::getInstance()->prepare($query_rsMeta);
+$rsMeta->execute();
+$row_rsMeta = $rsMeta->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsMeta = $rsMeta->rowCount();
+
+$title = $row_rsMeta["title"];
+$description = $row_rsMeta["description"];
+$keywords = $row_rsMeta["keywords"];
+
+$carrinho_session = $_COOKIE[CARRINHO_SESSION];
+$empty = $class_carrinho->isEmpty();
+$total = $_POST['total_final'];
+
+$portes_pag = $_POST['portes_pag'];
+$portes_env = $_POST['portes_env'];
+
+$preco_cliente = $class_user->clienteData('pvp');
+$subtotal = $class_carrinho->precoTotal();
+
+//Verificar se apenas existe um Cheque Prenda no carrinho ou se também existem produtos.
+$verifica_carrinho = $class_carrinho->verificaCarrinho();
+
+if($empty == 0 || ($row_rsCliente == 0 && CARRINHO_LOGIN == 1) || ($verifica_carrinho == 1 && !isset($_POST['pagamento']) && !isset($_POST['entrega'])) || ($verifica_carrinho == 1 && !isset($_POST['pagamento']))) {
+  header("Location: ".ROOTPATH_HTTP."carrinho.php");  
+  exit();
+}
+
+$pais = 197;
+if($_POST['pais'] > 0) {
+  $pais = $_POST['pais'];
+}
+
+$query_rsPais = "SELECT nome FROM paises WHERE visivel='1' AND id = '$pais'";
+$rsPais = DB::getInstance()->prepare($query_rsPais);
+$rsPais->execute();
+$row_rsPais = $rsPais->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsPais = $rsPais->rowCount();
+DB::close();
+
+$pais_fatura = 197;
+if($_POST['pais_factura'] > 0) {
+  $pais_fatura = $_POST['pais_factura'];
+}
+
+$query_rsPaisFatura = "SELECT nome FROM paises WHERE visivel='1' AND id = '$pais_fatura'";
+$rsPaisFatura = DB::getInstance()->prepare($query_rsPaisFatura);
+$rsPaisFatura->execute();
+$row_rsPaisFatura = $rsPaisFatura->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsPaisFatura = $rsPaisFatura->rowCount();
+
+$morada_factura = $_POST['morada_factura'];
+$pagamento = $_POST['pagamento'];
+
+$pagamento_nome = "";
+$pagamento_img = "";
+$pagamento_descricao = "";
+
+if(CARRINHO_PORTES == 1 && $pagamento != '999') {
+  $query_rsQtds = "SELECT zonas_met_pagamento.portes, zonas_met_pagamento.tipo, met_pagamento".$extensao.".* FROM zonas_met_pagamento, met_pagamento".$extensao.", zonas, paises WHERE zonas_met_pagamento.id_zona=zonas.id AND zonas_met_pagamento.id_metodo=met_pagamento".$extensao.".id AND paises.zona=zonas.id AND paises.id='$pais' AND met_pagamento".$extensao.".id='$pagamento' ORDER BY met_pagamento".$extensao.".ordem ASC, met_pagamento".$extensao.".nome ASC";
+  $rsQtds = DB::getInstance()->prepare($query_rsQtds);
+  $rsQtds->execute();
+  $row_rsQtds = $rsQtds->fetch(PDO::FETCH_ASSOC);
+  $totalRows_rsQtds = $rsQtds->rowCount();
+    
+  $pagamento_nome = $row_rsQtds['nome'];
+
+  if($portes_pag > 0) {
+    $pagamento_nome = $pagamento_nome." (".$Recursos->Resources["comprar_acresce"]." ".$class_carrinho->mostraPreco($portes_pag, 0, 0).")";
+  }
+
+  $pagamento_img = ROOTPATH_HTTP."imgs/carrinho/geral.png";
+  if($row_rsQtds['imagem']!='' && file_exists(ROOTPATH.'imgs/carrinho/'.$row_rsQtds['imagem'])) { 
+    $pagamento_img = ROOTPATH_HTTP."imgs/carrinho/".$row_rsQtds['imagem'];
+  }
+
+  $pagamento_descricao = "";
+  if($row_rsQtds['descricao2']) {
+    $pagamento_descricao = "<br>".$row_rsQtds['descricao2'];
+  }
+}
+
+$morada_envio = $_POST['morada_envio'];
+$entrega = $_POST['entrega'];
+
+$entrega_nome = "";
+$entrega_img = "";
+$entrega_descricao = "";
+
+if(CARRINHO_PORTES == 1 && $entrega != '999') {                 
+  $query_rsQtds = "SELECT zonas_met_envio.portes, zonas_met_envio.tipo, zonas_met_envio.tabela, zonas_met_envio.custo, met_envio".$extensao.".*, zonas.portes_gratis".$preco_cliente.", zonas.peso_max FROM zonas_met_envio, met_envio".$extensao." LEFT JOIN met_pag_envio ON met_pag_envio.met_envio=met_envio".$extensao.".id, zonas, paises WHERE zonas_met_envio.id_zona=zonas.id AND zonas_met_envio.id_metodo=met_envio".$extensao.".id AND paises.zona=zonas.id AND paises.id='$pais' AND met_pag_envio.met_pagamento='$pagamento' AND met_envio".$extensao.".id='$entrega' ORDER BY met_envio".$extensao.".ordem ASC, met_envio".$extensao.".nome ASC";
+  $rsQtds = DB::getInstance()->prepare($query_rsQtds);
+  $rsQtds->execute();
+  $row_rsQtds = $rsQtds->fetch(PDO::FETCH_ASSOC);
+  $totalRows_rsQtds = $rsQtds->rowCount();
+  DB::close();
+                      
+  $entrega_nome = $row_rsQtds['nome'];
+
+  if($portes_env > 0) {
+    //Faz verificação pelo peso
+    if(!$total_peso) {
+      $total_peso = $class_carrinho->totalPeso();
+    }
+
+    $portes_gratis_peso = 0;
+
+    if($row_rsQtds['peso_max'] > 0) {
+        $peso_max = $row_rsQtds['peso_max'];
+
+        if($total_peso > $peso_max) {
+          $portes_gratis_peso = 1;
+        }
+    }
+
+    if($row_rsQtds['portes_gratis'.$preco_cliente] != NULL && $row_rsQtds['portes_gratis'.$preco_cliente] > 0 && $row_rsQtds['portes_gratis'.$preco_cliente] <= $subtotal && $portes_gratis_peso == 0) { 
+      $entrega_nome = $entrega_nome." (".$Recursos->Resources["comprar_portes_gratis"].")";
+    }
+    else {
+      $entrega_nome = $entrega_nome." (".$Recursos->Resources["comprar_acresce"]." ".$class_carrinho->mostraPreco($portes_env, 0, 0).")";
+    }
+  }
+  
+  if($_POST['localidade_loja'] && $_POST['localidade_loja'] != "") {
+    $entrega_nome = $entrega_nome." (".$_POST['localidade_loja'].")";
+  }
+  
+  $entrega_img = ROOTPATH_HTTP."imgs/carrinho/geral.png";
+  if($row_rsQtds['imagem']!='' && file_exists(ROOTPATH.'imgs/carrinho/'.$row_rsQtds['imagem'])) { 
+    $entrega_img = ROOTPATH_HTTP."imgs/carrinho/".$row_rsQtds['imagem'];
+  }
+
+  $entrega_descricao = "";
+  if($row_rsQtds['descricao']) {
+    $entrega_descricao .= $row_rsQtds['descricao'];
+  }
+  if($row_rsQtds['descricao2']) {
+    $entrega_descricao .= "<br>".$row_rsQtds['descricao2'];
+  }
+}
+
+$menu_sel = "carrinho";
+
+DB::close();
+
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $lang; ?>"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame - Remove this if you use the .htaccess -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>
+<?php if($title){ echo addslashes(htmlspecialchars($title, ENT_COMPAT, 'UTF-8')); }else{ echo $Recursos->Resources["pag_title"];}?>
+</title>
+<?php if($description){?>
+<META NAME="description" CONTENT="<?php echo addslashes(htmlspecialchars($description, ENT_COMPAT, 'UTF-8')); ?>" />
+<?php }?>
+<?php if($keywords!=""){?>
+<META NAME="keywords" CONTENT="<?php echo addslashes(htmlspecialchars($keywords, ENT_COMPAT, 'UTF-8')); ?>" />
+<?php }?>
+<?php include_once('codigo_antes_head.php'); ?>
+<?php include_once('funcoes.php'); ?>
+</head>
+<body>
+<!--Preloader-->
+<div class="mask">
+  <div id="loader">
+    
+  </div>
+</div>
+
+<div class="mainDiv">
+  <div class="row1">
+    <div class="div_table_cell">
+      <?php include_once('header.php'); ?>
+      <div class="row collapse content">
+        <div class="column">
+          <div class="div_100 carrinho">
+            <nav class="row" aria-label="You are here:" role="navigation">
+              <div class="column">
+                <ul class="row collapse carrinho_nav">
+                  <li class="uppercase column"><?php echo $Recursos->Resources["carrinho_passo1"]; ?></li><!--
+                  --><li class="uppercase column"><?php echo $Recursos->Resources["carrinho_passo2"]; ?></li><!--
+                  --><li class="uppercase column active"><?php echo $Recursos->Resources["carrinho_passo3"]; ?></li>
+                </ul>
+              </div>
+            </nav>
+            <div class="row comprar disabled">
+              <div class="column">
+                <form action="carrinho-comprar3.php" id="comprar2" name="comprar2" method="post" onSubmit="return validaPasso()" autocomplete="off" novalidate>   
+                  <div class="row collapse align-strecht">
+                    <div class="small-12 medium-8 column">
+                      <div class="row collapse align-strecht info_cont">
+                        <div class="small-12 xxsmall-6 column">
+                          <div class="head">
+                            <h3 class="comprar_tit"><?php echo $Recursos->Resources["dados_faturacao"]; ?></h3>
+                          </div>
+                          <div class="div_100 dados">
+                            <p><?php echo $_POST['nome'] ;?></p>
+                            <p><?php echo nl2br($morada_factura) ;?></p>
+                            <p><?php echo $_POST['cod_postal'] ;?></p>
+                            <p><?php echo $_POST['localidade'] ;?></p>
+                            <p><?php echo $row_rsPaisFatura['nome'] ;?></p>
+                            
+                            <p class="marg"><?php echo $Recursos->Resources["comprar_email"] ;?> <span><?php echo $_POST['email'] ;?></span></p>
+                            <p><?php echo $Recursos->Resources["comprar_nif"] ;?> <span><?php echo $_POST['nif'] ;?></span></p>
+                          </div>
+                        </div>
+                        <div class="small-12 xxsmall-6 column">
+                          <div class="head">
+                            <h3 class="comprar_tit"><?php echo $Recursos->Resources["dados_envio"]; ?></h3>
+                          </div>
+                          <div class="div_100 dados">
+                            <p><?php echo $_POST['nome2'] ;?></p>
+                            <p><?php echo nl2br($morada_envio) ;?></p>
+                            <p><?php echo $_POST['cod_postal2'] ;?></p>
+                            <p><?php echo $_POST['localidade2'] ;?></p>
+                            <p><?php echo $row_rsPais['nome'] ;?></p>
+                            
+                            <p class="marg"><?php echo $Recursos->Resources["comprar_contacto"] ;?> <span><?php echo $_POST['contacto'] ;?></span></p>
+                          </div>
+                        </div>
+                        <div class="small-12 xxsmall-6 column">
+                          <div class="head">
+                            <h3 class="comprar_tit"><?php echo $Recursos->Resources["comprar_pagamento"]; ?></h3>
+                          </div>
+                          <div class="div_100">
+                            <?php if($pagamento != '999') { ?>
+                              <div class="div_100 pagamentos_divs">
+                                <label for="pagamento">
+                                  <div class="img"><img src="<?php echo $pagamento_img; ?>" width="100%" /></div><!--
+                                  --><span><?php echo $pagamento_nome;?></span>
+                                  <?php if($pagamento_descricao) { ?><div class="desc"><?php echo $pagamento_descricao; ?></div><?php } ?>
+                                </label>
+                              </div>
+                            <?php } else { ?>
+                             <div class="div_100 pagamentos_divs">
+                                <label for="pagamento">
+                                  <div class="img"><img src="<?php echo ROOTPATH_HTTP."imgs/carrinho/geral.png"; ?>" width="100%" /></div><!--
+                                  --><span><?php echo $Recursos->Resources["pagamt_com_saldo"]; ?></span>
+                                </label>
+                              </div>
+                            <?php } ?>
+                          </div>
+                        </div>
+                        <?php if($empty > 0 && $verifica_carrinho == 1) { ?>
+                          <div class="small-12 xxsmall-6 column">
+                            <div class="head">
+                              <h3 class="comprar_tit"><?php echo $Recursos->Resources["comprar_entrega"]; ?></h3>
+                            </div>
+                            <div class="div_100">
+                              <?php if($entrega > 0 && $entrega != 999) { ?>
+                                <div class="div_100 pagamentos_divs">
+                                  <label for="entrega">
+                                    <div class="img"><img src="<?php echo $entrega_img; ?>" width="100%" /></div><!--
+                                    --><span><?php echo $entrega_nome;?></span>
+                                    <?php if($entrega_descricao) { ?><div class="desc"><?php echo $entrega_descricao; ?></div><?php } ?>
+                                  </label>
+                                </div>
+                              <?php } else if($_POST['entrega'] == 999) { ?>
+                                <div class="div_100 pagamentos_divs">
+                                  <label for="pagamento">
+                                    <div class="img"><img src="<?php echo ROOTPATH_HTTP."imgs/carrinho/geral.png"; ?>" width="100%" /></div><!--
+                                    --><span><?php echo $Recursos->Resources["comprar_portes_gratis"]; ?></span>
+                                  </label>
+                                </div>
+                              <?php } else { ?>
+                                <div class="div_100 pagamentos_divs">
+                                  <label for="pagamento">
+                                    <div class="img"><img src="<?php echo ROOTPATH_HTTP."imgs/carrinho/geral.png"; ?>" width="100%" /></div><!--
+                                    --><span><?php echo $Recursos->Resources["nao_aplicavel"]; ?></span>
+                                  </label>
+                                </div>
+                              <?php } ?>
+                            </div>
+                          </div>
+                        <?php } ?>
+                        <?php if($_POST['observacoes'] != '') { ?>
+                          <div class="small-12 column">
+                            <div class="head">
+                              <h3 class="comprar_tit"><?php echo $Recursos->Resources["obs_encomenda"]; ?></h3>
+                            </div>
+                            <textarea class="carrinho_inpt" name="observacoes" id="observacoes" readonly><?php echo $_POST['observacoes']; ?></textarea>
+                          </div>
+                        <?php } ?>
+                      </div>
+                      <div class="row collapse text-left termos">
+                        <div class="small-12 column">
+                          <input type="checkbox" required value="1" name="termos" id="termos" />
+                          <label for="termos"><h3><?php echo $Recursos->Resources["aceito_termos_reg"]; ?></h3></label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="small-12 medium-4 column">
+                      <?php echo $class_carrinho->carrinhoResumo(1, 0); ?>
+                    </div>
+                  </div>
+                  <div class="row collapse buttons_marg">
+                    <div class="small-12 medium-8 column">
+                      <button class="carrinho_btn icon_carrinho" type="submit"><span style="position: relative;"><?php echo $Recursos->Resources["comprar_seguinte"]." <span class='total_update'>".$class_carrinho->mostraPreco($total, 0, 0)."</span>"; ?> <i class="icon-right-carrinho"></i></span></button>
+                    </div>
+                    <div class="small-12 medium-4 column">
+                      <a class="carrinho_btn disabled" href="carrinho.php"><?php echo $Recursos->Resources["comprar_voltar"]; ?></a>
+                    </div>
+                  </div>
+                  <input name="nome" value="<?php echo $_POST['nome']; ?>"  type="hidden" />
+                  <input name="nome_envio" value="<?php echo $_POST['nome2']; ?>"  type="hidden" />
+                  <input name="morada_factura" id="morada_factura" value="<?php echo $morada_factura; ?>" type="hidden" />
+                  <input name="morada_envio" id="morada_envio" value="<?php echo $morada_envio; ?>" type="hidden" />
+                  <input name="cod_postal" value="<?php echo $_POST['cod_postal']; ?>"  type="hidden" />
+                  <input name="cod_postal_envio" value="<?php echo $_POST['cod_postal2']; ?>"  type="hidden" />
+                  <input name="localidade" value="<?php echo $_POST['localidade']; ?>"  type="hidden" />
+                  <input name="localidade_envio" value="<?php echo $_POST['localidade2']; ?>"  type="hidden" />
+                  <input name="telefone" id="telefone" value="<?php echo $_POST['contacto']; ?>" type="hidden" />
+                  <input name="pais" id="pais" value="<?php echo $pais; ?>" type="hidden" />
+                  <input name="pais_fatura" id="pais_fatura" value="<?php echo $pais_fatura; ?>" type="hidden" />
+                  <input name="telemovel" id="telemovel" value="<?php echo $_POST['contacto']; ?>" type="hidden" />
+                  <input name="email"  value="<?php echo $_POST['email']; ?>"  type="hidden" />
+                  <input name="nif" id="nif" value="<?php echo $_POST['nif']; ?>" type="hidden" />
+                  <input name="localidade_loja" id="localidade_loja" value="<?php echo $_POST['localidade_loja']; ?>" type="hidden" />
+                </form>
+              </div>           
+            </div>                        
+          </div> 
+        </div>
+      </div>    
+    </div>
+  </div>
+  <?php include_once('footer.php'); ?>    
+</div>
+<input type="hidden" name="menu_sel" id="menu_sel" value="carrinho" />
+<script>
+function validaPasso() {    
+  var valid = validaForm('comprar2');
+
+  if(!valid) {
+    ntg_error('<?php echo $Recursos->Resources["comprar_preencher"]; ?>');
+    
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+</script>
+<?php include_once('codigo_antes_body.php'); ?>
+</body>
+</html>

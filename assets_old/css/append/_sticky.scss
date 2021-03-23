@@ -1,0 +1,56 @@
+/* ELEMENTS STICKY */
+.to_sticky {
+	position: relative;
+	left: 0;
+	top: auto;
+	bottom:auto;
+	z-index: 100;
+
+	/* Force Hardware Acceleration in WebKit */
+	-webkit-transform: translate3d(0, 0, 0) translateZ(0);
+	-moz-transform: translate3d(0, 0, 0) translateZ(0);
+	-ms-transform: translate3d(0, 0, 0) translateZ(0);
+	-o-transform: translate3d(0, 0, 0) translateZ(0);
+	transform: translate3d(0, 0, 0) translateZ(0);
+	
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+.is-fixed {
+	/* when the user scrolls down, we hide the header right above the viewport */
+	-webkit-transform: translate3d(0, -100%, 0) translateZ(0);
+	-moz-transform: translate3d(0, -100%, 0) translateZ(0);
+	-ms-transform: translate3d(0, -100%, 0) translateZ(0);
+	-o-transform: translate3d(0, -100%, 0) translateZ(0);
+	transform: translate3d(0, -100%, 0) translateZ(0);
+}
+.is-visible {
+	/* if the user changes the scrolling direction, we show the header */
+	-webkit-transform: translate3d(0, 0, 0) translateZ(0);
+	-moz-transform: translate3d(0, 0, 0) translateZ(0);
+	-ms-transform: translate3d(0, 0, 0) translateZ(0);
+	-o-transform: translate3d(0, 0, 0) translateZ(0);
+	transform: translate3d(0, 0, 0) translateZ(0);
+}
+.is-sticky{
+	position: fixed !important;
+}
+.is-absolute {
+	position: absolute !important;
+	bottom:0 !important;
+	top:auto !important;
+}	
+.sticky-line{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+
+	&.active{
+		opacity: 1;
+		visibility: visible;
+	}
+}

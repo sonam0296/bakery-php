@@ -1,0 +1,96 @@
+[formStep]{
+	position: relative;
+	overflow: hidden;
+
+	&[formStep-watch="false"],
+	&[formStep-watch="false"] [steps-field]{
+		height: auto;
+	}
+
+	& [steps-image],
+	& [steps-field] {
+		/*stacking fieldsets above each other*/
+		display: block;
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    z-index: 5;
+	    overflow: hidden;
+	    background-color: white;
+
+		&:not(:first-of-type),
+		&:not(:first-child) { /*Hide all except first fieldset*/
+			opacity: 0;
+			visibility: hidden;
+			left: 50%;
+		}
+	}
+
+	& [steps-image] {
+		left: 0 !important;
+		height: 100%;
+
+		pointer-events:none;
+		
+		&.fadeIn{
+			opacity: 1;
+			visibility: visible;
+
+			@include Animationcss(all 0.5s linear);
+		}
+	}
+	& [steps-field] {
+		& [steps-progressbar] {
+			margin-bottom: 30px;
+			overflow: hidden;
+			/*CSS counters to number the steps*/
+			counter-reset: step;
+
+			& li {
+				list-style-type: none;
+				color: white;
+				text-transform: uppercase;
+				font-size: 9px;
+				width: 33.33%;
+				float: left;
+				position: relative;
+
+				& &:before {
+					content: counter(step);
+					counter-increment: step;
+					width: 20px;
+					line-height: 20px;
+					display: block;
+					font-size: 10px;
+					color: #333;
+					background: white;
+					border-radius: 3px;
+					margin: 0 auto 5px auto;
+				}
+				/*progressbar connectors*/
+				&:after {
+					content: '';
+					width: 100%;
+					height: 2px;
+					background: white;
+					position: absolute;
+					left: -50%;
+					top: 9px;
+					z-index: -1; /*put it behind the numbers*/
+				}
+				&:first-child:after {
+					/*connector not needed before the first step*/
+					content: none; 
+				}
+				/*marking active/completed steps green*/
+				/*The number of the step and the connector before it = green*/
+				&.active:before,
+				&.active:after{
+					background: #27AE60;
+					color: white;
+				}
+			}
+		}	
+	}
+}

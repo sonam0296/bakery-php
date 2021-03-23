@@ -1,0 +1,10 @@
+[07-Sep-2020 10:02:27 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.banners_popups_pt' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow-popups/slideshow-popups-list.php:93
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow-popups/slideshow-popups-list.php(93): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow-popups/slideshow-popups-list.php on line 93
+[07-Sep-2020 10:02:47 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.banners_popups_pt' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow-popups/slideshow-popups-list.php:93
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow-popups/slideshow-popups-list.php(93): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/slideshow-popups/slideshow-popups-list.php on line 93

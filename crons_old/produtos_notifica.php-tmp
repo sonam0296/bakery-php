@@ -1,0 +1,258 @@
+<?php $is_cron_file = 1;
+require_once ('../Connections/connADMIN.php');
+?>
+<?php
+
+@set_time_limit(0);
+
+if ($_GET['op'] == 'g235f89235d2uioh523iody5hn2i') {
+	$query_rsPedidos = "SELECT * FROM l_pecas_seguir ORDER BY id ASC";
+	$rsPedidos       = DB::getInstance()->prepare($query_rsPedidos);
+	$rsPedidos->execute();
+	$totalRows_rsPedidos = $rsPedidos->rowCount();
+	DB::close();
+
+	if ($totalRows_rsPedidos > 0) {
+		while ($row_rsPedidos = $rsPedidos->fetch()) {
+			$id         = $row_rsPedidos['id'];
+			$id_cliente = $row_rsPedidos['id_cliente'];
+			$id_produto = $row_rsPedidos['id_produto'];
+			$id_opcao   = $row_rsPedidos['id_opcao'];
+			$preco      = $row_rsPedidos['preco'];
+
+			$query_rsProduto = "SELECT ref, nome, url, preco FROM l_pecas_en WHERE id='$id_produto' AND visivel=1";
+			$rsProduto       = DB::getInstance()->prepare($query_rsProduto);
+			$rsProduto->execute();
+			$row_rsProduto       = $rsProduto->fetch(PDO::FETCH_ASSOC);
+			$totalRows_rsProduto = $rsProduto->rowCount();
+			DB::close();
+
+			$query_rsCliente = "SELECT nome, email FROM clientes WHERE id = '$id_cliente' AND validado = 1";
+			$rsCliente       = DB::getInstance()->prepare($query_rsCliente);
+			$rsCliente->execute();
+			$row_rsCliente       = $rsCliente->fetch(PDO::FETCH_ASSOC);
+			$totalRows_rsCliente = $rsCliente->rowCount();
+			DB::close();
+
+			if ($totalRows_rsProduto > 0 && $totalRows_rsCliente > 0) {
+				$nome_opcao1 = NULL;
+				$nome_opcao2 = NULL;
+				$nome_opcao3 = NULL;
+				$nome_opcao4 = NULL;
+				$nome_opcao5 = NULL;
+
+				if ($id_opcao > 0) {
+					$query_rsTamanho = "SELECT * FROM l_pecas_tamanhos WHERE peca = '$id_produto' AND id = '$id_opcao'";
+					$rsTamanho       = DB::getInstance()->prepare($query_rsTamanho);
+					$rsTamanho->execute();
+					$row_rsTamanho       = $rsTamanho->fetch(PDO::FETCH_ASSOC);
+					$totalRows_rsTamanho = $rsTamanho->rowCount();
+					DB::close();
+
+					if ($totalRows_rsTamanho > 0) {
+						$novo_preco = $row_rsTamanho['preco'];
+
+						$car1 = $row_rsTamanho['car1'];
+						$op1  = $row_rsTamanho['op1'];
+						$car2 = $row_rsTamanho['car2'];
+						$op2  = $row_rsTamanho['op2'];
+						$car3 = $row_rsTamanho['car3'];
+						$op3  = $row_rsTamanho['op3'];
+						$car4 = $row_rsTamanho['car4'];
+						$op4  = $row_rsTamanho['op4'];
+						$car5 = $row_rsTamanho['car5'];
+						$op5  = $row_rsTamanho['op5'];
+
+						$query_rsOpcao = "SELECT * FROM l_caract_opcoes_pt WHERE id = '$op1'";
+						$rsOpcao       = DB::getInstance()->prepare($query_rsOpcao);
+						$rsOpcao->execute();
+						$row_rsOpcao = $rsOpcao->fetch(PDO::FETCH_ASSOC);
+						DB::close();
+
+						if ($car1 == 1) {
+							$nome_opcao1 = "Cor: ".$row_rsOpcao['nome'];
+						} else if ($car1 == 2) {
+							$nome_opcao1 = "Tamanho: ".$row_rsOpcao['nome'];
+						} else {
+							$query_rsCatOpcao = "SELECT * FROM l_caract_categorias_pt WHERE id = '$car1'";
+							$rsCatOpcao       = DB::getInstance()->prepare($query_rsCatOpcao);
+							$rsCatOpcao->execute();
+							$row_rsCatOpcao = $rsCatOpcao->fetch(PDO::FETCH_ASSOC);
+							DB::close();
+
+							$nome_opcao1 = $row_rsCatOpcao['nome'].": ".$row_rsOpcao['nome'];
+						}
+
+						if ($car2 > 0 && $op2 > 0) {
+							$query_rsOpcao = "SELECT * FROM l_caract_opcoes_pt WHERE id = '$op2'";
+							$rsOpcao       = DB::getInstance()->prepare($query_rsOpcao);
+							$rsOpcao->execute();
+							$row_rsOpcao = $rsOpcao->fetch(PDO::FETCH_ASSOC);
+							DB::close();
+
+							if ($car2 == 1) {
+								$nome_opcao2 = "Cor: ".$row_rsOpcao['nome'];
+							} else if ($car2 == 2) {
+								$nome_opcao2 = "Tamanho: ".$row_rsOpcao['nome'];
+							} else {
+								$query_rsCatOpcao = "SELECT * FROM l_caract_categorias_pt WHERE id = '$car2'";
+								$rsCatOpcao       = DB::getInstance()->prepare($query_rsCatOpcao);
+								$rsCatOpcao->execute();
+								$row_rsCatOpcao = $rsCatOpcao->fetch(PDO::FETCH_ASSOC);
+								DB::close();
+
+								$nome_opcao2 = $row_rsCatOpcao['nome'].": ".$row_rsOpcao['nome'];
+							}
+						}
+
+						if ($car3 > 0 && $op3 > 0) {
+							$query_rsOpcao = "SELECT * FROM l_caract_opcoes_pt WHERE id = '$op3'";
+							$rsOpcao       = DB::getInstance()->prepare($query_rsOpcao);
+							$rsOpcao->execute();
+							$row_rsOpcao = $rsOpcao->fetch(PDO::FETCH_ASSOC);
+							DB::close();
+
+							if ($car3 == 1) {
+								$nome_opcao3 = "Cor: ".$row_rsOpcao['nome'];
+							} else if ($car3 == 2) {
+								$nome_opcao3 = "Tamanho: ".$row_rsOpcao['nome'];
+							} else {
+								$query_rsCatOpcao = "SELECT * FROM l_caract_categorias_pt WHERE id = '$car3'";
+								$rsCatOpcao       = DB::getInstance()->prepare($query_rsCatOpcao);
+								$rsCatOpcao->execute();
+								$row_rsCatOpcao = $rsCatOpcao->fetch(PDO::FETCH_ASSOC);
+								DB::close();
+
+								$nome_opcao3 = $row_rsCatOpcao['nome'].": ".$row_rsOpcao['nome'];
+							}
+						}
+
+						if ($car4 > 0 && $op4 > 0) {
+							$query_rsOpcao = "SELECT * FROM l_caract_opcoes_pt WHERE id = '$op4'";
+							$rsOpcao       = DB::getInstance()->prepare($query_rsOpcao);
+							$rsOpcao->execute();
+							$row_rsOpcao = $rsOpcao->fetch(PDO::FETCH_ASSOC);
+							DB::close();
+
+							if ($car4 == 1) {
+								$nome_opcao4 = "Cor: ".$row_rsOpcao['nome'];
+							} else if ($car4 == 2) {
+								$nome_opcao4 = "Tamanho: ".$row_rsOpcao['nome'];
+							} else {
+								$query_rsCatOpcao = "SELECT * FROM l_caract_categorias_pt WHERE id = '$car4'";
+								$rsCatOpcao       = DB::getInstance()->prepare($query_rsCatOpcao);
+								$rsCatOpcao->execute();
+								$row_rsCatOpcao = $rsCatOpcao->fetch(PDO::FETCH_ASSOC);
+								DB::close();
+
+								$nome_opcao4 = $row_rsCatOpcao['nome'].": ".$row_rsOpcao['nome'];
+							}
+						}
+
+						if ($car5 > 0 && $op5 > 0) {
+							$query_rsOpcao = "SELECT * FROM l_caract_opcoes_pt WHERE id = '$op5'";
+							$rsOpcao       = DB::getInstance()->prepare($query_rsOpcao);
+							$rsOpcao->execute();
+							$row_rsOpcao = $rsOpcao->fetch(PDO::FETCH_ASSOC);
+							DB::close();
+
+							if ($car5 == 1) {
+								$nome_opcao5 = "Cor: ".$row_rsOpcao['nome'];
+							} else if ($car5 == 2) {
+								$nome_opcao5 = "Tamanho: ".$row_rsOpcao['nome'];
+							} else {
+								$query_rsCatOpcao = "SELECT * FROM l_caract_categorias_pt WHERE id = '$car5'";
+								$rsCatOpcao       = DB::getInstance()->prepare($query_rsCatOpcao);
+								$rsCatOpcao->execute();
+								$row_rsCatOpcao = $rsCatOpcao->fetch(PDO::FETCH_ASSOC);
+								DB::close();
+
+								$nome_opcao5 = $row_rsCatOpcao['nome'].": ".$row_rsOpcao['nome'];
+							}
+						}
+					} else {
+						$novo_preco = $row_rsProduto['preco'];
+					}
+				} else {
+					$novo_preco = $row_rsProduto['preco'];
+				}
+
+				if ($novo_preco < $preco) {
+					$novo_preco_txt = "<strong>".number_format($novo_preco, 2, ",", ".")."&pound;</strong>";
+
+					//Alterar o preço na tabela para não voltar a ser notificado nos dias seguintes sobre a mesma alteração
+					$query_rsUpdate = "UPDATE l_pecas_seguir SET preco = '$novo_preco' WHERE id = '$id'";
+					$rsUpdate       = DB::getInstance()->prepare($query_rsUpdate);
+					$rsUpdate->execute();
+					DB::close();
+
+					##################################### mail
+					$formcontent = getHTMLTemplate("contacto.htm");
+
+					$lingua = $row_rsCliente['lingua'];
+					if (!$lingua) {
+						$lingua = 'pt';
+					}
+
+					include_once (ROOTPATH."linguas/".$lingua.".php");
+					$className = 'Recursos_'.$lingua;
+					$Recursos  = new $className();
+
+					$rodape = email_social();
+
+					$titulo   = $Recursos->Resources['seguir_preco_tit'];
+					$mensagem = $Recursos->Resources['seguir_preco_txt'];
+
+					$nome = "<a style=\"color: #3e3d42;
+ font-weight: bold\" href=\"".ROOTPATH_HTTP.$row_rsProduto['url']."\">".$row_rsProduto['nome']."</a>";
+
+					if ($row_rsProduto['ref'] != '') {
+						$ref = " (Ref.:<span style=\"color: #3e3d42; font-weight: bold\">".$row_rsProduto['ref']."</span>)";
+
+					}
+
+					$opcoes = '';
+					if ($nome_opcao1 && $nome_opcao1 != '') {
+						$opcoes .= ' com as opções: '.$nome_opcao1." - ";
+					}
+					if ($nome_opcao2 && $nome_opcao2 != '') {
+						$opcoes .= $nome_opcao2." - ";
+					}
+					if ($nome_opcao3 && $nome_opcao3 != '') {
+						$opcoes .= $nome_opcao3." - ";
+					}
+					if ($nome_opcao4 && $nome_opcao4 != '') {
+						$opcoes .= $nome_opcao4." - ";
+					}
+					if ($nome_opcao5 && $nome_opcao5 != '') {
+						$opcoes .= $nome_opcao5." - ";
+					}
+					if ($opcoes != '') {
+						$opcoes = substr($opcoes, 0, -3);
+					}
+
+					$mensagem = str_replace('#prod#', $nome, $mensagem);
+					$mensagem = str_replace('#ref#', $ref, $mensagem);
+					$mensagem = str_replace('#nome#', $row_rsCliente['nome'], $mensagem);
+					$mensagem = str_replace('#opcoes#', $opcoes, $mensagem);
+					$mensagem = str_replace('#preco#', $novo_preco_txt, $mensagem);
+
+					$formcontent = str_replace("#cemail#", "Contacto", $formcontent);
+					$formcontent = str_replace("#crodape#", $rodape, $formcontent);
+					$formcontent = str_replace("#ctitulo#", $titulo, $formcontent);
+					$formcontent = str_replace("#csubtitulo#", "", $formcontent);
+					$formcontent = str_replace("#cmensagem#", $mensagem, $formcontent);
+					$formcontent = str_replace("#cmostrareg#", "", $formcontent);
+					$formcontent = str_replace("#tit_mail_compr#", $Recursos->Resources["car_mail_7"], $formcontent);
+
+					$subject = $titulo." - www.luc.pt";
+					sendMail($row_rsCliente['email'], '', $formcontent, $mensagem, $subject);
+					####################################
+				}
+			}
+		}
+	}
+}
+
+?>
+Feito.

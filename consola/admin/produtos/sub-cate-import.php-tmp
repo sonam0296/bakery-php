@@ -1,0 +1,300 @@
+<?php include_once ('../inc_pages.php');?>
+
+<?php
+$query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+$rsLinguas       = DB::getInstance()->prepare($query_rsLinguas);
+$rsLinguas->execute();
+$row_rsLinguas       = $rsLinguas->fetchAll();
+$totalRows_rsLinguas = $rsLinguas->rowCount();
+
+DB::close();
+
+function categoria_get($categoria_name) {
+
+	$query_rsCat = "SELECT id, nome FROM l_categorias_en WHERE nome = '$categoria_name'";
+	$rsCat       = DB::getInstance()->prepare($query_rsCat);
+	$rsCat->execute();
+	$row_rsCat = $rsCat->fetch();
+	DB::close();
+	return $row_rsCat;
+}
+
+function brand_get($brand_name) {
+	$query_rsBrand = "SELECT id, nome FROM l_marcas_en WHERE nome = '$brand_name'";
+	$rsBrand       = DB::getInstance()->prepare($query_rsBrand);
+	$rsBrand->execute();
+	$row_rsBrand = $rsBrand->fetch();
+	DB::close();
+	return $row_rsBrand;
+}
+
+?>
+
+<?php
+
+if (isset($_POST['importSubmit'])) {
+
+	// Allowed mime types
+	$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+
+	// Validate whether selected file is a CSV file
+	if (!empty($_FILES['csvfile']['name']) && in_array($_FILES['csvfile']['type'], $csvMimes)) {
+
+		// If the file is uploaded
+		if (is_uploaded_file($_FILES['csvfile']['tmp_name'])) {
+
+			// Open uploaded CSV file with read-only mode
+			$csvFile = fopen($_FILES['csvfile']['tmp_name'], 'r');
+
+			// Skip the first line
+			fgetcsv($csvFile);
+
+			// Parse data from CSV file line by line
+
+			$i = 1;
+			while (($line = fgetcsv($csvFile)) !== FALSE) {
+
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+
+				$main_cate_name = $line[1];
+				$cate_name      = $line[1];
+				$sub_cate_name  = $line[3];
+
+				$get_cate_name = categoria_get($main_cate_name);
+
+				if (!empty($sub_cate_name) && !empty($get_cate_name)) {
+					$sub_sub_exist = categoria_get($sub_cate_name);
+					if (empty($sub_sub_exist)) {
+
+						$insertSQL = "SELECT MAX(id) FROM l_categorias_en";
+						$rsInsert  = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->execute();
+						$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+
+						$max_id = $row_rsInsert["MAX(id)"]+1;
+
+						foreach ($row_rsLinguas as $linguas) {
+
+							$query_rsCatMae = "SELECT url FROM l_categorias_".$linguas['sufixo']." WHERE id=:categoria";
+							$rsCatMae       = DB::getInstance()->prepare($query_rsCatMae);
+							$rsCatMae->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT);
+							$rsCatMae->execute();
+							$row_rsCatMae       = $rsCatMae->fetch(PDO::FETCH_ASSOC);
+							$totalRows_rsCatMae = $rsCatMae->rowCount();
+
+							if ($totalRows_rsCatMae > 0) {
+								$nome_url = $row_rsCatMae['url']."-";
+							} else {
+								$nome_url = "";
+							}
+
+							$nome_url .= strtolower(verifica_nome($sub_cate_name));
+
+							$query_rsProc = "SELECT * FROM l_categorias_".$linguas['sufixo']." WHERE url like :nome_url AND id!=:max_id";
+							$rsProc       = DB::getInstance()->prepare($query_rsProc);
+							$rsProc->bindParam(':nome_url', $nome_url, PDO::PARAM_STR, 5);
+							$rsProc->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+							$rsProc->execute();
+							$totalRows_rsProc = $rsProc->rowCount();
+
+							if ($totalRows_rsProc > 0) {
+								$nome_url = $nome_url."-".$max_id;
+							}
+
+							$cat_array = [
+								'max_id'    => $max_id,
+								'nome'      => $sub_cate_name,
+								'categoria' => $get_cate_name['id'],
+								'url'       => $nome_url,
+								'title'     => $sub_cate_name,
+							];
+
+							$insertSQL = "INSERT INTO l_categorias_".$linguas["sufixo"]." (id, nome, cat_mae, url, title) VALUES (:max_id, :nome, :categoria, :url, :title)";
+							$rsInsert  = DB::getInstance()->prepare($insertSQL);
+							$rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+							$rsInsert->bindParam(':nome', $sub_cate_name, PDO::PARAM_STR, 5);
+							$rsInsert->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT, 5);
+							$rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5);
+							$rsInsert->bindParam(':title', $sub_cate_name, PDO::PARAM_STR, 5);
+							$rsInsert->execute();
+						}
+
+						$i++;
+
+					}
+				}
+			}
+
+			$i = 1;
+			while (($line = fgetcsv($csvFile)) !== FALSE) {
+
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+
+				$main_cate_name = $line[1];
+				$cate_name      = $line[1];
+				$sub_cate_name  = $line[3];
+
+				$get_cate_name = categoria_get($cate_name);
+
+				if (!empty($sub_cate_name) && !empty($get_cate_name)) {
+					$sub_sub_exist = categoria_get($sub_cate_name);
+					if (empty($sub_sub_exist)) {
+
+						$insertSQL = "SELECT MAX(id) FROM l_categorias_en";
+						$rsInsert  = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->execute();
+						$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+
+						$max_id = $row_rsInsert["MAX(id)"]+1;
+
+						foreach ($row_rsLinguas as $linguas) {
+
+							$query_rsCatMae = "SELECT url FROM l_categorias_".$linguas['sufixo']." WHERE id=:categoria";
+							$rsCatMae       = DB::getInstance()->prepare($query_rsCatMae);
+							$rsCatMae->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT);
+							$rsCatMae->execute();
+							$row_rsCatMae       = $rsCatMae->fetch(PDO::FETCH_ASSOC);
+							$totalRows_rsCatMae = $rsCatMae->rowCount();
+
+							if ($totalRows_rsCatMae > 0) {
+								$nome_url = $row_rsCatMae['url']."-";
+							} else {
+								$nome_url = "";
+							}
+
+							$nome_url .= strtolower(verifica_nome($sub_cate_name));
+
+							$query_rsProc = "SELECT * FROM l_categorias_".$linguas['sufixo']." WHERE url like :nome_url AND id!=:max_id";
+							$rsProc       = DB::getInstance()->prepare($query_rsProc);
+							$rsProc->bindParam(':nome_url', $nome_url, PDO::PARAM_STR, 5);
+							$rsProc->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+							$rsProc->execute();
+							$totalRows_rsProc = $rsProc->rowCount();
+
+							if ($totalRows_rsProc > 0) {
+								$nome_url = $nome_url."-".$max_id;
+							}
+
+							$cat_array = [
+								'max_id'    => $max_id,
+								'nome'      => $sub_cate_name,
+								'categoria' => $get_cate_name['id'],
+								'url'       => $nome_url,
+								'title'     => $sub_cate_name,
+							];
+
+							$insertSQL = "INSERT INTO l_categorias_".$linguas["sufixo"]." (id, nome, cat_mae, url, title) VALUES (:max_id, :nome, :categoria, :url, :title)";
+							$rsInsert  = DB::getInstance()->prepare($insertSQL);
+							$rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+							$rsInsert->bindParam(':nome', $sub_cate_name, PDO::PARAM_STR, 5);
+							$rsInsert->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT, 5);
+							$rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5);
+							$rsInsert->bindParam(':title', $sub_cate_name, PDO::PARAM_STR, 5);
+							$rsInsert->execute();
+						}
+
+						$i++;
+
+					}
+				}
+			}
+
+			$i = 1;
+			while (($line = fgetcsv($csvFile)) !== FALSE) {
+
+				if ($i < 1) {
+					$i++;
+					continue;
+				}
+
+				$main_cate_name = $line[1];
+				$cate_name      = $line[1];
+				$sub_cate_name  = $line[3];
+
+				$get_cate_name = categoria_get($sub_cate_name);
+
+				if (!empty($sub_cate_name) && !empty($get_cate_name)) {
+					$sub_sub_exist = categoria_get($sub_cate_name);
+					if (empty($sub_sub_exist)) {
+
+						$insertSQL = "SELECT MAX(id) FROM l_categorias_en";
+						$rsInsert  = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->execute();
+						$row_rsInsert = $rsInsert->fetch(PDO::FETCH_ASSOC);
+
+						$max_id = $row_rsInsert["MAX(id)"]+1;
+
+						foreach ($row_rsLinguas as $linguas) {
+
+							$query_rsCatMae = "SELECT url FROM l_categorias_".$linguas['sufixo']." WHERE id=:categoria";
+							$rsCatMae       = DB::getInstance()->prepare($query_rsCatMae);
+							$rsCatMae->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT);
+							$rsCatMae->execute();
+							$row_rsCatMae       = $rsCatMae->fetch(PDO::FETCH_ASSOC);
+							$totalRows_rsCatMae = $rsCatMae->rowCount();
+
+							if ($totalRows_rsCatMae > 0) {
+								$nome_url = $row_rsCatMae['url']."-";
+							} else {
+								$nome_url = "";
+							}
+
+							$nome_url .= strtolower(verifica_nome($sub_cate_name));
+
+							$query_rsProc = "SELECT * FROM l_categorias_".$linguas['sufixo']." WHERE url like :nome_url AND id!=:max_id";
+							$rsProc       = DB::getInstance()->prepare($query_rsProc);
+							$rsProc->bindParam(':nome_url', $nome_url, PDO::PARAM_STR, 5);
+							$rsProc->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+							$rsProc->execute();
+							$totalRows_rsProc = $rsProc->rowCount();
+
+							if ($totalRows_rsProc > 0) {
+								$nome_url = $nome_url."-".$max_id;
+							}
+
+							$cat_array = [
+								'max_id'    => $max_id,
+								'nome'      => $sub_cate_name,
+								'categoria' => $get_cate_name['id'],
+								'url'       => $nome_url,
+								'title'     => $sub_cate_name,
+							];
+
+							$insertSQL = "INSERT INTO l_categorias_".$linguas["sufixo"]." (id, nome, cat_mae, url, title) VALUES (:max_id, :nome, :categoria, :url, :title)";
+							$rsInsert  = DB::getInstance()->prepare($insertSQL);
+							$rsInsert->bindParam(':max_id', $max_id, PDO::PARAM_INT);
+							$rsInsert->bindParam(':nome', $sub_cate_name, PDO::PARAM_STR, 5);
+							$rsInsert->bindParam(':categoria', $get_cate_name['id'], PDO::PARAM_INT, 5);
+							$rsInsert->bindParam(':url', $nome_url, PDO::PARAM_STR, 5);
+							$rsInsert->bindParam(':title', $sub_cate_name, PDO::PARAM_STR, 5);
+							$rsInsert->execute();
+						}
+
+						$i++;
+
+					}
+				}
+			}
+			//exit();
+			// Close opened CSV file
+			fclose($csvFile);
+
+			$qstring = '?status=succ';
+		} else {
+			$qstring = '?status=err';
+		}
+	} else {
+		$qstring = '?status=invalid_file';
+	}
+}
+
+// Redirect to the listing page
+header("Location: produtos.php".$qstring);
+
+?>

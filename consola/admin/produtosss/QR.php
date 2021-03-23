@@ -1,0 +1,513 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php 
+  /*$cost = 100;
+  $markup = 100;
+  $revenue = $cost + $cost * $markup / 100;
+
+  $Profit = $revenue - $cost;*/
+  
+
+ ?>
+
+<?php 
+
+$menu_sel='ec_produtos_produtos';
+$menu_sub_sel='';
+
+$tab_sel=1;
+if($_GET['tab_sel'] > 0) $tab_sel=$_GET['tab_sel'];
+
+$id=$_GET['id'];
+
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "produtos_form")) {
+	$manter = $_POST['manter'];
+	$tab_sel = $_REQUEST['tab_sel'];	
+	
+	
+	/*	if(!$manter) 
+      header("Location: produtos.php?alt=1");
+    else
+      header("Location: produtos-edit.php?id=".$id."&alt=1&tab_sel=1");
+	}*/
+
+
+}
+
+$result = array_count_values($res);
+asort($result);
+end($result);
+$fav_opt = key($result);
+
+$query_rsPaginas = "SELECT id, nome FROM paginas_pt ORDER BY nome ASC";
+$rsPaginas = DB::getInstance()->prepare($query_rsPaginas);
+$rsPaginas->execute();
+$totalRows_rsPaginas = $rsPaginas->rowCount();
+$row_rsPaginas = $rsPaginas->fetch(PDO::FETCH_ASSOC);
+
+//Nº de Clientes diferentes que estão a seguir o produto
+$query_rsTotalFollow = "SELECT COUNT(id_cliente) AS total FROM l_pecas_seguir WHERE id_produto =:id GROUP BY id_produto";
+$rsTotalFollow = DB::getInstance()->prepare($query_rsTotalFollow);
+$rsTotalFollow->bindParam(':id', $id, PDO::PARAM_INT);
+$rsTotalFollow->execute();
+$row_rsTotalFollow = $rsTotalFollow->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsTotalFollow = $rsTotalFollow->rowCount();
+
+
+$query_rsRole = "SELECT * FROM l_pecas".$extensao." where id =".$id;
+$rsRole = DB::getInstance()->prepare($query_rsRole);
+$rsRole->bindParam(':id', $id, PDO::PARAM_INT);
+$rsRole->execute();
+$totalRows_rsRoll = $rsRole->fetchAll();
+
+
+$query_rsRole = "SELECT * FROM roll";
+$rsRole = DB::getInstance()->prepare($query_rsRole);
+$rsRole->execute();
+$totalRows_rsRoll = $rsRole->fetchAll();
+DB::close();
+
+
+$query_rs_supp = "SELECT * FROM l_pecas_supplier where product_id=".$id;
+$rsP_supp = DB::getInstance()->prepare($query_rs_supp);
+$rsP_supp->execute();
+$totalRows_rs_supp = $rsP_supp->fetchAll();
+
+$query_rs_supp = "SELECT * FROM l_pecas".$extensao." where id =".$id;
+$rsP_supp = DB::getInstance()->prepare($query_rs_supp);
+$rsP_supp->bindParam(':id', $id, PDO::PARAM_INT);
+$rsP_supp->execute();
+$totalRows_rsP_supp = $rsP_supp->rowCount();
+$row_rsP_QR = $rsP_supp->fetch(PDO::FETCH_ASSOC);
+
+
+
+?>
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+<!--COR-->
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>js/jscolor/jscolor.js"></script>
+<body class="<?php echo $body_info; ?>">
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+<div class="clearfix"> </div>
+<style type="text/css">
+  .client-details {
+    color: #0254EB
+  }
+  .client-details:visited {
+    color: #0254EB
+  }
+  .stats-details {
+    /*border-top: 1px solid #eee;*/
+    margin-top: 60px;
+    display: none;
+  }
+</style>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content"> 
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> <?php echo $RecursosCons->RecursosCons['produtos']; ?> <small><?php echo $RecursosCons->RecursosCons['editar_registo']; ?></small> </h3>
+      <div class="page-bar">
+        <ul class="page-breadcrumb">
+          <li> <i class="fa fa-home"></i> <a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?></a> <i class="fa fa-angle-right"></i> </li>           
+          <li>
+            <a href="produtos.php"><?php echo $RecursosCons->RecursosCons['produtos']; ?> <i class="fa fa-angle-right"></i></a>
+          </li>
+          <li>
+            <a href="javascript:"><?php echo $RecursosCons->RecursosCons['editar_registo']; ?></a>
+          </li>
+        </ul>
+      </div>
+      <!-- END PAGE HEADER-->      
+      <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h4 class="modal-title"><?php echo $RecursosCons->RecursosCons['eliminar_registo']; ?></h4>
+            </div>
+            <div class="modal-body"> <?php echo $RecursosCons->RecursosCons['msg_elimina_registo']; ?>  </div>
+            <div class="modal-footer">
+              <button type="button" class="btn blue" onClick="document.location='produtos.php?rem=1&id=<?php echo $row_rsP["id"]; ?>'"><?php echo $RecursosCons->RecursosCons['txt_ok']; ?></button>
+              <button type="button" class="btn default" data-dismiss="modal"><?php echo $RecursosCons->RecursosCons['txt_cancelar']; ?></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row">
+        <div class="col-md-12">     
+          <?php include_once(ROOTPATH_ADMIN.'inc_linguas.php'); ?>    
+          <form id="produtos_form" name="produtos_form" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <input type="hidden" name="manter" id="manter" value="0">
+            <input type="hidden" name="tab_sel" id="tab_sel" value="<?php echo $tab_sel; ?>">
+            <input type="hidden" name="last-order-id" id="last-order-id" value="">
+            <input type="hidden" name="client-id" id="client-id" value="">
+            <input type="hidden" name="product-id" id="product-id" value="<?php echo $id; ?>">
+            <div class="portlet">
+              <div class="portlet-title">
+                <div class="caption"> <i class="fa fa-pencil-square"></i><?php echo $RecursosCons->RecursosCons['produtos']; ?> - <?php echo $row_rsP['nome']; ?></div>
+                <div class="form-actions actions btn-set">
+                  <button type="button" name="back" class="btn default" onClick="document.location='produtos.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?></button>
+                  <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar']; ?></button>
+                  <button type="submit" class="btn green to-hide"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar']; ?></button>
+                  <button type="submit" class="btn green to-hide" onClick="document.getElementById('manter').value='1';"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar_manter']; ?></button>
+                  <a href="#modal_delete" data-toggle="modal" class="btn red"><i class="fa fa-remove"></i> <?php echo $RecursosCons->RecursosCons['']; ?></a>
+                </div>
+              </div>
+              <div class="portlet-body">
+                <div class="tabbable">
+                  <ul class="nav nav-tabs">
+                      <li class="nav-tab" onClick="window.location='produtos-edit.php?id=<?php echo $id; ?>&tab_sel=1'"> <a href="#tab_general" data-toggle="tab" onClick="document.getElementById('tab_sel').value='1'"> <?php echo $RecursosCons->RecursosCons['tab_detalhes']; ?> </a> </li>
+                    <li onClick="window.location='produtos-edit.php?id=<?php echo $id; ?>&tab_sel=5'"> <a href="#tab_promocao" data-toggle="tab" onClick="document.getElementById('tab_sel').value='5'"> <?php echo $RecursosCons->RecursosCons['tab_promocao']; ?> </a> </li>
+                    <li class="nav-tab" onClick="window.location='produtos-edit-imagens.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> <?php echo $RecursosCons->RecursosCons['tab_imagens']; ?> </a> </li>
+                    <li class="nav-tab" onClick="window.location='produtos-edit-stocks.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> <?php echo $RecursosCons->RecursosCons['tab_stocks']; ?> </a> </li>
+
+                    <li class="nav-tab" onClick="window.location='store-edit.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> Store Locater </a> </li>
+
+                    <li onClick="window.location='produtos-edit-filtros.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> <?php echo $RecursosCons->RecursosCons['tab_filtros']; ?> </a> </li>
+                    <!-- <li onClick="window.location='supply-edit.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> Supplier </li> -->
+                   
+                    <!--  <li class="nav-tab <?php if($tab_sel==7) echo "active"; ?>"> <a href="#tab_supplier" data-toggle="tab" onClick="document.getElementById('tab_sel').value='7'"> Supplier </a> </li> -->
+
+                    <li class="nav-tab" onClick="window.location='supplier-edit.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> Supplier </a> </li>
+                    <li class="nav-tab active" onClick="window.location='QR.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> QR Code </a> </li>
+
+                    <li class="nav-tab" onClick="window.location='produtos-edit-relacionados.php?id=<?php echo $id; ?>'"> <a href="javascript:void(null)" data-toggle="tab"> <?php echo $RecursosCons->RecursosCons['tab_relacionados']; ?> </a> </li>
+                    <li id="nav-tab-stats" class="nav-tab <?php if($tab_sel==2) echo "active"; ?>"> <a id="tab_2" href="#tab_estatisticas" data-toggle="tab" onClick="document.getElementById('tab_sel').value='2'"> <?php echo $RecursosCons->RecursosCons['tab_estatisticas']; ?> </a> </li>
+                    <li class="nav-tab <?php if($tab_sel==3) echo "active"; ?>"> <a id="tab_3" href="#tab_dados" data-toggle="tab" onClick="document.getElementById('tab_sel').value='3'"> <?php echo $RecursosCons->RecursosCons['tab_metatags']; ?> </a> </li>
+                  </ul>
+                  <div class="tab-content no-space">
+                    <div class="tab-pane <?php if($tab_sel==1) echo "active"; ?>" id="tab_general">
+                      <div class="form-body">
+                        <?php if($_GET['alt'] == 1 && $_GET['tab_sel'] == 1) { ?>
+                          <div class="alert alert-success display-show">
+                            <button class="close" data-close="alert"></button>
+                            <span> <?php echo $RecursosCons->RecursosCons['alt']; ?> </span>
+                          </div>
+                        <?php } ?>
+                        <?php if($_GET['env'] == 1) { ?>  
+                          <div class="alert alert-success display-show">
+                            <button class="close" data-close="alert"></button>
+                            <?php echo $RecursosCons->RecursosCons['env_config']; ?> 
+                          </div>
+                        <?php } ?>
+                        <div class="alert alert-danger display-hide">
+                          <button class="close" data-close="alert"></button>
+                          <?php echo $RecursosCons->RecursosCons['msg_required']; ?> 
+                        </div>                  
+
+              <!-- START QR CODE || CODE BY VISHAL PRAJAPATI || 15-12-20-->
+             <?php 
+              include('library/php_qr_code/qrlib.php'); // Include a library for PHP QR code
+
+              if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
+
+                  $image = $row_rsP_QR['qr_code'];
+
+                  $file= '../../../imgs/QR/'.$image;
+
+                  unlink($file);
+
+              	//its a location where generated QR code can be stored.
+              	$qr_code_file_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../imgs/QR'.DIRECTORY_SEPARATOR;
+              	$set_qr_code_path = '../../../imgs/QR/';
+
+              	// If directory is not created, the create a new directory 
+              	if(!file_exists($qr_code_file_path)){
+                  	mkdir($qr_code_file_path);
+              	}
+              	
+              	//Set a file name of each generated QR code
+              	$filename	=	$qr_code_file_path.time().'.png';
+              	
+              /* All the user generated data must be sanitize before the processing */
+               if (isset($_REQUEST['level']) && $_REQUEST['level']!='')
+                  $errorCorrectionLevel = $_REQUEST['level'];
+
+               if (isset($_REQUEST['size']) && $_REQUEST['size']!='')
+                  $matrixPointSize = $_REQUEST['size'];
+              	
+
+              	$frm_link	 =	"Product Name : ".$row_rsP_QR['nome'];
+              	$frm_link	.=  "Stock : ".$row_rsP_QR['stock'];
+              	$frm_link	.=	"Price : ".$row_rsP_QR['preco'];
+              	
+              	
+              	// After getting all the data, now pass all the value to generate QR code.
+              	QRcode::png($frm_link, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+
+              	$store_qr = basename($filename);
+
+
+              	$insertSQL = "UPDATE l_pecas".$extensao." SET qr_code=:qr WHERE id=:id";
+              	$rsInsert = DB::getInstance()->prepare($insertSQL);
+              	$rsInsert->bindParam(':id', $id, PDO::PARAM_INT);
+              	$rsInsert->bindParam(':qr', $store_qr, PDO::PARAM_STR, 5); 	
+              	$rsInsert->execute();
+                header("Location: QR.php?id=".$id."");
+
+              }
+            ?>
+
+	
+			<div class="container">
+				<div class="row justify-content-md-center">
+				<div class="ml-2 col-sm-6">
+					<?php if(isset($frm_link) and $frm_link!=""){?>
+					<div class="alert alert-success">QR created for <strong>[<?php echo $frm_link;?>]</strong></div>
+					<?php  } ?>
+					<?php if($row_rsP_QR['qr_code'] != "") { ?> 
+            <div class="text-center"><img src="../../../imgs/QR/<?php echo $row_rsP_QR['qr_code']; ?>"/></div>
+					<?php }
+  					else
+  					{
+
+  					}
+					?>
+						<div class="form-group">
+							<label>QR Code Level</label>
+							<select name="level" class="form-control">
+								<option value="L">L - smallest</option>
+								<option value="M" selected>M</option>
+								<option value="Q">Q</option>
+								<option value="H">H - best</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>QR Code Size</label>
+							<select name="size" class="form-control">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4" selected>4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="submit" name="submit" value="Upload" class="btn btn-danger">
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+	
+	
+	<!--Only these JS files are necessary--> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>  
+
+                        <!-- END QR CODE -->
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="MM_insert" value="produtos_form" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+  </div>
+  <!-- END CONTENT -->
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+</div>
+<!-- END CONTAINER -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+<!-- LINGUA PORTUGUESA -->
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/plupload/js/plupload.full.min.js" type="text/javascript"></script> 
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckeditor/ckeditor.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.js"></script> 
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+<script src="form-validation.js"></script> 
+<link rel="stylesheet" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/admin/pages/css/tinyscrollbar.css" type="text/css"/>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/admin/pages/scripts/jquery.tinyscrollbar.min.js"></script>
+<script src="produtos-estatisticas.js"></script>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+ <script type="text/javascript">
+    $( function() {
+    $( "#tabs" ).tabs();
+  } );
+ </script>
+
+  <script>
+
+     $("#markup").change(function(){
+
+        var cost   = $('#cost').val();
+        var markup = $('#markup').val();
+        var totalprice =  parseInt(cost) +  ( (cost * markup) / 100);
+        $('#preco').val(totalprice);
+      });
+
+       $("#preco").change(function(){
+
+        var cost   = $('#cost').val();
+        var preco = $('#preco').val();
+        var totalprice2 =  100 * (preco - cost) / cost;
+        $('#markup').val(totalprice2);
+      });
+
+       $("#cost").change(function(){
+
+        var cost   = $('#cost').val();
+        var markup = $('#markup').val();
+
+        totalprice2 = parseInt(cost) +  ( (cost * markup) / 100);
+
+        $('#preco').val(totalprice2);
+      });
+      
+
+        /* $(document).on("change keyup blur", "#preco", function() {
+            var total   = $('#tprice').val();
+            var qtn    = $('#qtn').val();
+            var total = (total * qtn);
+            $('#total').val(total);
+           // var mult = main * dec; // gives the value for subtract from main value
+            //var discont = main - mult;
+        });*/
+          /*  $(document).ready(function() {
+            $('#gst').keyup(function(ev) {
+              var gst = $("#gst").val();
+              var price = $("#tprice").val();
+              var qty = $("#qtn").val();
+              var qty_total = price * qty;
+              var tot_price = (qty_total * gst / 100) + qty_total;
+              var gst_total = document.getElementById('total');
+              gst_total.value = tot_price;
+            });
+          });  */
+
+    </script>
+
+
+ <script>
+  // Material Select Initialization
+  $(document).ready(function() {
+  $('.mdb-select').materialSelect();
+  });
+  </script>
+  <script>
+$(document).ready(function(){
+ $('#framework').multiselect({
+  nonSelectedText: 'Select Framework',
+  enableFiltering: true,
+  enableCaseInsensitiveFiltering: true,
+  buttonWidth:'400px'
+ });
+ 
+ $('#framework_form').on('submit', function(event){
+  event.preventDefault();
+  var form_data = $(this).serialize();
+  $.ajax({
+   url:"insert.php",
+   method:"POST",
+   data:form_data,
+   success:function(data)
+   {
+    $('#framework option:selected').each(function(){
+     $(this).prop('selected', false);
+    });
+    $('#framework').multiselect('refresh');
+    alert(data);
+   }
+  });
+ });
+ 
+ 
+});
+</script>
+
+ 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+jQuery(document).ready(function() {    
+  Metronic.init(); // init metronic core components
+  Layout.init(); // init current layout
+  QuickSidebar.init(); // init quick sidebar
+  Demo.init(); // init demo features
+  FormValidation.init();
+});
+</script> 
+<script type="text/javascript">
+var areas = Array('descricao', 'promocao_texto', 'caracteristicas', 'informacoes');
+$.each(areas, function (i, area) {
+ CKEDITOR.replace(area, {
+  filebrowserBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html',
+  filebrowserImageBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Images',
+  filebrowserFlashBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Flash',
+  filebrowserUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+  filebrowserImageUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+  filebrowserFlashUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+  toolbar : "Basic2",
+  height: "250px"
+ });
+});
+</script>
+<script type="text/javascript">
+document.ready=carregaPreview();
+</script>
+<script type="text/javascript">
+  var parts = window.location.search.substr(1).split("&");
+  var $_GET = {};
+  
+  for (var i = 0; i < parts.length; i++) {
+      var temp = parts[i].split("=");
+      $_GET[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+  }
+
+  if($_GET['tab_sel'] != null && $_GET['tab_sel'] == 2) {
+    $('.to-hide').hide();
+  }
+  else {
+    $('.to-hide').show();
+  }
+  
+  $('.nav-tab').click(function() {
+    if(this.id == 'nav-tab-stats') {
+      $('.to-hide').hide();
+    }
+    else {
+      $('.to-hide').show();
+    }
+  });
+</script>
+</body>
+<!-- END BODY -->
+</html>

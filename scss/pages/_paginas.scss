@@ -1,0 +1,934 @@
+$padds: 2rem;
+
+.paginas_header{
+	text-align:center;
+	position:relative;	
+	
+	&.has_padd{
+		padding:7.5rem 2rem;
+	}
+	&.has_color{
+		height: 18rem;
+		background: #000;
+	}
+
+
+	& .paginas_head_cont{
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	& h1{
+		@include textos(titulos, $white);
+		max-width: 80%;
+		margin:auto;
+		
+		&.branco{
+			color:#fff;
+		}
+		&.preto{
+			color:$primary-color;
+		}
+	}
+}
+.paginas_cont{
+	& .outras_paginas{
+	    left: auto; 
+	    margin-top: 5rem;
+	    width: 100%;
+	    max-width: 30rem;
+	    padding-right: 2rem;
+
+	    & a{
+	    	font-weight: 500;
+	    	position: relative;
+	    	display: table;
+	    	padding: 10px 0;
+	    	margin-bottom: 2rem;
+	    	padding-right: 2rem;
+
+	    	&:before{
+	    		position: absolute;
+	    		top: 50%;
+	    		right: 0;
+	    		@include transform(translateY(-50%));
+	    		color: $secondary-color;
+	    		display: none;
+	    		font-size: 10px;
+	    	}
+
+	    	&:after{
+	    		content:'';
+	    		position: absolute;
+	    		top: 0;
+	    		left: 0;
+	    		width: 0;
+	    		height: 3px;
+	    		background-color: $secondary-color;
+	    	}
+
+	    	&.active{
+	    		color: $secondary-color;
+
+	    		&:before{
+	    			display: block;
+	    		}
+	    		&:after{
+	    			width: 5rem;
+	    		}
+	    	}
+
+	    	&:hover{
+	    		color: $secondary-color;
+	    	}
+	    }
+	}
+
+	& .medium-9{
+		margin-top: 5rem;
+	}
+	@include breakpoint(xxsmall down){
+		& .medium-9{
+			margin-top: 0;
+		}
+	}
+}
+.paginas_container{
+	margin: auto;
+	position:relative;
+
+	&.has_max{
+		max-width:100%;
+		padding: 0;
+	}
+
+	& .limited{
+		max-width:$max_width_pag;
+		margin: auto;
+		/*text-align: center;*/
+	}
+}
+.paginas_bloco_margin{
+	display: block;
+
+	&.small{
+		height:5rem;
+		min-height:unset;
+	}
+
+	@include breakpoint(xxsmall down){
+		height:auto !important;
+	}
+}
+
+.paginas_tit{	
+	/*@include textos(subtitulos, $secondary-color);
+	@extend .titulos;*/
+	display: table;
+
+	text-align: left;
+	margin-bottom:3rem !important;
+
+	text-transform: uppercase;
+	
+	padding-bottom: 1rem;
+	position: relative;	
+
+	&:after{
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 140px;
+		height: 3px;
+		background-color: $secondary-color;
+	}
+	
+	&.full{
+		width: 100%;	
+
+		&:after{
+			width: 100%;
+		}
+	}
+
+	&.center{
+		margin: auto;
+		text-align:center;
+
+		&:after{
+			left: 50%;
+			@include transform(translateX(-50%));
+		}
+	}
+
+
+	/*@include breakpoint(xxsmall down){
+		text-align: center;
+		margin: auto;
+	}*/
+}
+.paginas_tit_small{
+	@include textos(list_tit);
+	font-size: 13px;
+
+	text-align: left;
+	padding-bottom:1.5rem;
+	
+	&.center{
+		text-align:center;
+	}
+	
+	@include breakpoint(xxsmall down){
+		text-align: center;
+		
+	}
+}
+.paginas_txt{	
+	font-style: normal;
+
+	padding-bottom: 3.5rem;
+
+	@include breakpoint(xxlarge){
+
+	}
+	
+	// Tabela pagina politica
+	& div.overflow {
+		overflow: auto;
+		display: block;
+	}
+
+	& table.tbl_cookies {
+		width: 100% !important;
+		min-width: 600px;
+		table-layout: fixed;
+		border: 1px solid #000000;
+		border-bottom: 0;
+		border-collapse: collapse;
+	}
+
+	& table.tbl_cookies thead tr {
+		background-color: #bdc0bf;
+		border-bottom: 1px solid #000000; 
+	}
+
+	& table.tbl_cookies thead td {
+		border-bottom: 1px solid #000000; 
+	}
+
+	& table.tbl_cookies thead td {
+		text-align: center;
+		font-weight: bold;
+	}
+
+	& table.tbl_cookies td {
+		width: 20% !important;
+		padding: 5px;
+		border-right: 1px solid #000000;
+		border-bottom: 1px solid #000000;
+	}
+
+	& table.tbl_cookies td:last-child {
+		border-right: 0;
+	}
+
+	& table.tbl_cookies td:nth-child(3) {
+		width: 40% !important;
+	}
+
+
+	&.has_max{
+		max-width: 90%;
+
+		@include breakpoint(xxsmall down){
+			max-width: 100%;
+		}		
+	}
+
+	& strong{
+		font-weight:700;
+	}
+	& a{
+		font-weight:700;
+		color:$secondary-color;	
+		
+		&:hover{
+			color:$primary-color;
+		}
+	}
+	
+	& iframe{
+		margin:auto;
+		display:block;
+		width:100%;
+		max-width:none;	
+	}
+
+	& img{
+		max-width: 100%;
+	}
+	
+	& ul:not(.slick-dots) li{
+		list-style-type: disc;
+		list-style-position: inside;
+		margin-top: 1.5rem;
+	}
+}
+.paginas_conteudo{
+	&.left{
+		padding-left: $padds;
+		padding-right: 0px;
+	}
+	
+	&.left_float{
+		padding-right: $padds;
+		padding-left: 0px;
+		float: left;
+	}
+	
+	&.right{
+		padding-right: $padds;
+		padding-left: 0px;
+	}
+	
+	
+	&.right_float{
+		padding-left: $padds;
+		padding-right: 0px;
+		float: right;
+	}
+	&.top{
+		padding-top:  $padds;
+	}
+	&.bottom{
+		padding-bottom:  $padds;
+	}
+	@include breakpoint(xxsmall down){
+		/*padding: 0 !important;
+		padding-bottom: $padds !important;*/
+		float: none !important;
+		max-width: 100%;
+
+		&.left_float{
+			padding-right: 0;
+			padding-bottom: $padds;
+		}
+		&.right_float{
+			padding-left: 0;
+			padding-bottom: $padds;
+		}
+		&.left{
+			padding-left: 0;
+			&.order_1{
+				padding-top: $padds;
+			}
+			&.order_2{
+				padding-top:  $padds;
+			}
+		}
+		&.right{
+			padding-right: 0;
+			&.order_1{
+				padding-top: $padds;
+			}
+			&.order_2{
+				padding-top:  $padds;
+			}
+		}
+		&.bottom{
+			/*padding-bottom: 0;*/
+			padding-top:  $padds;
+		}
+	}
+}
+
+.paginas_img{
+	display: block;
+
+	width: 100%;
+	max-width:50%;
+	/*padding-top: $padds;*/
+
+	&.left .div_cont_gal{
+		padding-left: $padds;
+		padding-right: 0px;
+	}
+	
+	&.left_float{
+		padding-right: $padds;
+		padding-left: 0px;
+		float: left;
+	}
+	
+	&.right .div_cont_gal{
+		padding-right: $padds;
+		padding-left: 0px;
+	}
+	
+	
+	&.right_float {
+		padding-left: $padds;
+		padding-right: 0px;
+		float: right;
+	}
+	&.top .div_cont_gal{
+		padding-top:  $padds;
+	}
+	&.bottom .div_cont_gal{
+		padding-bottom:  $padds;
+	}
+	&.single{
+		max-width:100%;
+		/*padding-bottom:0;*/
+	}
+	&.padded .div_cont_gal{
+		padding-bottom: $padds;
+	}
+
+	@include breakpoint(xxsmall down){
+		/*padding: 0 !important;
+		padding-bottom: $padds !important;*/
+		float: none !important;
+		max-width: 100%;
+
+		&.left_float{
+			padding-right: 0;
+			padding-bottom: $padds;
+		}
+		&.right_float{
+			padding-left: 0;
+			padding-bottom: $padds;
+		}
+
+		&.left{
+			& .div_cont_gal{
+				padding-left: 0;
+				padding-bottom:  $padds;
+			}
+
+			&.order_1 .div_cont_gal{
+				padding-bottom: $padds;
+			}
+			&.order_2 .div_cont_gal{
+				padding-top:  $padds;
+			}
+		}
+		&.right{
+			& .div_cont_gal{
+				padding-right: 0;
+				padding-bottom:  $padds;
+			}
+			&.order_1 .div_cont_gal{
+				padding-bottom: $padds;
+			}
+			&.order_2 .div_cont_gal{
+				padding-top:  $padds;
+			}
+			
+		}
+		&.top .div_cont_gal{
+			/*padding-bottom: 0;*/
+			padding-bottom:  $padds;
+		}
+	}
+}
+
+.gallery_cont{
+	& .gallery_arrows{
+		&.prev{
+			left: 5rem;
+		}
+		&.next{
+			right: 5rem;
+		}
+	}
+}
+
+.estrutura_3{
+	@include divOutter(-$padds);
+
+	& .column{
+		padding: 0 $padds !important;
+	}
+
+	@include breakpoint(xxsmall down){
+		@include divOutter(0);
+
+		& .column{
+			padding: 0 !important; 
+			padding-top: 8rem !important;
+
+			&:first-child{
+				padding-top: 0 !important;
+			};
+		}
+	}
+}
+
+.mapa_paginas{
+	height: 100%;
+
+	&.left{
+		padding-left: $padds;
+		padding-right: 0px;
+	}
+	
+	&.right{
+		padding-right: $padds;
+		padding-left: 0px;
+	}
+
+	& .mapa_container{
+		height: 100%;
+		min-height: 400px;
+	}
+
+	@include breakpoint(xxsmall down){
+
+		
+		&.left{
+			padding-left: 0;
+			&.order_1{
+				padding-bottom: $padds;
+			}
+			&.order_2{
+				padding-top:  $padds;
+			}
+		}
+		&.right{
+			padding-right: 0;
+			&.order_1{
+				padding-bottom: $padds;
+			}
+			&.order_2{
+				padding-top:  $padds;
+			}
+		}
+		
+	}
+}
+
+.pag_video_cont{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+
+	& .video_player{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+
+	& iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		
+		width: 100% !important;
+		height: 100% !important;
+		
+		z-index: 100;
+		background: transparent;
+	}
+}
+/*.paginas_btn{
+	margin-top: 3.5rem;
+}*/
+.paginas_form{
+
+	& form{
+		&.full{
+			margin-top: 4rem;
+		}
+		/*&.top{
+			padding-top: 7rem;
+		}*/
+		&.left{
+			padding-left: $padds;
+		}
+		&.right{
+			padding-right: $padds;
+		}
+	}
+
+
+	&.texto_centro{
+		text-align: center;
+
+		& .paginas_tit{
+			width: 100%;
+			text-align: center;
+
+			&:after{
+				left: 50%;
+				@include transform(translateX(-50%));
+			}
+		}
+
+		& form{
+			max-width: 500px;
+			margin: auto;
+		}
+	}
+	
+	@include breakpoint(xxsmall down){
+		& form{
+			margin-top: 4rem;
+
+			&.left{
+				padding-left: 0;
+			}
+			&.right{
+				padding-right: 0;
+			}
+		}
+	}
+}
+
+.paginas_downs{
+	padding-top: 4rem;
+
+	& .bloco_down{
+		padding: 1.5rem 0;
+		display: block;
+
+		&:last-child{
+			padding-bottom: 0;
+		}
+
+		& .icon{
+			color: $primary-color;
+			padding-right: 4rem;
+
+			&:before{
+				font-size: 3rem;
+			}
+		}
+
+		& .textos{
+			& span{
+				font-size: 14px;
+			}
+		}
+
+		&:hover{
+			& .icon,
+			& .textos{
+				color: $secondary-color;
+			}
+		}
+	}
+}
+
+.timeline{
+	/*margin-bottom: 7rem;*/
+
+	& .slick-years{
+		position: absolute;
+		width:50%;
+		right:0;
+		bottom: 6rem;
+		
+		z-index: 5;
+
+		&::before {
+			content: '';
+			
+			position: absolute;
+			left: 0%;
+			top: 50%;
+			
+			margin-top: -1px;
+			
+			display: block;
+			height: 2px;
+			width: 100%;
+			
+			background-color: $white;			
+			pointer-events: none;
+		}
+		
+		& li {
+			@include displayInline(top);
+			text-align: center;
+			height: 3.3rem;
+
+			span{
+				@include displayInline(top);
+				position: relative;
+
+				width: 1.7rem;
+				height: 1.7rem;
+				background: $white;
+				margin: 0 4rem;
+				margin-top: 0.8rem;
+
+				border-radius: 50%;
+
+				border:0;
+				
+				&::before {
+					content: '';
+					
+					position: absolute;
+					left: 50%;
+					top: 50%;
+					
+					margin-top: -1.65rem;
+					margin-left: -1.65rem;
+					
+					display: block;
+					height: 3.3rem;
+					width: 3.3rem;
+					
+					background-color: transparent;
+					border: 1px solid $white;
+					border-radius: 50%;
+					
+					pointer-events: none;
+					
+					opacity:0;
+					visibility:hidden;
+					
+					@include transform(scale(0.6));
+					@include Animationcss(all 0.3s linear);
+					
+				}
+			}
+
+			& span:hover,
+			&.slick-current span{
+				background:$secondary-color;
+				
+				&:before{
+					opacity:1;
+					visibility:visible;
+					
+					@include transform(scale(1));
+				}
+			}
+		}
+	}
+
+	.timeline_divs,
+	.timeline_info{
+		& .info{
+			display: block;
+			position:relative;
+			padding:7.5rem 9rem;
+			padding-bottom:10rem;
+
+			max-width: 82.5rem;
+
+			width: 100%;
+			height: 100%;
+
+			background:$primary-color;
+
+			& h3{
+				color:$white;
+				font-weight: 900;
+			}
+			& .textos{
+				color:$white;
+				margin-top:3rem;
+
+				display: block;
+				height: 13em;
+				overflow: hidden;
+    			overflow-y: auto;
+			}	
+
+			& .button{
+				margin-top:2.5rem;
+
+				&:before{
+					background:$white;
+				}
+
+				&:hover{
+					color: $secondary-color;
+				}
+			}	
+		}
+		&.opening .info,
+		&.open .info{
+			max-width: 100%;
+
+			& .textos{
+				height: auto;
+			}	
+		}
+
+		@include breakpoint(xlarge down){
+			& .info{
+				padding:5rem;
+				padding-bottom:7rem;
+				border-left:0;
+
+				max-width: 74.5rem;
+
+				& .textos{
+					margin-top:1.5rem;
+				}
+			}
+		}
+		@include breakpoint(medium down){
+			& .info{
+				padding:6rem 2rem;
+				padding-bottom:13rem;
+
+				max-width: 100%;
+
+				& .button{
+					margin-top: 4rem;
+				}
+			}
+		}
+	}
+
+	@include breakpoint(xlarge down){
+		& .slick-years{
+			bottom: 2rem;
+
+			& li span{
+				margin: 0 2rem;
+				margin-top: 0.8rem;
+			}
+		}
+	}
+	@include breakpoint(medium down){
+		& .slick-years{
+			bottom: 4rem;
+			
+			& li {
+				height: 1.8rem;
+
+				span{
+					width: 1.2rem;
+					height: 1.2rem;
+
+					margin: 0 1rem;
+					margin-top: 0.3rem;
+
+					&::before {
+						margin-top: -0.9rem;
+						margin-left: -0.9rem;
+						
+						height: 1.8rem;
+						width: 1.8rem;
+						
+					}
+				}
+			}
+
+		}
+	}
+	@include breakpoint(xxsmall down){
+		.timeline_divs,
+		.timeline_info{
+			& .info{
+				padding-bottom: 10rem;
+				& .textos{
+					height: 11em;
+				}
+			}
+		}
+		& .slick-years{
+			width:100%;
+		}
+	}
+}
+
+.paginas_container .table_overflow{
+	display: block;
+	width: 100%;
+	overflow: auto;
+	/*background-color: rgba($secondary-color, 0.1);*/
+
+	& table {
+		width: 100% !important;
+		min-width: 600px;
+		table-layout: fixed;
+		/*border: 1px solid #000000;*/
+		border-bottom: 0;
+		border-collapse: collapse;
+
+		& thead tr {
+			/*background-color: #bdc0bf;*/
+			/*border-bottom: 1px solid #000000; */
+		}
+
+		& thead td {
+			/*border-bottom: 1px solid #000000; */
+			/*text-align: center;*/
+			font-weight: bold;		
+			color: $white;
+
+			&.cor_op_1{
+				background-color: rgba($secondary-color, 1);
+			}
+			&.cor_op_05{
+				background-color: rgba($secondary-color, 0.5);
+			}
+		}
+
+		& td{
+			width: 22% !important;
+			padding: 15px 10px;
+			font-size: 14px;
+			/*border-right: 1px solid #000000;
+			border-bottom: 1px solid #000000;*/
+
+			&:last-child {
+				border-right: 0;
+			}
+
+			&:nth-child(3) {
+				width: 40% !important;
+			}
+		}
+
+		& tbody{
+
+			& tr{
+				position: relative;
+
+				& td.cor2_op_05{
+					background-color: rgba($secondary-color, 0.06);
+				}
+				& td.cor2_op_1{
+					background-color: rgba($secondary-color, 0.25);
+				}
+
+				&.cor3_op{
+					& td.cor2_op_05{
+						background-color: rgba($secondary-color, 0.01);
+					}
+					& td.cor2_op_1{
+						background-color: rgba($secondary-color, 0.20);
+					}
+				}
+			}
+		}
+	}
+}
+.paginas_pontos_venda{
+	& .filtros{
+		& .cont_filtro{
+			@include displayInline(middle);
+			max-width: 335px;
+			width: 100%;
+			padding-right: 1rem;
+		}
+	}
+}
+

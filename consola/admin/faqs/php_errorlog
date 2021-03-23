@@ -1,0 +1,5 @@
+[04-Mar-2021 06:50:47 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '8' for key 'PRIMARY' in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/faqs/faqs-insert.php:33
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/faqs/faqs-insert.php(33): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/faqs/faqs-insert.php on line 33

@@ -1,0 +1,40 @@
+.morphArea_clone{
+	& .morphArea_scroller{
+		display: block;
+		height: 100%;
+		overflow-y: auto; 
+	}
+
+	.close-button:hover, 
+	.close-button:focus{
+		color:#fff;
+	}
+
+	.morphArea_content{
+		height: 100% !important;
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
+/*.morphArea_masked::before,
+.morphArea_clone::before {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+	content: '';
+	opacity: 1;
+
+	-webkit-transition: opacity 0.5s;
+	transition: opacity 0.5s;
+}
+
+.morphArea_masked::before{
+	z-index: 1;
+}
+.morphArea_clone::before{
+	z-index: -1;
+}*/

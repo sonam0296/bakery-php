@@ -1,0 +1,27 @@
+[20-Jul-2020 08:39:53 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_istofazse.noticias_pt' doesn't exist in /home/netgpropostas/public_html/istofazse/consola/admin/noticias/noticias-list.php:116
+Stack trace:
+#0 /home/netgpropostas/public_html/istofazse/consola/admin/noticias/noticias-list.php(116): PDO->query('SELECT * FROM n...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/istofazse/consola/admin/noticias/noticias-list.php on line 116
+[20-Jul-2020 11:19:29 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Call to undefined function pre() in /home/netgpropostas/public_html/istofazse/consola/admin/noticias/noticias-edit.php:173
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/istofazse/consola/admin/noticias/noticias-edit.php on line 173
+[27-Aug-2020 08:27:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.noticias_pt' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-list.php:116
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-list.php(116): PDO->query('SELECT * FROM n...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-list.php on line 116
+[27-Aug-2020 08:31:30 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.noticias_pt' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-insert.php:11
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-insert.php(11): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-insert.php on line 11
+[27-Aug-2020 08:59:44 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Call to undefined function pre() in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-edit.php:179
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-edit.php on line 179
+[27-Aug-2020 10:40:20 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Call to undefined function pre() in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-edit.php:179
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/noticias/noticias-edit.php on line 179

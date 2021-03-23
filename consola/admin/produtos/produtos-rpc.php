@@ -1,0 +1,284 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php  
+
+header("Cache-Control: no-store, no-cache, must-revalidate");header("Cache-Control: post-check=0, pre-check=0", false);header("Pragma: no-cache");header("Content-type: text/html; charset=UTF-8");
+?>
+<?php
+
+if($_POST['op'] == 'ordenar_registos') {
+	$valor=$_POST['campos'];
+	$array = explode("&",$valor);
+
+	$array_first = $array[0];
+	$valor_first = explode("=",$array_first);
+	$valor_final_attr = explode("_",$valor_first[0]);
+
+	if ($valor_final_attr[0] != 'stock') {
+		echo 'dd';
+		exit();
+		return 0;
+	}else{
+		$array = array_chunk($array, 3);
+	}
+
+
+	$query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+	$rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
+	$rsLinguas->execute();
+	$row_rsLinguas = $rsLinguas->fetchAll();
+	$totalRows_rsLinguas = $rsLinguas->rowCount();
+
+
+	foreach ($array as $valor) {
+		
+		foreach($row_rsLinguas as $linguas) {
+			$getcost = 0;
+			$getmarkup = 0; 
+			//exit();
+			foreach ($valor as $value) {
+				
+				$valor_final = explode("=",$value);		
+				$cost_final = $valor_final[1];
+
+				$valor_final_2 = explode("_",$valor_final[0]);
+	
+				$campo_id = $valor_final_2[1];	
+				
+				if($campo_id>0) {	
+					$que_fazer=$valor_final_2[0];
+
+					if ($que_fazer=='order') {
+						$getmarkup = $cost_final;
+						$insertSQL = "UPDATE l_pecas_en SET markup=:ordem_final WHERE id=:campo_id";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':ordem_final', $cost_final, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':campo_id', $campo_id, PDO::PARAM_INT);
+						$rsInsert->execute();	
+					}
+					if($que_fazer=='cost')
+					{
+						$getcost = $cost_final;
+						$insertSQL = "UPDATE l_pecas_en SET cost=:cost_final WHERE id=:campo_id";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':cost_final', $cost_final, PDO::PARAM_STR, 5);
+						$rsInsert->bindParam(':campo_id', $campo_id, PDO::PARAM_INT);
+						$rsInsert->execute();	
+					}
+					if($que_fazer=='stock')
+					{
+						$insertSQL = "UPDATE l_pecas_en SET stock=:stock WHERE id=:campo_id";
+						$rsInsert = DB::getInstance()->prepare($insertSQL);
+						$rsInsert->bindParam(':stock', $cost_final, PDO::PARAM_INT);
+						$rsInsert->bindParam(':campo_id', $campo_id, PDO::PARAM_INT);
+						$rsInsert->execute();	
+					}
+				}
+
+			}
+
+			if ($getcost != 0 && $getmarkup != 0) {
+				//exit();
+				$getval = $getcost * $getmarkup;
+				$getval = $getval/100;
+				$totalprice2 = $getcost + $getval;
+				
+				$insertSQL = "UPDATE l_pecas_en SET preco =:preco WHERE id=:campo_id";
+				$rsInsert = DB::getInstance()->prepare($insertSQL);
+				$rsInsert->bindParam(':preco', $totalprice2, PDO::PARAM_INT);
+				$rsInsert->bindParam(':campo_id', $campo_id, PDO::PARAM_INT);
+				$rsInsert->execute();
+			}else {
+				
+			}		
+		}
+						
+	}
+}
+
+if($_POST['op'] == "carregaCaract") {
+	$cat = $_POST['cat'];
+	$id = $_POST['id'];
+	
+	if($cat > 0) {
+		$query_rsProd = "SELECT id, nome FROM l_caract_opcoes_en WHERE id NOT IN (SELECT id_caract FROM l_pecas_caract WHERE id_peca=:id) AND categoria=:cat ORDER BY nome ASC";
+		$rsProd = DB::getInstance()->prepare($query_rsProd);
+		$rsProd->bindParam(':id', $id, PDO::PARAM_INT, 5);
+		$rsProd->bindParam(':cat', $cat, PDO::PARAM_INT, 5);
+		$rsProd->execute();
+		$totalRows_rsProd = $rsProd->rowCount();
+		?>
+    <select class="form-control select2me" id="filtro" name="filtro">
+	    <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+	    <?php if($totalRows_rsProd > 0) { ?>
+        <?php while($row_rsProd = $rsProd->fetch()) { ?>
+          <option value="<?php echo $row_rsProd['id']; ?>"><?php echo $row_rsProd['nome']; ?></option>
+        <?php } ?>
+	    <?php } ?>
+    </select>
+	<?php }
+}
+
+if($_POST['op'] == "carregaFiltros") {
+	$cat = $_POST['cat'];
+	$id = $_POST['id'];
+	
+	if($cat > 0) {
+		$query_rsProd = "SELECT id, nome FROM l_filt_opcoes_en WHERE id NOT IN (SELECT id_filtro FROM l_pecas_filtros WHERE id_peca=:id) AND categoria=:cat ORDER BY nome ASC";
+		$rsProd = DB::getInstance()->prepare($query_rsProd);
+		$rsProd->bindParam(':id', $id, PDO::PARAM_INT, 5);
+		$rsProd->bindParam(':cat', $cat, PDO::PARAM_INT, 5);
+		$rsProd->execute();
+		$totalRows_rsProd = $rsProd->rowCount();
+		?>
+    <select class="form-control select2me" id="filtro" name="filtro">
+	    <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+	    <?php if($totalRows_rsProd > 0) { ?>
+	      <?php while($row_rsProd = $rsProd->fetch()) { ?>
+	        <option value="<?php echo $row_rsProd['id']; ?>"><?php echo $row_rsProd['nome']; ?></option>
+	      <?php } ?>
+	    <?php } ?>
+    </select>
+  <?php }
+}
+
+if($_POST['op'] == "carregaProdutos") {
+	$cat = $_POST['cat'];
+	$id = $_POST['id'];
+	
+	$left_join = "";
+	$where_pesq = "";
+
+	if(CATEGORIAS_NIVEL > 2) {
+    for($i = 2; $i < CATEGORIAS_NIVEL; $i++) {
+      $left_join .= " LEFT JOIN l_categorias_en c".$i." ON c".$i.".id = c".($i-1).".cat_mae";
+    }
+  }
+
+  if(CATEGORIAS == 1) {
+    $where_pesq .= " AND (p.categoria=".$cat;
+  }
+  else if(CATEGORIAS == 2) {
+    $where_pesq .= " AND (pc.id_categoria =".$cat;
+  }
+
+  if(CATEGORIAS_NIVEL >= 2) {
+    for($i = 2; $i <= CATEGORIAS_NIVEL; $i++) {		      
+      $where_pesq .= " OR c".($i-1).".cat_mae = ".$cat;
+    }
+  }
+
+  $where_pesq .=')';
+
+	if($cat > 0) {
+		if(CATEGORIAS == 1) {
+	  	$query_rsProd = "SELECT p.* FROM l_pecas_en p LEFT JOIN l_categorias_en c1 ON c1.id = p.categoria ".$left_join." WHERE p.id != :id AND p.id NOT IN (SELECT id_relacao FROM l_pecas_relacao WHERE id_peca = :id)".$where_pesq." GROUP BY p.id ORDER BY p.ref ASC, p.nome ASC";
+	  }
+	  else if(CATEGORIAS == 2) {
+			$query_rsProd = "SELECT p.* FROM l_pecas_en p LEFT JOIN l_pecas_categorias pc ON p.id = pc.id_peca LEFT JOIN l_categorias_en c1 ON c1.id = pc.id_categoria ".$left_join." WHERE p.id != :id AND p.id NOT IN (SELECT id_relacao FROM l_pecas_relacao WHERE id_peca = :id)".$where_pesq." GROUP BY p.id ORDER BY p.ref ASC, p.nome ASC";
+		}
+		$rsProd = DB::getInstance()->prepare($query_rsProd);
+		$rsProd->bindParam(':id', $id, PDO::PARAM_INT, 5);
+		$rsProd->bindParam(':cat', $cat, PDO::PARAM_INT, 5);
+		$rsProd->execute();
+		$totalRows_rsProd = $rsProd->rowCount();
+	}
+	else {
+		$query_rsProd = "SELECT * FROM l_pecas_en WHERE id!=:id AND id NOT IN (SELECT id_relacao FROM l_pecas_relacao WHERE id_peca=:id) ORDER BY ref ASC, nome ASC";
+		$rsProd = DB::getInstance()->prepare($query_rsProd);
+		$rsProd->bindParam(':id', $id, PDO::PARAM_INT, 5);
+		$rsProd->execute();
+		$totalRows_rsProd = $rsProd->rowCount();
+	}
+	?>
+  <select class="form-control select2me" id="produto" name="produto">
+    <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+    <?php if($totalRows_rsProd > 0) { ?>
+      <?php while($row_rsProd = $rsProd->fetch()) { ?>
+        <option value="<?php echo $row_rsProd['id']; ?>"><?php echo $row_rsProd['nome']; ?></option>
+      <?php } ?>
+    <?php } ?>
+  </select>
+	<?php	
+}
+
+if($_POST['op'] == "carregaProdutosOld") {
+	$cat = $_POST['cat'];
+
+	$left_join = "";
+	$where_pesq = "";
+
+	if(CATEGORIAS_NIVEL > 2) {
+    for($i = 2; $i < CATEGORIAS_NIVEL; $i++) {
+      $left_join .= " LEFT JOIN l_categorias_en c".$i." ON c".$i.".id = c".($i-1).".cat_mae";
+    }
+  }
+
+  if(CATEGORIAS == 1) {
+    $where_pesq .= " AND (p.categoria=".$cat;
+  }
+  else if(CATEGORIAS == 2) {
+    $where_pesq .= " AND (pc.id_categoria =".$cat;
+  }
+
+  if(CATEGORIAS_NIVEL >= 2) {
+    for($i = 2; $i <= CATEGORIAS_NIVEL; $i++) {		      
+      $where_pesq .= " OR c".($i-1).".cat_mae = ".$cat;
+    }
+  }
+
+  $where_pesq .=')';
+
+	if($cat > 0) {
+		if(CATEGORIAS == 1) {
+	  	$query_rsProd = "SELECT p.* FROM l_pecas_en p LEFT JOIN l_categorias_en c1 ON c1.id = p.categoria ".$left_join." WHERE p.id > 0 ".$where_pesq." GROUP BY p.id ORDER BY p.ref ASC, p.nome ASC";
+	  }
+	  else if(CATEGORIAS == 2) {
+			$query_rsProd = "SELECT p.* FROM l_pecas_en p LEFT JOIN l_pecas_categorias pc ON p.id = pc.id_peca LEFT JOIN l_categorias_en c1 ON c1.id = pc.id_categoria ".$left_join." WHERE p.id > 0 ".$where_pesq." GROUP BY p.id ORDER BY p.ref ASC, p.nome ASC";
+		}
+		$rsProd = DB::getInstance()->prepare($query_rsProd);
+		$rsProd->bindParam(':cat', $cat, PDO::PARAM_INT);
+		$rsProd->execute();
+		$totalRows_rsProd = $rsProd->rowCount();
+	}
+	else {
+		$query_rsProd = "SELECT id, ref, nome FROM l_pecas_en ORDER BY ref ASC, nome ASC";
+		$rsProd = DB::getInstance()->prepare($query_rsProd);
+		$rsProd->execute();
+		$totalRows_rsProd = $rsProd->rowCount();
+	}
+	
+	?>
+  <select class="form-control select2me" id="produto_old" name="produto_old" onChange="$('#nome_old').val($(this).find(':selected').attr('data-nome'));">
+    <option value="">Selecionar...</option>
+    <?php if($totalRows_rsProd > 0) { ?>
+      <?php while($row_rsProd = $rsProd->fetch()) { 
+      	$nome_prod = $row_rsProd['nome'];
+      	if($row_rsProd['ref']) {
+      		$nome_prod = $row_rsProd['ref']." - ".$row_rsProd['nome'];
+      	}
+
+      	$nome_copiar = $row_rsProd['nome']." - CÓPIA ".date('Y-m-d H:i:s');
+      	?>
+        <option value="<?php echo $row_rsProd['id']; ?>" data-nome="<?php echo $nome_copiar; ?>"><?php echo $nome_prod; ?></option>
+      <?php } ?>
+    <?php } ?>
+  </select>
+	<?php	
+}
+
+if ($_POST['op'] == 'galeria_visivel') {	
+	$id = $_POST['id'];
+	$valor = $_POST['valor'];
+
+	$query_rsImgUpdate = "UPDATE l_pecas_imagens SET visivel=:visivel WHERE draw_tickets_info_id=:id";
+  $rsImgUpdate = DB::getInstance()->prepare($query_rsImgUpdate);
+  $rsImgUpdate->bindParam(':visivel', $valor, PDO::PARAM_INT, 5);
+  $rsImgUpdate->bindParam(':id', $id, PDO::PARAM_INT, 5);
+  $rsImgUpdate->execute();
+}
+
+
+
+DB::close();
+
+?>

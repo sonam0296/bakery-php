@@ -1,0 +1,648 @@
+<?php require_once('Connections/connADMIN.php'); ?>
+<style>
+  .red {
+     border-color:red;   
+}
+	.mobilenumber{
+
+   	}
+</style>
+<?php
+
+//Se existir este parâmetro, significa que o cliente clicou no link para finalizar a encomenda através do email "Carrinho Abandonado".
+if(isset($_GET['rc']) && $_GET['rc'] == 1 && $row_rsCliente != 0) {
+	header("Location: carrinho.php?rc=1");
+	exit();
+}
+
+if($row_rsCliente != 0) {
+	header("Location: area-reservada.php");	
+	exit;
+}	
+
+$query_rsMeta = "SELECT * FROM metatags".$extensao." WHERE id = '1'";
+$rsMeta = DB::getInstance()->prepare($query_rsMeta);
+$rsMeta->execute();
+$row_rsMeta = $rsMeta->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsMeta = $rsMeta->rowCount();
+DB::close();
+
+$title = $row_rsMeta["title"];
+$description = $row_rsMeta["description"];
+$keywords = $row_rsMeta["keywords"];
+
+$query_rsLogin = "SELECT * FROM clientes_login".$extensao." WHERE id = '1'";
+$rsLogin = DB::getInstance()->prepare($query_rsLogin);
+$rsLogin->execute();
+$row_rsLogin = $rsLogin->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsLogin = $rsLogin->rowCount();
+DB::close();
+
+$query_rsAtividades = "SELECT * FROM clientes_atividades".$extensao." ORDER BY id ASC";
+$rsAtividades = DB::getInstance()->prepare($query_rsAtividades);
+$rsAtividades->execute();
+$totalRows_rsAtividades = $rsAtividades->rowCount();
+DB::close();
+
+$menu_sel = "login";
+if($_GET['anchor'] == "form_registo") {
+	$menu_sel = "registo";
+}
+if($_GET['empresas'] == "1") {
+	$menu_sel = "registo";
+}
+
+$footer_small = 1;
+
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $lang; ?>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame - Remove this if you use the .htaccess -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>
+<?php if($title) { echo addslashes(htmlspecialchars($title, ENT_COMPAT, 'UTF-8')); } else { echo $Recursos->Resources["pag_title"]; } ?>
+</title>
+<?php if($description) { ?>
+	<META NAME="description" CONTENT="<?php echo addslashes(htmlspecialchars($description, ENT_COMPAT, 'UTF-8')); ?>" />
+<?php } ?>
+<?php if($keywords != "") { ?>
+	<META NAME="keywords" CONTENT="<?php echo addslashes(htmlspecialchars($keywords, ENT_COMPAT, 'UTF-8')); ?>" />
+<?php } ?>
+<?php include_once('codigo_antes_head.php'); ?>
+</head>
+<body>
+
+<!--Preloader-->
+<div class="mask">
+	<div id="loader">
+	
+	</div>
+</div>
+<!--Preloader-->
+
+<div class="mainDiv login_container <?php echo LOGIN; ?>">
+	<div class="row1">
+		<div class="div_table_cell">
+			<?php include_once("header.php");?>
+			<div class="div_100">
+				<div class="row content align-center">
+					<div class="login_divs small-12<?php if(LOGIN != "TYPE1") echo " xsmall-10 xxsmall-8 medium-6"; else " medium-8"; ?> column text-left">
+						<div class="div_100 text-left">
+							<form name="form_login" id="form_login" method="post" onSubmit="return validaForm('form_login')" novalidate action="">
+								<h2 class="subtitulos"><?php echo $Recursos->Resources["login_tit"]; ?></h2>
+								<div class="row collapse<?php if(LOGIN == "TYPE1") echo " align-middle"; ?>">
+									<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-8"; ?>">
+										<div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+											<div class="inpt_holder">
+												<label class="inpt_label" for="<?php echo $form_login['login_email']; ?>"><strong><?php echo $Recursos->Resources["mail"];?></strong></label><!--
+												--><input required class="inpt" type="email" autocomplete='email' id="<?php echo $form_login['login_email']; ?>" name="<?php echo $form_login['login_email']; ?>" />
+											</div>
+										</div><!-- 
+										--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+											<div class="inpt_holder">
+												<label class="inpt_label" for="<?php echo $form_login['login_pass']; ?>"><strong><?php echo $Recursos->Resources["password"];?></strong></label><!--
+												--><input required class="inpt" type="password" id="<?php echo $form_login['login_pass']; ?>" name="<?php echo $form_login['login_pass']; ?>"  autocomplete="password" />
+												<div class="passwordToggler" onClick="changePassType(this)"></div>
+											</div>
+										</div>
+									</div>
+									<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-3 medium-offset-1"; ?>">
+										<div class="inpt_holder simple no_marg text-center">                                
+											<div class="inpt_checkbox">
+												<input type="checkbox" name="lembrar" id="lembrar" value="1"/>
+												<label for="lembrar"><?php echo $Recursos->Resources["login_lembrar"]; ?></label>
+											 </div>
+										 </div>
+										 <button type="submit" class="button invert submit_login inptsized"><?php echo $Recursos->Resources["entrar"]; ?></button>
+										<div class="inpt_holder simple no_marg text-center">      
+											<label class="recupera_txt list_txt" onClick="$('#form_recupera').slideToggle('slow')"><?php echo $Recursos->Resources["recupera_password"]; ?></label>
+										</div>
+									</div>
+								</div>
+								<input type="hidden" name="MM_insert" value="form_login" />
+								<input type="hidden" name="<?= $token_id; ?>" value="<?= $token_value; ?>" />
+								<input type="hidden" name="titulo_pag" id="titulo_pag_login" value="<?php echo $title; ?>" />
+								<input type="text" name="form_hidden" id="form_hidden_login" class="inpt hidden" value="" />
+							</form>
+							<form name="form_recupera" id="form_recupera" method="post" onSubmit="return validaForm('form_recupera')" novalidate action="">                                
+								<div class="row collapse align-bottom">
+									<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-8"; ?>">
+										<h2 class="subtitulos"><?php echo $Recursos->Resources["recuperar_password"]; ?></h2>
+										<div class="textos diviser"><p><?php echo $row_rsLogin["texto_password"]; ?></p></div>
+										<div class="div_100">
+											<div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>"<?php if(LOGIN == "TYPE1") echo 'style="margin:0"';?>>
+												<div class="inpt_holder no_marg">
+													<label class="inpt_label" for="<?php echo $form_recupera['recupera_email']; ?>"><?php echo $Recursos->Resources["mail"];?></label><!--
+													--><input required class="inpt" type="email" autocomplete='email' id="<?php echo $form_recupera['recupera_email']; ?>" name="<?php echo $form_recupera['recupera_email']; ?>" />
+												</div>
+											</div><!-- 
+											--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+												<?php if(LOGIN == "TYPE1"){ ?><label class="inpt_label">&nbsp;</label><?php } ?>
+												<button type="submit" class="button invert submit_login inptsized"<?php if(LOGIN == "TYPE1") echo 'style="margin:0"'; ?>><?php echo $Recursos->Resources["enviar"]; ?></button>
+											</div>
+										</div>
+									</div>
+								</div>                               
+								<input type="hidden" name="<?= $token_id; ?>" value="<?= $token_value; ?>" />
+								<input type="hidden" name="MM_insert" value="form_recupera" />
+								<input type="hidden" name="titulo_pag" id="titulo_pag_recupera" value="<?php echo $title; ?>" />
+								<input type="text" name="form_hidden" id="form_hidden_recupera" class="inpt hidden" value="" />
+							</form>
+							<?php if(LOGIN_SOCIAL != 0) { ?>
+								<div class="div_100 login_block text-center<?php if(LOGIN == "TYPE1") echo " medium-text-left"; ?>">
+									<h4 class="subtitulos"><?php echo $Recursos->Resources["reg_redes"]; ?></h4>
+									<div class="row collapse">
+										<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-8"; ?>">
+											<?php if(LOGIN_SOCIAL == 1 || LOGIN_SOCIAL == 3) { ?>
+												<div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium no_marg"; else echo "div_100"; ?>">
+													<button type="button" class="button submit_login inptsized loginFace share-facebook" onclick="window.open('includes/login-facebook.php?tipo=1','facebook_login','width=400,height=260,directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no',true);">Facebook</button>
+												</div><!--
+											--><?php } ?><!-- 
+											--><?php if(LOGIN_SOCIAL == 2 || LOGIN_SOCIAL == 3) { ?><!--
+												--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium no_marg"; else echo "div_100"; ?>">
+													<button type="button" class="button submit_login inptsized loginGoogle share-google" onclick="window.open('includes/login-google.php?tipo=1','google_login','width=400,height=260,directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no',true);">Google +</button>
+												</div>
+											<?php } ?>
+										</div>
+									</div>
+								</div>
+							<?php } ?>                            
+						</div>
+					</div>
+					<div class="login_divs small-12<?php if(LOGIN != "TYPE1") echo " xsmall-10 xxsmall-8 medium-6"; else " medium-8"; ?> column">
+						<div class="div_100 text-left">
+            	<?php /*<form accept-charset=utf-8 name="form_registo" id="form_registo" method="post" onSubmit="return validaForm('form_registo')" autocomplete="off" novalidate action=""> NAO MOSTRAVA ERRO NO CAPTCHA*/ ?>
+                 
+                <form action="" data-error="<?php echo $Recursos->Resources["comprar_preencher"]; ?>"  method="post" name="form_registo" id="form_registo" class="form_registo" novalidate autocomplete="off" nearby-validator>
+
+
+								<?php if(LOGIN == "ALL" || LOGIN == "TYPE3") { ?>
+									<?php if($row_rsLogin["imagem1"] && file_exists(ROOTPATH."imgs/clientes/".$row_rsLogin["imagem1"])) { ?>
+										<div class="div_100 reg_block" id="form_texts">
+											<h2 class="subtitulos"><?php echo $Recursos->Resources["registo_tit"]; ?></h2>
+											<img src="<?php echo ROOTPATH_HTTP; ?>imgs/clientes/<?php echo $row_rsLogin["imagem1"]; ?>" alt="" width="100%" />
+										</div>
+									<?php } ?>
+								<?php } ?>
+								<?php if(LOGIN == "ALL" || LOGIN == "TYPE1" || LOGIN == "TYPE2") { ?>
+									<div class="div_100" id="form_texts">
+										<?php if($row_rsLogin["titulo"] && $row_rsLogin["texto"]) { ?>
+											<div class="row collapse">
+												<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-8"; ?>">
+													<div class="div_100 reg_block">
+														<h2 class="subtitulos"><?php echo $row_rsLogin["titulo"]; ?></h2>
+														<div class="textos"><p><?php echo $row_rsLogin["texto"]; ?></p></div>
+													</div>
+													<?php if(LOGIN == "ALL" || LOGIN == "TYPE2") { ?>
+														<?php if($row_rsLogin["titulo2"] && $row_rsLogin["texto2"]) { ?>
+															<div class="div_100 reg_block">
+																<h2 class="subtitulos"><?php echo $row_rsLogin["titulo2"]; ?></h2>
+																<div class="textos"><p><?php echo $row_rsLogin["texto2"]; ?></p></div>
+															</div>
+														<?php } ?>
+													<?php } ?>
+												</div>
+											</div>
+										<?php } ?>
+									</div>
+								<?php } ?>
+								<div class="div_100 diviser">
+									<div class="div_100<?php if(LOGIN == "ALL") echo ' reg_block'; ?>" id="form_elem"<?php if(LOGIN == "TYPE2" || LOGIN == "TYPE3") echo 'style="display:none;"'; ?>>
+										<?php if(LOGIN == "TYPE2" || LOGIN == "TYPE4") { ?>
+											<h2 class="subtitulos"><?php echo $Recursos->Resources["registo_tit"]; ?></h2>
+										<?php } ?>
+										<div class="row collapse">
+											<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-8"; ?>">
+												<div class="div_100">
+													<div class="type1 <?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['nome']; ?>"><strong><?php echo $Recursos->Resources["nome"]; ?> *</strong></label><!--
+															--><input required class="inpt" autocomplete="given-name" type="text" id="<?php echo $form_registo['nome']; ?>" name="<?php echo $form_registo['nome']; ?>"/>
+														</div>
+													</div><!-- 
+													--><div class="type2 <?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['nif']; ?>"><strong><?php echo $Recursos->Resources["ar_contribuinte"]; ?></strong></label><!--
+															--><input class="inpt Contributor" type="text" autocomplete="nif" id="taxpayer" id="<?php echo $form_registo['nif']; ?>" name="<?php echo $form_registo['nif']; ?>" />
+															<div id="tax"></div>
+														</div>
+													</div><!-- 
+													--><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															 <label class="inpt_label" for="<?php echo $form_registo['email']; ?>"><strong><?php echo $Recursos->Resources["mail"]; ?> *</strong></label><!--
+															--><input required class="inpt" type="email" autocomplete='email' id="<?php echo $form_registo['email']; ?>" name="<?php echo $form_registo['email']; ?>"/>
+														</div>
+													</div><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['pass']; ?>"><strong><?php echo $Recursos->Resources["password"]; ?> *</strong></label><!--
+															--><input required class="inpt confirm" type="password"
+															 id="<?php echo $form_registo['pass']; ?>" name="<?php echo $form_registo['pass']; ?>"data-error="<?php echo $Recursos->Resources["password_error"]; ?>" data-pattern="password_8" autocomplete="password"/>
+															 <p id="demo"></p>
+															<div class="passwordToggler" onClick="changePassType(this)"></div>
+														</div>
+													</div><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['pass_conf']; ?>"><strong><?php echo $Recursos->Resources["ar_password_conf"]; ?> *</strong> </label><!--
+															--><input required class="inpt cod_confirm" type="password"
+															  id="<?php echo $form_registo['pass_conf']; ?>" name="<?php echo $form_registo['pass_conf']; ?>"/>
+															<div class="passwordToggler" onClick="changePassType(this)"></div>
+														</div>
+													</div><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['telemovel']; ?>"><strong><?php echo $Recursos->Resources["ar_telemovel"]; ?> *</strong></label><!--
+															-->
+																	<input required <?php if((!$row_rsCliente['pais'] || $row_rsCliente['pais']==197) && $extensao="_pt") echo 'data-pattern="phones_pt"'; ?>  class=" inpt" type="number" id="mobilenumber" id="<?php echo $form_registo['telemovel']; ?>" name="<?php echo $form_registo['telemovel']; ?>" autocomplete="tel"/>
+																	<p id="mobile"></p>
+														</div>
+													</div><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['telefone']; ?>"><strong><?php echo $Recursos->Resources["ar_telefone"]; ?></strong></label><!--
+															--><input class="inpt telefone" type="number" id="phonenumber" id="<?php echo $form_registo['telefone']; ?>" name="<?php echo $form_registo['telefone']; ?>" autocomplete="tel"/>
+															<p id="phone"></p>
+														</div>
+													</div><!--
+													-->
+													<!-- Start Roll  || Code Vishal Prajapti -->
+													<div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<?php 
+														$query_rsRoll ="SELECT * FROM roll WHERE visivel = 1";
+														$rsRoll = DB::getInstance()->prepare($query_rsRoll);
+														$rsRoll->execute();
+														 ?>
+															<div class="inpt_holder select">
+																<label class="inpt_label" for="<?php echo $form_registo['roll']; ?>"><strong>Select Roll *</strong></label><!--
+																--><select class="inpt" autocomplete="country" name="<?php echo $form_registo['roll']; ?>" id="<?php echo $form_registo['roll']; ?>" required onchange="changePais(this.value);">
+																  <option value="0"></option>  
+																  <?php 				
+																	while($roll = $rsRoll->fetch()) {
+													 					?>  
+																		<option value="<?php echo $roll['roll_name']; ?>"><?php echo $roll['roll_name']; ?></option>
+																  <?php } ?>
+																</select>
+															</div>
+												
+													</div>
+													<!-- End Roll -->
+													<div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<?php if(!empty($GLOBALS['divs_paises'])) { ?>
+															<div class="inpt_holder select">
+																<label class="inpt_label" for="<?php echo $form_registo['pais']; ?>"><strong><?php echo $Recursos->Resources["ar_selecione_pais"]; ?> *</strong></label><!--
+																--><select class="inpt" autocomplete="country" name="<?php echo $form_registo['pais']; ?>" id="<?php echo $form_registo['pais']; ?>" required onchange="changePais(this.value);">
+																  <option value="0"></option>  
+																  <?php foreach($GLOBALS['divs_paises'] as $pais) { ?>  
+																		<option value="<?php echo $pais['id']; ?>"><?php echo $pais['nome']; ?></option>
+																  <?php } ?>
+																</select>
+															</div>
+														<?php } ?> 
+													</div><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder textarea">
+															<label class="inpt_label" for="<?php echo $form_registo['morada']; ?>"><strong><?php echo $Recursos->Resources["ar_morada"]; ?> *</strong></label><!--
+															--><textarea required class="inpt" id="<?php echo $form_registo['morada']; ?>" name="<?php echo $form_registo['morada']; ?>" autocomplete="adress"></textarea>
+														</div>
+													</div><!--
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder simple">
+															<label class="inpt_label" for="<?php echo $form_registo['cpostal']; ?>"><strong><?php echo $Recursos->Resources["ar_cpostal"]; ?> *</strong></label>
+															<div class="row collapse div_postal">
+																<div class="column">
+																	<input required class="inpt codepostal" type="text" id="postalcheck"  id="<?php echo $form_registo['cpostal']; ?>" name="<?php echo $form_registo['cpostal']; ?>" />
+																	<div id="postal"></div>
+																</div>
+																<div class="column" style="display: none;">
+																	<span class="divid_cod"></span><input class="inpt " type="text" id="<?php echo $form_registo['cpostal2']; ?>" name="<?php echo $form_registo['cpostal2']; ?>" maxlength="3"/>
+																</div>
+															</div>
+														</div>
+													</div><!-- 
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<div class="inpt_holder">
+															<label class="inpt_label" for="<?php echo $form_registo['localidade']; ?>"><strong><?php echo $Recursos->Resources["localidade"]; ?> *</strong></label><!--
+															--><input required class="inpt" type="text" autocomplete="adress-level2" id="<?php echo $form_registo['localidade']; ?>" name="<?php echo $form_registo['localidade']; ?>" />
+														</div>
+													</div><!--
+													--><!--
+													--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium"; else echo "div_100"; ?>">
+														<?php if(CAPTCHA_KEY != NULL) { ?>
+															<div class="inpt_holder simple">
+																<div class="captcha" id="registo_captcha" data-sitekey="<?php echo CAPTCHA_KEY; ?>" data-error="<?php echo $Recursos->Resources["preencha_captcha"]; ?>"></div>
+															</div>
+														<?php } else { ?>
+															<div class="inpt_holder">
+																<?php $cod1 = rand(1, 10); $cod2 = rand(1, 10); $cod3 = $cod1 + $cod2; ?>
+																<label class="inpt_label" for="<?php echo $form_seguranca['cod_seg']; ?>"><strong><?php echo $Recursos->Resources["seguranca"]; ?></strong></label><!--
+																--><input required type="text" class="inpt confirm" name="<?php echo $form_seguranca['cod_seg']; ?>" id="<?php echo $form_seguranca['cod_seg']; ?>" value="" placeholder="<?php echo $cod1." + ".$cod2." ="; ?>"/>
+																<input type="hidden" class="cod_confirm" name="<?php echo $form_seguranca['cod_res']; ?>" id="<?php echo $form_seguranca['cod_res']; ?>" value="<?php echo $cod3; ?>"/>
+															</div>   
+														<?php } ?>
+													</div>
+												</div>             
+												<div class="div_100">
+													<div class="inpt_holder simple">                                
+														<div class="inpt_checkbox">
+															<input type="checkbox" required name="<?php echo $form_registo['aceita_politica']; ?>" id="<?php echo $form_registo['aceita_politica']; ?>" value="1"/>
+															<label for="<?php echo $form_registo['aceita_politica']; ?>"><?php echo $Recursos->Resources["aceito_termos_reg"]; ?></label>
+														</div>
+													</div>
+													<div class="inpt_holder simple">                                
+														<div class="inpt_checkbox">
+															<input type="checkbox" name="<?php echo $form_registo['aceita_newsletter']; ?>" id="<?php echo $form_registo['aceita_newsletter']; ?>" value="1"/>
+															<label for="<?php echo $form_registo['aceita_newsletter']; ?>"><?php echo $Recursos->Resources["aceito_news"]; ?></label>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<input type="hidden" name="referer_code" value="<?php echo $_GET['code']; ?>" />
+									<input type="hidden" name="<?= $token_id; ?>" value="<?= $token_value; ?>" />
+									<input type="hidden" name="MM_insert" value="form_registo" />
+									<input type="hidden" name="titulo_pag" id="titulo_pag_regista" value="<?php echo $title; ?>" />
+									<input type="text" name="form_hidden" id="form_hidden_regista" class="inpt hidden" value="" />
+									<button type="submit" id="btn" class="button invert submit_login inptsized small-12 <?php if(LOGIN == "TYPE1") echo " medium-4"; ?>"><?php echo $Recursos->Resources["criar_registo"]; ?></button>
+								</div>
+							</form>
+							<?php if(LOGIN_SOCIAL != 0) { ?>
+								<div class="div_100 login_block text-center<?php if(LOGIN == "TYPE1") echo " medium-text-left"; ?>">
+									<h4 class="subtitulos"><?php echo $Recursos->Resources["reg_redes"]; ?></h4>
+									<div class="row collapse">
+										<div class="column small-12<?php if(LOGIN == "TYPE1") echo " medium-8"; ?>">
+											<?php if(LOGIN_SOCIAL == 1 || LOGIN_SOCIAL == 3) { ?>
+												<div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium no_marg"; else echo "div_100"; ?>">
+													<button type="button" class="button submit_login inptsized loginFace share-facebook" onclick="window.open('includes/login-facebook.php?tipo=2','facebook_login','width=400,height=260,directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no',true);">Facebook</button>
+												</div><!--
+											--><?php } ?><!-- 
+											--><?php if(LOGIN_SOCIAL == 2 || LOGIN_SOCIAL == 3) { ?><!--
+												--><div class="<?php if(LOGIN == "TYPE1") echo "inpt_cells medium no_marg"; else echo "div_100"; ?>">
+													<button type="button" class="button submit_login inptsized loginGoogle share-google" onclick="window.open('includes/login-google.php?tipo=2','google_login','width=400,height=260,directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no',true);">Google +</button>
+												</div>
+											<?php } ?>
+										</div>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
+					</div>           
+				</div>
+			</div>            
+		</div>    		   
+	</div>
+	<?php include_once('footer.php'); ?>
+</div>
+
+<?php include_once('footer_scripts.php'); ?>
+
+<script type="text/javascript">
+
+
+	<?php 
+
+	if ($_GET['anchor'] == 'form_regista') { ?>
+			jQuery(document).ready(function($) {
+				$('#form_registo #form_texts').hide();
+				$('#form_registo #form_elem').show();
+			});
+	<?php } 
+	?>
+
+	$(document).ready(function() {
+		$('#form_registo button[type="submit"]').on('click', function(e) {
+			if($('#form_elem').css('display') === "none") {
+				e.preventDefault();
+
+				$('.login_container').addClass('login_hidden');
+				<?php if(LOGIN == "TYPE2") { ?>
+					$('#form_texts').slideUp('slow');
+					$('#form_elem').fadeIn('slow');
+				<?php } else if(LOGIN == "TYPE3") { ?>
+					$('#form_elem').slideDown('slow');
+				<?php } ?>
+				
+				return false;
+			}
+		});
+
+		$('.login_divs:first-child').on('click', function(e) {
+			if($('.login_container').hasClass('login_hidden') && $(e.target).closest('login_divs:first-child').length == 0) {
+				$('.login_container').removeClass('login_hidden')
+			}
+		});
+
+		$('input[name="<?php echo $form_registo['tipo']; ?>"]:checked').trigger('change');
+	});
+
+	function changePais(pais) {
+		if(pais == 197 || pais == 267) {
+			$('.div_postal .column:nth-child(2)').fadeIn('slow');
+			$('.div_postal .column:nth-child(2)').addClass('show');
+			$('.div_postal .column:nth-child(1) .inpt').attr('maxlength', '4');
+			$('.div_postal .column').addClass('shrink');
+			$('.postal').attr('required','required');
+		}
+		else {
+			$('.div_postal .column:nth-child(2)').fadeOut('slow');
+			$('.div_postal .column:nth-child(2)').removeClass('show');
+			$('.div_postal .column').removeClass('shrink');
+			$('.postal').removeAttr('required').removeClass('has-error');
+			$('.div_postal .column:nth-child(1) .inpt').removeAttr('maxlength');
+		}
+	}
+
+	function changeType(tipo) {
+		if(tipo == 1) {
+			$('.type1').find("label").html('<strong><?php echo $Recursos->Resources["nome"]; ?> *</strong>');
+			
+			$('.type3').fadeOut('slow');
+			$('.type3').find('.inpt').removeAttr('required').removeClass('has-error');
+
+			$('.type2').find('.inpt').removeAttr('required');
+
+			var lastChar = $('.type2').find('label').html().charAt($('.type2').find('label').html().length - 1);
+			if(lastChar == '*') {
+				var placeholder = $('.type2').find('label').html().slice(0, -2);
+				$('.type2').find("label").html(placeholder);
+			}     
+		}
+		else {
+			$('.type1').find("label").html('<strong><?php echo $Recursos->Resources["ar_empresa"]; ?> *</strong>');
+			
+			$('.type3').fadeIn('slow');
+			$('.type3').find('.inpt').attr('required','required');
+
+			$('.type2').find('.inpt').attr('required', 'required');
+			$('.type2').find("label").html($('.type2').find('label').html()+' *');
+		}
+	}
+
+	function changeActividade(act) {
+		if(act == "<?php echo $Recursos->Resources["outro"]; ?>") {
+			$('.act_outro').fadeIn('slow');
+			$('.act_7').attr('required','required');
+		}
+		else {
+			$('.act_outro').fadeOut('slow');
+			$('.act_7').removeAttr('required').removeClass('has-error');
+		}
+	}
+</script>
+
+<?php if($login_post != 0) { ?>
+	<script>
+		$(window).on('load', function() {
+			data = '<?php echo $login_post; ?>';
+			if(data == "-1") {
+				ntg_error("<?php echo $Recursos->Resources["area_erro_2"]; ?>");
+				document.getElementById('<?php echo $form_login['login_email']; ?>').focus();
+			}
+			else if(data == "-2") {
+				ntg_error("<?php echo $Recursos->Resources["validar_registo_erro"]; ?>");
+			}
+			else {
+				ntg_confirm(
+					{
+						type: 'info',
+						title: "<?php echo $Recursos->Resources["validar_conta"]; ?>",
+						html: "<?php echo $Recursos->Resources["validar_conta_txt"]; ?>",
+						showCloseButton: true,
+						showCancelButton: true,
+						cancelButtonText: "<?php echo $Recursos->Resources["cancelar"]; ?>",
+						showConfirmButton: true,
+						confirmButtonText: "<?php echo $Recursos->Resources["enviar"]; ?>",
+					},
+					function() { 
+						$.post(_includes_path+"login_valida.php", {op:"reenvia_email", user:<?php echo $login_post; ?>}, function(data) {
+							ntg_success("<?php echo $Recursos->Resources["validar_conta_txt2"]; ?>");
+						});
+					},
+					function() {
+						return false;
+					},
+					"<?php echo $Recursos->Resources["validar_conta_txt2"]; ?>",
+					"<?php echo $Recursos->Resources["area_erro_11"]; ?>"
+				);
+			}
+		});
+	</script>
+<?php } ?>
+
+<?php if($recupera_post != 0) { ?>
+	<script>
+		$(window).on('load', function() {
+			data = '<?php echo $recupera_post; ?>';
+
+			if(data == "1") {
+				ntg_success("<?php echo $Recursos->Resources["recuperar_email_sucesso"]; ?>");
+			}
+			else {	
+				ntg_error("<?php echo $Recursos->Resources["recuperar_email_erro"]; ?>");
+				document.getElementById('<?php echo $form_recupera['recupera_email']; ?>').focus();
+			}
+		});
+	</script>
+<?php } ?>
+
+<?php if($registo_post != 0) { ?>
+	<script>
+		$(window).on('load', function(){
+			data = '<?php echo $registo_post; ?>';
+
+			if(data == "-1") {
+				//ntg_success("<?php echo $Recursos->Resources["criar_registo_msg_sucesso"]; ?>");
+				document.location = 'login_obrigado.php?t=1';
+			}
+			else if(data == "-2") {	
+				ntg_error("<?php echo $Recursos->Resources["area_mail_registado"]; ?>");
+			}
+			else if(data == "-3") {
+				ntg_error("<?php echo $Recursos->Resources["validar_registo_erro"]; ?>");
+			}
+			else if(data == '-4') {
+				// ntg_success("<?php echo $Recursos->Resources["reg_aviso_prof"]; ?>");
+				document.location = 'login_obrigado.php?t=2';
+			}
+			else{	
+				ntg_confirm(
+					{
+						type: 'info',
+						title: "<?php echo $Recursos->Resources["validar_conta"]; ?>",
+						html: "<?php echo $Recursos->Resources["validar_conta_txt"]; ?>",
+						showCloseButton: true,
+						showCancelButton: true,
+						cancelButtonText: "<?php echo $Recursos->Resources["cancelar"]; ?>",
+						showConfirmButton: true,
+						confirmButtonText: "<?php echo $Recursos->Resources["enviar"]; ?>",
+					},
+					function() { 
+						$.post(_includes_path+"login_valida.php", {op:"reenvia_email", user:<?php echo $registo_post; ?>}, function(data) {
+							ntg_success("<?php echo $Recursos->Resources["validar_conta_txt2"]; ?>");
+						});
+					},
+					function() {
+						return false;
+					},
+					"<?php echo $Recursos->Resources["validar_conta_txt2"]; ?>",
+					"<?php echo $Recursos->Resources["area_erro_11"]; ?>"
+				);
+			}
+		});
+	</script>
+
+<?php } ?>
+<script type="text/javascript">
+$(document).ready(function(e) {
+$('#form_registo').submit(function() {
+	 var txt = "";
+	 var mobiletxt = "";
+	 var phonetxt = "";	
+	 var postaltxt = "";	
+	 var taxpayertxt = "";	
+	//For password 
+    if ($('.confirm').val().length > 6) {	
+	      txt = "should have 6 Maxmum Password";
+	      document.getElementById("demo").innerHTML = txt;
+	        
+      }
+    //For MobileNumber   
+    if (mobilenumber.value.length > 13) {	
+	      mobiletxt = "should have 10-13 minimum MobileNumber";
+	      document.getElementById("mobile").innerHTML = mobiletxt;
+	       
+      	}
+    //For PhoneNumber  	
+    if (phonenumber.value.length > 8) {	
+	      phonetxt = "should have 6-8 minimum PhoneNumber";
+	      document.getElementById("phone").innerHTML = phonetxt;
+	      
+    }
+    
+    //For PostalCode  	
+    if (postalcheck.value.length > 7) {	
+	      $(this).addClass("red")
+	      taxpayertxt = "should have 6-8 minimum TaxPayer";
+	      document.getElementById("postal").innerHTML = taxpayertxt;
+	    
+    }
+
+    if (taxpayer.value.length > 250) {	
+	      $(this).addClass("red")
+	      taxpayertxt = "should have 6-8 minimum TaxPayer";
+	      document.getElementById("tax").innerHTML = taxpayertxt;
+	    
+    }  	  
+ 
+   });
+ });
+
+</script>
+<?php include_once('codigo_antes_body.php'); ?>
+</body>
+</html>
+

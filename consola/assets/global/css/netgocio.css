@@ -1,0 +1,53 @@
+* Button */
+.linguas.btn {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-color: #cccccc;
+}
+.linguas.btn:hover, .linguas.btn:focus, .linguas.btn:active, .linguas.btn.active {
+  color: #FFFFFF;
+  background-color: #cb5a5e;
+  border-color: #cb5a5e;
+}
+.font_uppercase{
+  text-transform:uppercase;
+}
+
+/* não permitir alterar tamanho das textareas */
+textarea {
+	resize:none;	
+}
+
+
+/* META TAGS GOOGLE PREVIEW*/
+.meta_title, .meta_title a {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	line-height:16px;
+	font-weight:normal;
+	color:#2518b5;
+	text-decoration:underline;
+}
+.meta_url {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	line-height:16px;
+	font-weight:normal;
+	color:#00802a;
+	text-decoration:none;
+}
+.meta_description {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	line-height:16px;
+	font-weight:normal;
+	color:#444444;
+	text-decoration:none;
+}
+
+
+/* CAMPO ORDEM*/
+.cx_ordenar {
+	width:40px;
+	text-align:center;
+}

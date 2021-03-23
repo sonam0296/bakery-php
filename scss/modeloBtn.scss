@@ -1,0 +1,18 @@
+@charset 'utf-8';
+
+@import 'includes/utilities';
+
+.button{
+	@include buttons(all, null, yes, null);
+	outline: 0;
+	text-decoration: none;
+}
+.button{
+	@include buttons(none, normal, null, 0);
+}
+.button.invert{
+	@include buttons(none, null, null, 1);
+}
+.button.invert2{
+	@include buttons(none, null, null, 2);
+}

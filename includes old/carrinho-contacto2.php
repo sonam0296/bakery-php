@@ -1,0 +1,410 @@
+<?php require_once('Connections/connADMIN.php'); ?>
+<?php
+ 
+try {
+	$query_rsMeta = "SELECT * FROM metatags".$extensao." WHERE id = '1'";
+	$rsMeta = DB::getInstance()->prepare($query_rsMeta);
+    $rsMeta->execute();
+    $row_rsMeta = $rsMeta->fetch(PDO::FETCH_ASSOC);
+	$totalRows_rsMeta = $rsMeta->rowCount();
+	DB::close();
+
+	$title = $row_rsMeta["title"];
+	$description = $row_rsMeta["description"];
+	$keywords = $row_rsMeta["keywords"];
+
+} catch(PDOException $e){
+echo $e->getMessage();
+}
+
+header("Cache-Control: no-store, no-cache, must-revalidate");header("Cache-Control: post-check=0, pre-check=0", false);header("Pragma: no-cache");header("Content-type: text/html; charset=UTF-8");
+
+
+$class_carrinho = Carrinho::getInstance();
+$carrinho_session=$_COOKIE[CARRINHO_SESSION];
+$row_rsCliente = $class_user->isLogged();
+$empty = $class_carrinho->isEmpty();
+
+if($row_rsCliente==0 || $empty==0){
+	header("Location: ".ROOTPATH_HTTP."carrinho-contacto.php");	
+}
+
+$id_cliente=$row_rsCliente['id'];
+
+//Verificar se apenas existe um Cheque Prenda no carrinho ou se também existem produtos.
+
+	
+$query_rsCarrinhoFinal ="SELECT pecas.id, pecas.nome, pecas.ref, pecas.url, pecas.nao_limitar_stock, carrinho.*, carrinho.id AS id_linha FROM carrinho LEFT JOIN l_pecas".$extensao." AS pecas ON (carrinho.produto = pecas.id AND pecas.visivel = 1) WHERE carrinho.session = '$carrinho_session' ORDER BY pecas.ordem ASC";
+$rsCarrinhoFinal = DB::getInstance()->prepare($query_rsCarrinhoFinal);
+$rsCarrinhoFinal->execute();
+$row_rsCarrinhoFinal = $rsCarrinhoFinal->fetchAll(PDO::FETCH_ASSOC);
+$totalRows_rsCarrinhoFinal = $rsCarrinhoFinal->rowCount();
+DB::close();		
+
+$rodape = email_social(1);
+
+// MANDA MAIL PO CLIENTE
+$formcontent = getHTMLTemplate("comprar.htm");
+
+$nome=$row_rsCliente['nome'];
+$mor_fac=$row_rsCliente['morada'];
+$cpostal_fac=$row_rsCliente['cod_postal'];
+$local_fac=$row_rsCliente['localidade'];
+$pais=$GLOBALS['divs_paises'][$row_rsCliente['pais']]['nome'];
+$roll=$GLOBALS['divs_roll'][$row_rsCliente['roll']]['roll_name'];
+$email=$row_rsCliente['email'];
+$telemovel=$row_rsCliente['telemovel'];
+$nif=$row_rsCliente['nif'];
+
+$observacoes=$_POST['observacoes'];
+$data=date('Y-m-d');
+
+$subject = $Recursos->Resources["novo_contacto_tit"];
+$desc = $Recursos->Resources["novo_contacto_txt"];
+
+//Substituir possíveis tags no texto
+$subject = str_replace("#nome#", $nome, $subject);	
+$subject = str_replace("#enc#", '', $subject);	
+$subject = str_replace("#total#", '', $subject);	
+$subject = str_replace("#data#", $data, $subject);	
+
+$desc = str_replace("#nome#", $nome, $desc);	
+$desc = str_replace("#enc#", '', $desc);	
+$desc = str_replace("#total#", '', $desc);	
+$desc = str_replace("#data#", $data, $desc);	
+
+	
+/*TEXTO DE INTRODUÇÂO*/	
+$msg_intro = '<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top:1px solid #ebeced;">
+	  <tbody>
+		<tr>
+		  <td colspan="3" height="45">&nbsp;</td>
+		</tr>
+		<tr>
+		  <td width="15"><img src="'.ROOTPATH_HTTP.'/imgs/carrinho/fill.gif" width="15" /></td>
+		  <td align="left" valign="top" class="intro" style="line-height:25px">#car_mail_intro#</td>
+		  <td width="15"><img src="'.ROOTPATH_HTTP.'/imgs/carrinho/fill.gif" width="15" /></td>
+		</tr>
+		<tr>
+		  <td colspan="3" height="45">&nbsp;</td>
+		</tr>
+	  </tbody>
+	</table>';
+
+
+/*DADOS DE FATURACAO*/
+$mailFaturacao='<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tbody>
+			<tr>
+			  <td class="titulos">'.$Recursos->Resources["dados_contacto"].'</td>
+			</tr>
+			<tr>
+			  <td height="20"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="20" /></td>
+			</tr>
+			<tr>
+			  <td class="textos">
+					'.$nome.'<br>
+					'.nl2br($mor_fac).'
+					'.$cpostal_fac.'<br>
+					'.$local_fac.'
+					'.$pais.'
+					<br><br>
+					<strong>Email</strong> '.$email.'<br>
+					<strong>Contribuinte</strong> '.$nif.'
+			  </td>
+			</tr>
+		  </tbody>
+		</table>';
+
+
+/*OBSERVACOES*/
+$mailObs='';
+if($observacoes) {
+	$mailObs='<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tbody>
+			<tr>
+			  <td class="titulos">'.$Recursos->Resources["obs_encomenda"].'</td>
+			</tr>
+			<tr>
+			  <td height="20"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="20" /></td>
+			</tr>
+			<tr>
+			  <td class="textos">'.nl2br($observacoes).'</td>
+			</tr>
+		  </tbody>
+		</table>';
+}
+
+		
+/*TABELA DE PRODUTOS*/
+$mailprodutos='<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #e7e7e7;">
+		  <tbody>
+			<tr>
+			  <td colspan="3" height="10"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="10" /></td>
+			</tr>
+			<tr>
+			  <td width="15"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" width="15" /></td>
+			  <td class="titulos">'.$Recursos->Resources["comprar_resumo"].'</td>
+			  <td width="15"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" width="15" /></td>
+			</tr>
+			<tr>
+			  <td colspan="3" height="10"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="10" /></td>
+			</tr>
+		  </tbody>
+		</table>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #e7e7e7;">
+		  <tbody>
+			<tr>
+			  <td>';
+
+$count=0;
+foreach ($row_rsCarrinhoFinal as $produtos)  { $count++;
+
+	$produto = $produtos['produto_id'];
+	$image = $class_produtos->imgProduto($produto);
+	$nome_prod = $produtos['nome'];
+	$codigo = $produtos['ref'];
+	$quantidade = $produtos['quantidade'];
+	$opcoes = $produtos['opcoes'];
+	
+	$new_path = explode("/", $image);
+	$new_path = ROOTPATH."imgs/produtos/".end($new_path);
+
+	$horVert = tamanho_imagem2($new_path, 50, 50);
+	
+	$image_prod = '<img src="'.$image.'" width="50" />';
+	if($horVert=="height"){
+		$image_prod = '<img src="'.$image.'" height="50" />';
+	}
+	
+	$border=' style="border-bottom:1px solid #e7e7e7;"';
+	if($count==$totalRows_rsCarrinhoFinal){
+		$border="";
+	}
+	
+	$opcoes2 = explode("<br>", str_replace(";", ",", $opcoes));
+	$opcoes_mail = "";
+	foreach($opcoes2 as $opcao){
+		$opcao = explode(":", $opcao);
+		$opcoes_mail.=$opcao[1]." ";
+	}
+	
+	$mailprodutos.='<table width="100%" border="0" cellspacing="0" cellpadding="0"'.$border.'>
+				  <tbody>
+					<tr>
+					  <td colspan="3"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="15" /></td>
+					</tr>
+					<tr>
+					  <td><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" width="15" /></td>
+					  <td>
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						  <tbody>
+							<tr>
+							  <td width="50">'.$image_prod.'</td>
+							  <td width="15"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" width="15" /></td>
+							  <td>
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								  <tbody>
+									<tr>
+									  <td colspan="3" class="nome_produto">'.$nome_prod.'</td>
+									</tr>
+									<tr>
+									  <td colspan="3" class="opcoes_produto">'.$opcoes_mail.'</td>
+									</tr>
+									<tr>
+									  <td colspan="3" height="5"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="5" /></td>
+									</tr>
+									<tr>
+									  <td class="qtd_produto">Qtd. '.$quantidade.'</td>
+									</tr>
+								  </tbody>
+								</table>
+							  </td>
+							</tr>
+						  </tbody>
+						</table>
+					  </td>
+					  <td><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" width="15" /></td>
+					</tr>
+					<tr>
+					  <td colspan="3"><img src="'.ROOTPATH_HTTP.'imgs/carrinho/fill.gif" height="15" /></td>
+					</tr>
+				  </tbody>
+				</table>';
+}
+
+$mailprodutos.='</td>
+			</tr>
+		  </tbody>
+		</table>';
+		
+	
+$info_pagamento = '';
+
+/*TEXTOS*/
+$table_final = $info_pagamento;
+if($imprime==0){
+	$table_final .= '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tbody>
+	  <tr>
+		  <td height="30"></td>
+		</tr>
+		<tr>
+		  <td align="center" class="cumprimentos">'.$Recursos->Resources["car_mail_7"].'</td>
+		</tr>
+		<tr>
+		  <td align="center" class="nome_site">'.NOME_SITE.'</td>
+		</tr>
+		<tr>
+		  <td height="40">&nbsp;</td>
+		</tr>
+		<tr>
+		  <td>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#c7c7c7">
+			  <tbody>
+				<tr>
+				  <td colspan="3" height="20"></td>
+				</tr>
+				<tr>
+				  <td width="30%" align="center"><a class="textos_rodape" href="'.ROOTPATH_HTTP.'area-reservada.php">'.$Recursos->Resources["car_mail_cliente"].'</a></td>
+				  <td align="center"><a class="textos_rodape" href="'.ROOTPATH_HTTP.'contactos.php">'.$Recursos->Resources["car_mail_maisinfo"].'</a></td>
+				  <td align="center" width="30%"><a class="textos_rodape" href="'.ROOTPATH_HTTP.'">www.'.SERVIDOR.'</a></td>
+				</tr>
+				<tr>
+				  <td colspan="3" height="20"></td>
+				</tr>
+			  </tbody>
+			</table>
+		  </td>
+		</tr>
+		<tr>
+		  <td height="25"></td>
+		</tr>
+	  </tbody>
+	</table>';
+}
+		
+		
+$formcontent = str_replace ("#msg_intro#",$msg_intro,$formcontent);
+$formcontent = str_replace ("#car_mail_intro#",$desc,$formcontent);
+$formcontent = str_replace ("#car_resumo_enc#",$Recursos->Resources["car_resumo_enc"],$formcontent);
+$formcontent = str_replace ("#car_num_enc#","",$formcontent);
+$formcontent = str_replace ("#car_data_enc#",$Recursos->Resources["car_data_enc"]." <strong>".date('Y-m-d')."</strong>",$formcontent);
+
+$formcontent = str_replace ("#dados_faturacao#",$mailFaturacao,$formcontent);
+$formcontent = str_replace ("#dados_envio#",$mailObs,$formcontent);
+$formcontent = str_replace ("#car_pagamento#",'',$formcontent);
+$formcontent = str_replace ("#car_entrega#",'',$formcontent);
+$formcontent = str_replace ("#seguir_envio#",'',$formcontent);
+$formcontent = str_replace ("#car_observacoes#",'',$formcontent);
+
+$formcontent = str_replace ("#encomenda_produtos#",$mailprodutos,$formcontent);
+$formcontent = str_replace ("#home_delivery#",$maildelivery,$formcontent);
+$formcontent = str_replace ("#ctotais#",'',$formcontent);
+$formcontent = str_replace ("#cextras#",'',$formcontent);
+
+$formcontent = str_replace ("#ctextos#",$table_final,$formcontent);
+
+$formcontent = str_replace ("#crodape#",$rodape,$formcontent);
+
+
+// apaga o carrinho
+$deleteSQL  = "DELETE FROM carrinho where session='$carrinho_session'";
+$rsDelete = DB::getInstance()->prepare($deleteSQL);
+$rsDelete->execute();
+DB::close();
+	
+// remove carrinho do cliente
+$query_insertSQL = "DELETE FROM carrinho_cliente WHERE id_cliente=:user";
+$insertSQL = DB::getInstance()->prepare($query_insertSQL);
+$insertSQL->bindParam(':user', $row_rsCliente["id"], PDO::PARAM_INT);
+$insertSQL->execute();	
+DB::close();
+
+$deleteSQL  = "DELETE FROM carrinho_comprar where session='$carrinho_session'";
+$rsDelete = DB::getInstance()->prepare($deleteSQL);
+$rsDelete->execute();
+DB::close();
+	
+$query_rsCont = "SELECT * FROM notificacoes".$extensao." WHERE id='3'";
+$rsCont = DB::getInstance()->prepare($query_rsCont);
+$rsCont->execute();
+$row_rsCont = $rsCont->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsCont = $rsCont->rowCount();
+DB::close();
+					
+$mail_cont=$row_rsCont['email'];		
+if($mail_cont){			
+	$to=$email;
+	
+	sendMail($to, '', $formcontent, $subject, $subject);				
+	sendMail($mail_cont, '', $formcontent, $subject, $subject, $row_rsCont['email2'], $row_rsCont['email3']);
+	// FIM DO MAIL
+}
+
+
+$menu_sel = "carrinho";
+?>
+<!DOCTYPE html>
+<html lang="<?php if($lang == "uk") echo "en"; else echo "pt"; ?>"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame - Remove this if you use the .htaccess -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>
+<?php if($title){ echo addslashes(htmlspecialchars($title, ENT_COMPAT, 'UTF-8')); }else{ echo $Recursos->Resources["pag_title"];}?>
+</title>
+<?php if($description){?>
+<META NAME="description" CONTENT="<?php echo addslashes(htmlspecialchars($description, ENT_COMPAT, 'UTF-8')); ?>" />
+<?php }?>
+<?php if($keywords!=""){?>
+<META NAME="keywords" CONTENT="<?php echo addslashes(htmlspecialchars($keywords, ENT_COMPAT, 'UTF-8')); ?>" />
+<?php }?>
+<?php include_once('codigo_antes_head.php'); ?>
+<?php include_once('funcoes.php'); ?>
+<link href='<?php echo ROOTPATH_HTTP; ?>css/carrinho.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<!--Preloader-->
+<div class="mask">
+	<div id="loader">
+    
+  </div>
+</div>
+<div class="mainDiv">
+	<div class="row1">
+    	<div class="div_table_cell">
+			<?php include_once('header.php'); ?>
+            <div class="row collapse content">
+            	<div class="column">
+                    <div class="div_100 carrinho">
+                         <nav class="row show-for-medium" aria-label="You are here:" role="navigation">
+                            <div class="column">
+                                <ul class="row collapse carrinho_nav">
+                                    <li class="column"><?php echo $Recursos->Resources["carrinho_contacto"]; ?></li><!--
+                                    --><li class="column active"><?php echo $Recursos->Resources["carrinho_contacto2"]; ?></li>
+                                </ul>
+                            </div>
+                        </nav>
+                        
+                        <div class="div_100 carrinho_finalize">
+                            <div class="row align-right">
+                                <div class="small-12 column info">
+                                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark_circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark_check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                                    <h3><?php echo $Recursos->Resources["contacto_msg_sucesso"]; ?></h3>
+                                    
+                                    
+                                    <h4><?php echo $Recursos->Resources["comprar4_obrigado"]; ?></h4>
+                                    <a class="carrinho_btn" href="<?php echo CARRINHO_VOLTAR; ?>"><?php echo $Recursos->Resources["fazer_compra2"]; ?></a>
+                                </div>
+                            </div>  
+                        </div>
+                    </div> 
+            	</div>
+            </div>
+        </div>
+    </div>
+	<?php include_once('footer.php'); ?>    
+</div>
+<?php include_once('codigo_antes_body.php'); ?>
+</body>
+</html>

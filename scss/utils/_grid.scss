@@ -1,0 +1,233 @@
+.#{$grid-row-alias}{
+	position:relative;
+	width:100%;
+	max-width:$global-width;
+
+	margin: auto;
+	padding:0 $grid-column-gutter;
+
+    display: flex;
+    flex-flow: row wrap;
+	
+	&:not(.collapse):not(.no_padd){
+		@include padding-sides(1);
+	}
+	&.content{		
+		max-width:$global-max-width !important;
+	}
+	&.collapse{
+		padding:0;
+		max-width:$global-width !important;
+
+		&.full{
+			max-width:100% !important;
+		}
+		
+		& .#{$grid-column-alias}{
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+	&.no_padd{
+		@include padding-sides();
+		
+		& .#{$grid-column-alias}{
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+
+	& .#{$grid-column-alias}{
+		flex: 1 1 0px;
+		padding:0 $grid-column-gutter;
+		min-width: 0;
+	}
+
+	@include breakpoint(medium up){
+		@if $global-width != 100%{
+			max-width:$global-width + ($p_medium * 2) !important;
+		}
+
+		&.content{		
+			max-width:$global-max-width + ($p_medium * 2) !important;
+		}
+	}
+	@include breakpoint(xlarge up){
+		@if $global-width != 100%{
+			max-width:$global-width + ($p_large * 2) !important;
+		}
+
+		&.content{		
+			max-width:$global-max-width + ($p_large * 2) !important;
+		}
+	}
+	@include breakpoint(xxlarge up){
+		@if $global-width != 100%{
+			max-width:$global-width + ($p_retina * 2) !important;
+		}
+
+		&.content{		
+			max-width:$global-max-width + ($p_retina * 2) !important;
+		}
+	}
+}
+
+
+@each $size in $breakpoint-classes {
+	//Breakpoint normal
+	@include breakpoint($size) {
+		//Create column
+		@for $i from 1 through $grid-column-count{
+			$width: percentage($i / $grid-column-count);
+			$pct: percentage(1/$i);
+			
+			.#{$grid-column-alias}.#{$size}-#{$i}{
+				max-width: $width;
+				flex: 0 0 $width;
+			}
+			.#{$grid-row-alias}.#{$size}-up-#{$i} {
+				flex-wrap: wrap;
+
+				> .#{$grid-column-alias} {
+					max-width: $pct;
+					flex: 0 0 $pct;
+				}
+			}
+			.#{$grid-row-alias} .#{$size}-expand {
+        flex: 1 1 0px;
+      }
+			
+			//Create orders
+			@if $size != $zero-breakpoint {
+				.#{$size}-order-#{$i} {
+					order: $i;
+				}
+			} @else {
+				.order-#{$i} {
+					order: $i;
+				}
+			}
+			
+			//Create offsets
+			@if $size != $zero-breakpoint {
+				.#{$grid-column-alias}.#{$size}-offset-#{$i} {
+					margin-left: $width;
+				}
+			} @else {
+				.#{$grid-column-alias}.offset-#{$i} {
+					margin-left: $width;
+				}
+			}
+		}
+
+		@if $size != $zero-breakpoint {
+			.#{$grid-column-alias}.#{$size}-no-offset{
+				margin-left: 0px !important;
+			}
+		}
+
+		//Start Text align
+		@each $align in (left, right, center, justify) { 
+			@if $size != $zero-breakpoint {
+				.#{$size}-text-#{$align} {
+					text-align: $align;
+				}
+			} @else {
+				.text-#{$align} {
+					text-align: $align;
+				}
+			}
+		}
+		
+		//Start Column align
+		@each $align in (top, middle, bottom, stretch, left, center, right, spaced, evenly) { 
+			$instruction: align-items;
+			$value: $align;
+
+			@if $align==top or $align==left{
+				$value: flex-start;
+			} @else if $align==middle{
+				$value: center;
+			} @else if $align==bottom or $align==right{
+				$value: flex-end;
+			} @else if $align==spaced{
+				$value: space-around;
+			} @else if $align==evenly{
+				$value: space-evenly;
+			} 
+
+			@if $align==left or $align==center or $align==right or $align==spaced{
+				$instruction: justify-content;
+			}
+			
+			@if $size != $zero-breakpoint {
+				.#{$size}-align-#{$align} {
+					#{$instruction}: $value;
+				}
+				.#{$size}-align-self-#{$align} {
+					align-self: $value;
+				}
+			} @else {
+				.align-#{$align} {
+					#{$instruction}: $value;
+				}
+				.align-self-#{$align} {
+					align-self: $value;
+				}
+			}	
+		}
+
+		//Start Shrink
+		@if $size != $zero-breakpoint {
+			.#{$grid-column-alias}.#{$size}-shrink {
+				flex: 0 0 auto;
+				max-width: 100%;
+			}
+		} @else {
+			.#{$grid-column-alias}.shrink {
+				flex: 0 0 auto;
+				max-width: 100%;
+			}
+		}
+	}
+
+	@if $size != $zero-breakpoint {
+		.hide-for-#{$size} {
+			@include breakpoint($size) {
+				display: none !important;
+			}
+		}
+
+		.show-for-#{$size} {
+			$newSize: map-get($breakpoints, $size);
+			@include breakpoint($newSize down) {
+				display: none !important;
+			}
+		}
+	}	
+
+	//Breakpoint down
+	$sizeCollapse: map-get($breakpoints, $size);
+	@include breakpoint($sizeCollapse down) {
+		@if $size != $zero-breakpoint {
+			.#{$size}-collapse {	
+				padding: 0 !important;
+
+				& > .column {
+				    padding-right: 0;
+				    padding-left: 0;
+				}
+			}
+		}
+	}
+
+	//Breakpoint only
+	@include breakpoint($size only) {
+		@if $size != $zero-breakpoint {
+			.#{$grid-column-alias}.#{$size}-only-shrink {
+				flex: 0 0 auto;
+				max-width: 100%;
+			}
+		}
+	}
+}

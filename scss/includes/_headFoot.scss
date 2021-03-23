@@ -1,0 +1,839 @@
+// 1. HEADER
+// ---------
+.logo{ /* manter fora de parents */
+	@include displayInline(middle);
+	width:20rem;
+	max-width:18rem;
+	
+	margin:0;
+	
+	z-index: 5;
+}
+
+.header {
+	position: relative;
+			
+	margin:0;
+	background:$white;
+	z-index: 205 !important;
+	
+	& .top{
+		@include Animationcss(opacity 0.1s, all 0.1s linear);
+		padding: 7px 0;
+        
+		& .wrapper_linguas{
+			position: relative;
+			z-index: 101;
+			padding-left: 2rem;
+			& a{
+				@include textos(list_txt, $dark-gray, 12px, null, 400);
+				display: block;
+				padding-right: 1.5rem;
+				& img{
+					max-width: 2.2rem;
+					width: 3rem;
+					margin-right: 1rem;
+					@include displayInline(middle);
+				}
+				&:before{
+					@include transform(translateY(50%));
+					font-size: 8px !important;
+				}	
+			}
+			& ul{
+				& li{
+					&[accordion-active]{
+						& a{
+							&:before{
+								@include transform(rotate(180deg) translateY(-50%));
+							}	
+						}
+					}
+					& ul{
+						top: calc(100% + 7px);
+						background: $white;
+						box-shadow: 0px 20px 30px -10px rgba($dark-gray, 0.4);
+						width: calc(100% + 1rem);
+						left: -1rem;
+						& li{
+							padding: 1rem;
+						}
+					}
+				}
+			}
+		}
+
+		& .txt_delivery{
+			@include textos(list_txt, $primary-color, 10px, null, 600);
+			display: block;
+		}
+
+		& .links{
+			margin-right: 2rem;
+			color: $dark-gray;
+			&:hover{
+				color: $secondary-color;
+			}
+		}
+		& .links:last-child{
+			margin-right: 0px;
+		}
+
+	}
+
+	& .fav_btn,
+	& .cart-btn{
+		position: relative;
+		@include displayInline(middle);
+		@include Animationcss(all 0.3s linear);
+		padding-right: 3rem;
+		padding-left: 1.5rem;
+  	& i{
+  		display: block;
+  		font-size: 21px;
+  		color: $primary-color;
+  		@include Animationcss(all 0.3s linear);
+  	}  	
+
+  	& .count{
+			position: absolute;
+			top: -3px;
+			right: 0;
+			width: 25px;
+			height: 25px;
+		
+			@include textos(list_txt, $white, 14px, 25px, 600);
+			font-style: initial;
+			border-radius: 50%;
+			background: $medium-gray;
+			@include Animationcss(all 0.3s linear);
+			& small{
+				font-size: 100%;
+				font-style: initial;
+			}
+		}
+
+		&:hover{
+			& i{
+	  		color: $secondary-color;
+	  	}  	
+		}
+  }
+
+
+
+	& .middle{
+		padding: 2rem 0 1.5rem;
+		border-top: 1px solid rgba($medium-gray, 0.5);
+
+		& .header_help{
+			& a{
+				@include displayInline(middle);
+				@include textos(list_txt, $primary-color, 18px, null, 700);
+				& span{
+					color: $secondary-color;
+					font-size: 14px;
+					display: block;
+				}
+				&:hover{
+					color: $secondary-color;
+				}
+			}
+		}
+
+
+    & .login_header{
+			@include displayInline(middle);
+    	& .logout{
+    		width: 16px;
+    		& svg path{
+					fill: rgba($primary-color, 0.5);
+    		}
+    	}
+	
+    	& a{
+    		@include textos(textos, $primary-color);
+				@include displayInline(middle);
+				&:hover{
+					color: $secondary-color;
+				}
+      }      	
+
+    	& .separator{
+    		position: relative;
+    		top: 1px;
+    		margin:0 5px;
+    		color: $primary-color;
+    		font-size: 10px;
+    	}
+    }
+		
+	}
+	
+	& .bottom{
+		& .navbar-nav{
+			background-color: $light-gray;
+			& .menu-item{
+				@include displayInline(middle);
+				& .nav-link{
+					@include textos(textos, $primary-color, 14px, 1.2, 600);
+					padding: 15px 10px;
+					position: relative;
+					display: block;
+					min-width: 9rem;
+					z-index: 1;
+					overflow: hidden;
+					border-left: 1px solid $white;
+					border-right: 1px solid $white;
+
+					&:after {
+						content: "";
+						position: absolute;
+						z-index: -1;
+						top: -2px;
+						left: -2px;
+						right: -2px;
+						bottom: -2px;
+						background-color: $secondary-color;
+
+						-webkit-transform-origin: 50% 0%;
+						transform-origin: 50% 0%;
+
+						@include transform(scaleY(0));
+						@include Animationcss(transform 0.3s ease-out);
+					}
+
+					&:hover,
+					&.active{
+						color: $white;
+						&:after{
+							@include transform(scaleY(1));
+						}
+					}
+				}
+				& .search-btn{
+					color: $white;
+					padding: 10px;
+					position: relative;
+					display: block;
+					& span{
+						font-size: 13px;
+					}
+					&:hover{
+						color: $secondary-color;
+					}
+				}
+			}
+		}
+
+	}
+
+	& .menu_holder{	
+		@include displayInline(middle);
+		position:relative;
+
+		color: $secondary-color;
+		width: 38px;
+		height: 32px;
+		
+		z-index: 5;
+
+		& span,
+		&:before,
+		&:after{
+			display: block;
+			position: absolute;
+			
+			top: 5px;
+			left: 5px;
+						
+			width: 28px;
+			height: 3px;
+
+			border-radius: 5px;
+			background-color: currentColor;
+			opacity: 1;
+			
+			transform-origin: left center;
+			@include transform(rotate(0deg));
+			@include Animationcss(0.3s ease-in-out);
+		}		
+		& span{			
+			top:14px;
+		}			
+
+		&:before,
+		&:after{
+			content:'';
+		}
+		&:after{
+			top: 23px;
+		}
+
+
+		
+		&.active{
+			& span{
+				width: 0%;
+				opacity: 0;
+			}
+			&:before {
+				top: 3px;
+				@include transform(rotate(45deg));
+			}
+			&:after {
+				@include transform(rotate(-45deg));
+			}
+		}
+	}
+
+
+	@include breakpoint(xmedium down){		
+		& .bottom{
+			& .wrapper_menu{
+				& a{
+					padding: 1.6rem 1rem;
+				}
+			}
+		}
+	}
+
+
+	@include breakpoint(xxsmall down){
+		& .middle{
+			padding: 2.2rem 0;
+		}
+	}
+}
+
+
+// 2. MENUS
+// ---------
+
+.menu_desktop{
+	position: absolute;
+	top: 100%;
+	margin-top: 0;
+	left: 0px;
+	right: 0px;
+	
+	height:480px;
+	max-height: 480px;
+
+	display: none;
+	pointer-events: none;
+	
+	z-index: -1;
+	
+	&.opened {
+		pointer-events: auto;
+
+		& > .div_100 {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	& > .div_100 {
+		display: block;
+		height: 100%;
+		opacity: 0;
+		visibility: hidden;;
+
+		@include Animationcss(all 0.5s linear);
+	}
+
+	& .menu_desk_bg{
+		background: $white;
+		height: 100%;
+	}
+	& .menu_desk_scroll{
+		display:block;
+		height: 100%;
+		height:calc(100% - 1px);
+		overflow:hidden;
+		overflow-y: auto;
+	}
+	&.header_pesq_drop{
+		background: $white;
+		border-top: 1px solid $light-gray;
+	}
+	&.header_menu_drop{
+		background: $white;
+		border-top: 1px solid $light-gray;
+
+		& .divs{
+			padding-top: 3rem;
+			padding-bottom: 7rem;
+
+			& .novidades_divs{
+				& h6{
+					font-size: 12px;
+				}
+			}
+		}
+		& .menu_categorias{
+			& > li{
+				display: block;
+				width: 25%;
+				float: left;
+
+				padding-right: 2rem;
+				margin-bottom: 5rem;
+
+				& > a{
+					display: block;
+					@include textos(list_tit, $primary-color, 12px);
+					padding-bottom: 5px;
+					border-bottom: 1px solid;
+
+					&:hover{
+						color: $dark-gray;
+					}				
+				}
+				& > ul{
+				    margin-left: 0;
+
+					& > li > a{
+						display: table;
+						margin-top: 5px;
+
+						@include textos(list_tit, $primary-color, 14px, null, 400);
+						text-transform: none;
+
+						&:hover{
+							color: $dark-gray;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@include breakpoint($global-width down){
+		& .row{
+			padding: 0 10px !important;
+		}
+	}
+}
+
+.menu_mobile{
+	position: fixed;
+	top: 0;
+	padding-top: $mmob_header_padd;
+	background: $mmob_bg;
+	width: 100%;
+	max-width: $mmob_width;
+	height: 100%;
+
+	z-index: 204;
+	
+	opacity:0;
+	visibility:hidden;
+
+	@include Animationcss(all 0.3s ease-in);
+
+	&.right-side{
+		right: -$mmob_width;
+	}
+	&.left-side{
+		left: -$mmob_width;
+	}
+
+	&.menu-opened{
+		opacity:1;
+		visibility:visible;
+
+		&.right-side{
+			right: 0;
+		}
+		&.left-side{
+			left: 0;
+		}
+	}
+
+	& .menu_mobile_scroller{
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow:auto;
+	}
+	& .intro{
+		position: relative;
+		background: $mmob_bgInsde;	
+		padding:$mmob_padd $mmob_paddSide;
+				
+		& .header_linguas{		
+			& img,
+			& span,
+			& i{			
+				@include displayInline(middle);
+			}
+			& img{
+				max-width: 2.5rem;
+				margin-right: 1rem;
+			}
+			& i{
+				font-size: 1.3rem;
+				margin-left: 2rem;
+			}	
+
+			&:hover{
+				color: $secondary-color;
+        	}					
+		}
+	}
+	& .section{
+		margin-top: $mmob_marg;
+		
+		& ul{
+			margin:0;
+
+			& ul li:last-child > a{
+				border-bottom: 0;
+			}
+		}
+
+		& span{
+			display: block;
+			padding-left:$mmob_paddSide;
+			color:$secondary-color;
+			padding-bottom: 5px;	
+
+			font-weight: 700;	
+
+			text-transform: none;
+
+			border-bottom: $mmob_border;
+		}
+		& a{
+			display: block;
+			padding:$mmob_padd $mmob_paddSide;
+			border-bottom: $mmob_border;
+			
+			font-weight: 400;
+			text-transform: none;
+
+			&:hover{
+				color:$secondary-color;
+			} 
+		}
+		&.redes{
+			border-top: $mmob_border;
+			padding:$mmob_padd $mmob_paddSide;
+
+			& a{
+				@include displayInline(middle);
+				color: $primary-color;
+				font-size:35px;
+
+				border:0;
+				padding:0;
+			}
+		}
+		& li.has-sub{
+			border-bottom: $mmob_border;
+
+			& > a{
+				position: relative;
+				border-bottom: 0;
+
+				&::before,
+				&::after {
+					top: 50%;
+					position:absolute;
+					@include pseudoElements;
+					background:currentColor;	
+				}
+				
+				&::before{
+					height:14px;
+					width:2px;
+					margin-top: -7px;
+					right: $mmob_paddSide + 6px;
+				}
+				&::after{
+					width:14px;
+					height:2px;
+					margin-top:-1px;
+					right:$mmob_paddSide;
+				}				
+			}
+			& ul{
+				display: none;
+				background: $mmob_bgInsde;	
+
+				& li{
+					& a{
+						&.active{
+							background: $dark-gray;
+							color: $white;
+						}
+					}
+					&:first-child a{
+						border-top: $mmob_border;
+					}
+				}
+			}		
+
+			&.is-active{
+				& > a{
+					&:before,
+					&:after{
+						@include transform(rotate(45deg));
+					}
+				}
+			}
+		}
+
+		& ul{
+			& li{
+				& a{
+					&.active{
+						background: $dark-gray;
+						color: $white;
+					}
+				}
+			}
+		}
+		
+		& li.is-active{
+			& > a{
+				background: $mmob_bgInsde;
+				color:$secondary-color;					
+			}
+		}
+	}
+}
+
+
+// 3. FOOTER
+// ---------
+.footer{
+	margin-top:13rem;
+	background:$white;
+
+	& .links-section{
+		padding: 5.5rem 0;
+
+		& h3{
+			@include Animationcss(all 0.3s linear);
+			@include textos(list_subtit, #2F3936, 16px);
+			display: block;
+			margin-bottom: 3rem;
+			text-transform:uppercase;
+		}
+		& a{
+			display: table;
+			@include textos(list_txt, $dark-gray, 14px, null, 400);
+			margin-bottom: 2rem;
+			&:hover{
+				color:$secondary-color;
+			}
+		}
+	}
+		
+	& .section-info{
+		background: $secondary-color;
+		& .newsImage{
+			position:relative;
+			& .sofas{
+				position:absolute;
+				top: -6.3rem;
+				left:10rem;
+			}
+			& .salas{
+				position:absolute;
+				top:16rem;
+				right: -14.8rem;
+			}
+			& .moveis{
+				position:absolute;
+				bottom:2.7rem;
+				left: -4rem;
+			}
+
+		}
+		& form{
+			max-width:440px;
+			margin:auto;
+			padding: 20rem 2rem;
+
+			& h3{
+				@include textos(subtitulos, $white, 35px, 1.2, 400);
+				margin-bottom:8rem;
+			}
+			& label{
+				color: $white;
+
+				&:after{
+					border-color: $white;
+				}
+				& a{
+					color: $white;
+					text-decoration: underline;
+					&:hover{
+						color: $black;
+					}
+				}
+			}
+			& .inpt_holder{
+				& input{
+					border:0;
+					width: 100%;
+					padding:10px 0;
+					color: $white;
+					background: transparent;
+					border-bottom: 1px solid rgba($white, 0.5);
+					font-weight: 500;
+
+					&::placeholder{
+						text-transform:uppercase;
+						letter-spacing: 1px;
+					}
+				}
+			}
+			& .inpt_holder:not(.simple):not(.select):after {
+    			background: $white;
+    		}
+			& .button{
+				margin-top:4.2rem;
+				padding: 1.2rem 4.5rem;
+
+			}
+			& .anular_subs{
+				padding-top: 2rem;
+				& a{
+					@include textos(list_subtit, $white, null, null, 400);
+				}
+			}
+		}
+	}
+	& .section-direitos{
+		background-color:$light-gray;
+		padding: 3rem 0;
+
+		& h6{
+			@include displayInline(middle);
+			@include textos(list_subtit, $dark-gray, 12px, null, 400);
+			text-transform: none;
+			
+			& a{
+				color:$black;
+
+				&:hover{
+					color: $secondary-color;
+				}					
+			}
+		}
+		& .reclamacoes{
+			& svg{
+				width:7.5rem;
+				height:auto;
+			}
+		}
+
+		& .icon-netgocio{
+			font-size: 5rem;
+			color: $black;
+		}
+	}
+	
+	& .redes{			
+		& h3{
+			@include displayInline(middle);
+			color: rgba($white, 0.25);
+			margin-right: 3rem;
+		}
+		& a{
+			@include displayInline(middle);
+			color: white !important;
+			font-size: 2.8rem;
+		}
+	}
+
+	//PAGAMENTOS
+	.divs_pagamentos{
+		@include displayInline(middle);
+		background:$light-gray;
+		padding: 8px;
+		margin-right: 10px;
+		margin-bottom: 10px;
+    	border-radius: 7px;
+
+		& > div{
+			width: 8rem;
+			height: 3rem;
+			opacity: 1;
+		}
+	}
+	
+	
+	@include breakpoint(xxsmall down){
+		& .links-section{
+			padding: 8rem 4.5rem;
+			
+			& .icon-mmauto{
+				margin-top: 3rem;
+				margin-bottom: 2rem;
+			}
+			& .spacer{
+				margin-bottom: 2rem;
+			}
+		}
+		& .section-info{
+			& .newsImage{
+				& .aspectRatioPlaceholder{
+					max-height:577px !important;
+				}
+				& .sofas{
+					top: -7rem;
+    				left: -5rem;
+				}
+				& .salas {
+    				right: -16.2rem;
+				}
+			}
+		}
+
+		& .redes{	
+			margin-bottom: 2.5rem;
+		    padding-bottom: 2.5rem;
+		    border-bottom: 1px solid #000;
+
+		    & h3{
+		    	display: block;
+		    	margin-right: 0;
+		    	margin-bottom: 3rem;
+		    }
+	    }
+		& h3.list_subtit{
+			position: relative;
+			cursor: pointer;	
+
+			&:hover{
+				color: $secondary-color;
+			}
+		}
+		& .pagamento{
+			margin-top:4rem;
+		}
+		& .section-direitos{
+			text-align: center;
+			padding: 6rem 4.5rem;
+			& .reclamacoes{
+				& svg{
+					margin:auto;
+					width:12.4rem;
+					height:auto;
+				}
+			}
+			& h6{
+				margin-bottom: 4rem;
+			}
+
+		}
+	}
+
+
+}

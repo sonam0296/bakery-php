@@ -1,0 +1,179 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php
+  /* 
+   * Paging
+   */
+
+  if(isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
+    $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
+    //$records["customActionMessage"] = "Group action successfully has been completed. Well done!"; // pass custom message(useful for getting status of group actions)
+  
+    // actualiza estado dos registos selecionados
+    $opcao = $_REQUEST["customActionName"];
+    $array_ids = $_REQUEST["id"];
+    $lista = "";
+    foreach($array_ids as $id) {
+      $lista.=$id.",";
+    }
+    $lista = "(".substr($lista,0,-1).")";
+
+    $query_rsLinguas = "SELECT sufixo FROM linguas WHERE visivel = '1'";
+    $rsLinguas = DB::getInstance()->prepare($query_rsLinguas);
+    $rsLinguas->execute();
+    $row_rsLinguas = $rsLinguas->fetchAll();
+    $totalRows_rsLinguas = $rsLinguas->rowCount();
+    
+    if($opcao == 0 || $opcao == 1) { // torna clientes selecionados activos ou inactivos
+      foreach($row_rsLinguas as $linguas) {
+        $query_rsUpd = "UPDATE l_promocoes_".$linguas['sufixo']." SET visivel =:visivel WHERE id IN $lista";
+        $rsUpd = DB::getInstance()->prepare($query_rsUpd);
+        $rsUpd->bindParam(':visivel', $opcao, PDO::PARAM_INT);
+        $rsUpd->execute();
+      }
+    } 
+    else if($opcao == '-1') { // elimina clientes selecionados
+      foreach($row_rsLinguas as $linguas) {
+        $query_rsDel = "DELETE FROM l_promocoes_".$linguas['sufixo']." WHERE id IN $lista";
+        $rsDel = DB::getInstance()->prepare($query_rsDel);
+        $rsDel->execute();
+      }
+    }
+  }
+  
+  // ordenação
+  $sOrder = " ORDER BY id DESC";
+  $colunas = array( 'id', 'nome', 'id_categoria', 'id_marca', 'datai', 'dataf', 'visivel', '');
+  
+  if(isset($_REQUEST['order'])) {
+    $sOrder = " ORDER BY ";
+    if(sizeof($_REQUEST['order']) > 1) {
+      for($i=0; $i<sizeof($_REQUEST['order']); $i++) {
+       if($i>0) $sOrder .= ", ";
+       $sOrder .= $colunas[$_REQUEST['order'][$i]["column"]]." ".$_REQUEST['order'][$i]["dir"];
+      }
+    } elseif($colunas[$_REQUEST['order'][0]["column"]]) $sOrder .= $colunas[$_REQUEST['order'][0]["column"]]." ".$_REQUEST['order'][0]["dir"];
+  }
+  
+  // pesquisa
+  $where_pesq = "";
+  if(isset($_REQUEST['action']) && $_REQUEST['action']=="filter") {
+    $pesq_nome = utf8_decode($_REQUEST['form_nome']);
+    $pesq_datai = $_REQUEST['form_inicio'];
+    $pesq_dataf = $_REQUEST['form_fim'];
+    $pesq_activo = $_REQUEST['form_activo'];
+    $pesq_categoria = $_REQUEST['form_categoria'];
+    $pesq_marca = $_REQUEST['form_marca'];
+    
+    if($pesq_nome != "") $where_pesq .= " AND nome LIKE '%$pesq_nome%'";
+    if($pesq_datai != "") $where_pesq .= " AND datai = '$pesq_datai'";
+    if($pesq_dataf != "") $where_pesq .= " AND dataf = '$pesq_dataf'";
+    if($pesq_activo != "") $where_pesq .= " AND visivel = '$pesq_activo'";
+    if($pesq_categoria != "") $where_pesq .= " AND id_categoria = '$pesq_categoria'";
+    if($pesq_marca != "") $where_pesq .= " AND id_marca = '$pesq_marca'";
+    
+  }
+  
+  $iDisplayLength = intval($_REQUEST['length']);
+  $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength; 
+  $iDisplayStart = intval($_REQUEST['start']);
+  $sEcho = intval($_REQUEST['draw']);
+  
+  $query_rsTotal = "SELECT * FROM l_promocoes_pt WHERE id > 0".$where_pesq.$sOrder;
+  $rsTotal = DB::getInstance()->prepare($query_rsTotal);
+  $rsTotal->execute();
+  $totalRows_rsTotal = $rsTotal->rowCount();
+  
+  $iTotalRecords = $totalRows_rsTotal;
+  
+  $query_rsTotal = "SELECT * FROM l_promocoes_pt WHERE id > 0".$where_pesq.$sOrder." LIMIT $iDisplayStart, $iDisplayLength";
+  $rsTotal = DB::getInstance()->prepare($query_rsTotal);
+  $rsTotal->execute();
+  $totalRows_rsTotal = $rsTotal->rowCount();
+  
+  $records = array();
+  $records["data"] = array(); 
+
+  $end = $iDisplayStart + $iDisplayLength;
+  $end = $end > $iTotalRecords ? $iTotalRecords : $end;
+  
+  $i = $iDisplayStart;
+  while($i < $end && $row_rsTotal = $rsTotal->fetch()) {
+    $id = $row_rsTotal['id'];
+    $nome = utf8_encode($row_rsTotal['nome']);
+    $datai = $row_rsTotal['datai'];
+    $dataf = $row_rsTotal['dataf'];
+    
+    if($row_rsTotal['visivel'] == 1) {
+      $activo = $RecursosCons->RecursosCons['text_visivel_sim'];
+      $etiqueta = "success";
+    } 
+    else {
+      $activo = $RecursosCons->RecursosCons['text_visivel_nao'];
+      $etiqueta = "danger";
+    }
+    $categoria = '';
+    if($row_rsTotal['id_categoria'] > 0) {
+      $query_rsCategoria = "SELECT nome, cat_mae FROM l_categorias_en WHERE id =:id";
+      $rsCategoria = DB::getInstance()->prepare($query_rsCategoria);
+      $rsCategoria->bindParam(':id', $row_rsTotal['id_categoria'], PDO::PARAM_INT);
+      $rsCategoria->execute();
+      $row_rsCategoria = $rsCategoria->fetch(PDO::FETCH_ASSOC);
+      $totalRows_rsCategoria = $rsCategoria->rowCount();
+
+      if($totalRows_rsCategoria > 0) {
+        if($row_rsCategoria['cat_mae'] > 0) {
+          $query_rsCategoriaMae = "SELECT nome FROM l_categorias_en WHERE id=:id";
+          $rsCategoriaMae = DB::getInstance()->prepare($query_rsCategoriaMae);
+          $rsCategoriaMae->bindParam(':id', $row_rsCategoria['cat_mae'], PDO::PARAM_INT);
+          $rsCategoriaMae->execute();
+          $row_rsCategoriaMae = $rsCategoriaMae->fetch(PDO::FETCH_ASSOC);
+          $totalRows_rsCategoriaMae = $rsCategoriaMae->rowCount();
+
+          if($totalRows_rsCategoriaMae > 0) {
+            $categoria = utf8_encode($row_rsCategoriaMae['nome']." » ");
+          }
+        }
+
+        $categoria .= utf8_encode($row_rsCategoria['nome']);
+      }
+    }
+
+    if($categoria == '') {
+      $categoria = '---';
+    }
+    $marca = '---';
+    if($row_rsTotal['id_marca'] > 0) {
+      $query_rsMarca = "SELECT nome FROM l_marcas_pt WHERE id =:id";
+      $rsMarca = DB::getInstance()->prepare($query_rsMarca);
+      $rsMarca->bindParam(':id', $row_rsTotal['id_marca'], PDO::PARAM_INT);
+      $rsMarca->execute();
+      $row_rsMarca = $rsMarca->fetch(PDO::FETCH_ASSOC);
+      $totalRows_rsMarca = $rsMarca->rowCount();
+      
+      if($totalRows_rsMarca > 0) {
+        $marca = utf8_encode($row_rsMarca['nome']);
+      }
+    }
+    
+    $records["data"][] = array(
+    '<input type="checkbox" name="id[]" value="'.$id.'">',
+    $nome,
+    $categoria,
+    $marca,
+    $datai,
+    $dataf,
+    '<span class="label label-sm label-'.$etiqueta.'">'.utf8_encode($activo).'</span>',
+    '<a href="promocoes-edit.php?id='.$id.'" class="btn btn-xs default btn-editable"><i class="fa fa-pencil"></i> '. $RecursosCons->RecursosCons['btn_editar'].'</a>',
+    );
+    
+    $i++;
+  }
+
+  DB::close();
+
+  $records["draw"] = $sEcho;
+  $records["recordsTotal"] = $iTotalRecords;
+  $records["recordsFiltered"] = $iTotalRecords;
+  
+  echo json_encode($records);
+?>

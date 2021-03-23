@@ -1,0 +1,5 @@
+[22-Feb-2021 13:17:22 UTC] PHP Fatal error:  Uncaught Error: Class 'Imagick' not found in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/funcoes.php:358
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/destaques/destaques-edit.php(254): compressImage('../../../imgs/d...', '../../../imgs/d...')
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/funcoes.php on line 358

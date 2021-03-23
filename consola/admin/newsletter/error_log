@@ -1,0 +1,133 @@
+[20-Jul-2020 11:06:38 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'where clause' in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-enviar.php:382
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-enviar.php(382): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-enviar.php on line 382
+[20-Jul-2020 11:10:47 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '/media/trabalhos/N/natura_saude/site/Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:15:36 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '/media/trabalhos/N/natura_saude/site/Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:16:58 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required 'Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:17:24 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined variable: is_cron_file in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 204
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: opt in /home/netgpropostas/public_html/naturasaude/consola/admin/activity-rpc.php on line 154
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: lg in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_pages.php on line 110
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; SMTP has a deprecated constructor in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 27
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; MIME has a deprecated constructor in /home/netgpropostas/public_html/naturasaude/sendMail/mime.php on line 24
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 71
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 115
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 119
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 134
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 144
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: email_bounce in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-enviar-teste.php on line 34
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined variable: is_cron_file in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 204
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_user in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 545
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_pass in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 546
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: natura_saudeWish in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 716
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined variable: cookie_secure in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 727
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_currency in /home/netgpropostas/public_html/naturasaude/helpers/carrinho.php on line 379
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: HTTP_USER_AGENT in /home/netgpropostas/public_html/naturasaude/helpers/carrinho.php on line 382
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_user in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 660
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_pass in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 661
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_user in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 660
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: SITE_pass in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 661
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1523
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1523
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1523
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 2236
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Warning:  require_once(../Connections/connADMIN.php): failed to open stream: No such file or directory in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:18:21 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Notice:  Undefined variable: is_cron_file in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 204
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Notice:  Undefined index: opt in /home/netgpropostas/public_html/naturasaude/consola/admin/activity-rpc.php on line 154
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Notice:  Undefined index: lg in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_pages.php on line 110
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; SMTP has a deprecated constructor in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 27
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; MIME has a deprecated constructor in /home/netgpropostas/public_html/naturasaude/sendMail/mime.php on line 24
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 71
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 115
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 119
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 134
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 144
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Notice:  Undefined variable: hour in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_topo.php on line 16
+[20-Jul-2020 11:19:03 Europe/Lisbon] PHP Notice:  Undefined variable: hour in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_topo.php on line 20
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined variable: is_cron_file in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 204
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: opt in /home/netgpropostas/public_html/naturasaude/consola/admin/activity-rpc.php on line 154
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: lg in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_pages.php on line 110
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; SMTP has a deprecated constructor in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 27
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Methods with the same name as their class will not be constructors in a future version of PHP; MIME has a deprecated constructor in /home/netgpropostas/public_html/naturasaude/sendMail/mime.php on line 24
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::is_alpha() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 71
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 115
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::is_ipv4() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 119
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 134
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Deprecated:  Non-static method FUNC::str_clear() should not be called statically in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 144
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: email_bounce in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-enviar-teste.php on line 34
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined variable: is_cron_file in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 204
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_user in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 545
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_pass in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 546
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: natura_saudeWish in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 716
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined variable: cookie_secure in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 727
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_currency in /home/netgpropostas/public_html/naturasaude/helpers/carrinho.php on line 379
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: HTTP_USER_AGENT in /home/netgpropostas/public_html/naturasaude/helpers/carrinho.php on line 382
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_user in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 660
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_pass in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 661
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_user in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 660
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: SITE_pass in /home/netgpropostas/public_html/naturasaude/helpers/utilizadores.php on line 661
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1523
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1523
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1523
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Notice:  Undefined index: gera_imagens in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 2236
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Warning:  require_once(../Connections/connADMIN.php): failed to open stream: No such file or directory in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:19:08 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:19:32 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:20:05 Europe/Lisbon] PHP Fatal error:  require(): Failed opening required '../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:20:23 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '/../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:21:09 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '../../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:21:28 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '../Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 11:23:06 Europe/Lisbon] PHP Fatal error:  require_once(): Failed opening required '/home/netgpropostas/public_html/Connections/connADMIN.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/netgpropostas/public_html/naturasaude/mailgun/mailgun.php on line 2
+[20-Jul-2020 13:24:28 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1608
+[20-Jul-2020 13:25:12 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1605
+[20-Jul-2020 14:38:58 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 984
+[20-Jul-2020 14:40:39 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1704
+[20-Jul-2020 15:47:16 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 984
+[20-Jul-2020 16:15:07 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1834
+[20-Jul-2020 16:19:54 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 970
+[20-Jul-2020 19:55:37 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1607
+[20-Jul-2020 19:56:03 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 982
+[20-Jul-2020 20:09:29 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 657
+[20-Jul-2020 20:14:09 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-edit.php on line 1001
+[21-Jul-2020 06:33:28 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-historico-list.php:135
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-historico-list.php(135): PDO->query('SELECT hist.*, ...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-historico-list.php on line 135
+[21-Jul-2020 06:33:30 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-historico-list.php:135
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-historico-list.php(135): PDO->query('SELECT hist.*, ...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/newsletter/newsletter-historico-list.php on line 135
+[28-Jul-2020 19:47:54 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[28-Jul-2020 19:54:27 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[28-Jul-2020 19:55:41 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[28-Jul-2020 19:56:16 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 06:33:18 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 07:19:13 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 07:19:54 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 07:20:16 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 07:22:29 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 07:28:39 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 07:29:37 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:02:29 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:03:52 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:35:16 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:36:10 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:36:49 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:44:44 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:46:18 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:50:09 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:53:25 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:57:15 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 08:59:13 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:00:40 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:00:44 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:01:40 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:03:49 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:07:56 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:09:35 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470
+[29-Jul-2020 09:13:15 Europe/Lisbon] PHP Warning:  Invalid text/plain value, on class SMTP::text() in /home/netgpropostas/public_html/naturasaude/sendMail/smtp.php on line 470

@@ -1,0 +1,560 @@
+/*LISTAGENS*/
+
+.listings{	
+	margin-top:0 !important;
+
+	& .listings_container{
+		margin: 0 !important;
+		position:relative;
+		display:block;
+		height:auto;
+
+		& .listings_divs{
+			position:relative;
+			@include divOutter(-5px);
+
+			& .titulo_pesq{
+				text-align: left;
+				padding-bottom: 5rem;
+				& p{
+					@include textos(textos);
+				}
+				& h1{
+					@include textos(titulos);
+					margin-bottom: 5px;
+					margin-top: 0px;
+					& span{
+						color: $secondary-color;
+					}
+				}
+			}
+
+			& .listing_mask{
+				display:none !important;
+				position:absolute;
+				top:0;
+				left: 5px;
+				right: 5px;
+				height:100%;
+				
+				z-index:10;
+				
+				opacity:0;
+				visibility:hidden;
+				pointer-events:none;
+				
+				@include Animationcss(all 0.5s linear);
+				
+				& .listing_loader{
+					display:block;
+					margin:auto;
+					
+					width: 120px;
+					height: 120px;
+					
+					margin-top:70px;
+					
+					&.is-sticky{
+						left: calc(100% - (50% - 90px));
+					}
+						
+					& .circle {
+						width: 100%;
+						height: 100%;
+						
+						border-radius: 50%;
+						box-shadow: inset 0 0 0 5px rgba($secondary-color, 0.1);						
+					}
+					& .line-mask {
+						position: absolute;
+						left: 0%;
+						top: 0%;
+						
+						width: 100%;
+						height: 100%;
+						
+						overflow: hidden;
+						
+						transform-origin: 60px 60px;
+						
+						-webkit-mask-image: -webkit-linear-gradient(top, #000000, rgba(0, 0, 0, 0));
+						
+						-webkit-animation: rotate 1.2s infinite linear;
+						-moz-animation: rotate 1.2s infinite linear;
+						-o-animation: rotate 1.2s infinite linear;
+						animation: rotate 1.2s infinite linear;
+						
+						& .line {
+							width: 100%;
+							height: 100%;
+							border-radius: 50%;
+							box-shadow: inset 0 0 0 8px rgba($secondary-color, 0.5);
+						}
+					}
+				}
+			}
+			
+			& .opac{
+				opacity:0.4;
+			}
+		}
+	}
+
+	@include breakpoint(medium){
+		& .listings_container{
+			padding:6rem 0px;
+			padding-left:25px;
+
+			& .listings_divs{
+				@include divOutter(-10px);
+			}
+		}
+	}
+}
+
+.filtersToggle{
+	display:block;
+	width: 100%;	
+	background: $dark-gray;
+	padding: 1.8rem 10px;
+				
+	cursor: pointer;
+		
+	& span{
+		color: $white;
+		
+		&:before{
+			@include displayInline(middle);
+			font-size: 1.8rem;
+			margin-right: 3rem;
+		}
+	}	
+
+	&:hover{
+		background: $secondary-color;
+	}
+}
+
+.listings_filters{
+	position:relative;
+	vertical-align:top;
+	width:300px;
+	padding-top: 3rem;
+
+	z-index: 5;
+
+	& .listings_filters_bg{
+		position:relative;
+		background:$white;
+		height:100%;
+
+		& .listings_filters_content{
+			position:relative;
+			left:auto;
+
+			& .filtersHead{
+				position:absolute;
+				top:0;
+				left:0;
+				width:100%;
+				
+				background: $dark-gray;
+				padding:15px 20px;
+				
+				& .close-button{
+					top: 4px;
+				}
+				& h4{
+					color: $white;
+
+					&:before{
+						@include displayInline(middle);
+						font-size: 16px;
+						margin-right: 10px;
+		    			margin-top: -2px;
+					}
+				}
+				& a{
+					color: $white;
+
+					&:hover{
+						color:$primary-color;
+					}
+				}
+				
+			}
+		
+			& .filtersFoot{
+				padding:4rem 0;
+				width: auto;
+			}
+		}
+	}	
+
+	& .filters_padd{
+		position:relative;
+		
+		& h3{
+			padding-left: 0 !important;
+		}
+		
+		& .filter_outer{
+			@include divOutter(-4px);			
+		}
+
+		& .column{
+			padding:0 2px !important;
+		}
+	}	
+	& .filters_divs{
+		position:relative;
+		padding-top: 3rem;
+
+		& > h3{			
+			position: relative;
+			display: block;
+			color: $secondary-color;
+			margin-bottom: 3rem;
+		}
+		& [native-window-trigger]{
+			background: $white;
+			padding: 12px 20px;
+			border-right: 0;
+			border-left: 0;
+		}
+		& .hidden_filters{
+			display:none;
+			margin-bottom: 10px;
+		}
+		& .hidden_filters_btn{								
+			display:none;
+			
+			color: $dark-gray;
+			font-weight: 700;
+			
+			&.active{
+				display:inline-block;
+			}
+		}
+		
+		& .filters{
+			position: relative;
+			display:table;
+
+			& input[type="checkbox"]{
+				@include inputElements(checkradio);
+				cursor:pointer;
+			}
+		}
+
+		//inputs com categorias
+		& .loja_inpt{
+			&.type1{
+				display: table;
+				padding-right: 25px;
+				margin-bottom: 10px;
+
+				&::before{
+					margin-top: -6px !important;
+	    			font-size: 12px !important;
+				}
+			}
+			&.type2{
+				margin-bottom: 5px;
+			}
+		}
+
+		&.input_radio,
+		&.input_check{
+			& .filters{
+				padding:5px 0;
+				padding-left: 30px;
+
+				& h5,
+				& p{
+					@include displayInline(middle);		
+				}
+				& p{
+					color: $secondary-color;
+					margin-left: 10px;
+				}
+				& h5{
+					&:before{
+						@include pseudoElements;
+						position:absolute;
+						top:50%;
+						left:0;
+						width:20px;
+						height:20px;
+						border:1px solid $dark-gray;
+						background:transparent;
+						pointer-events:none;
+						
+						@include transform(translateY(-50%));
+					}
+					&:after{
+						@include pseudoElements;
+
+						position:absolute;
+					    top: 50%;
+
+						opacity:0;
+						pointer-events:none;
+					}
+				}
+				& input{					
+					&:checked{		
+						& + h5{						
+							&:after{
+								opacity:1;
+							}
+						}		
+					}
+				}	
+			}
+		}
+		&.input_radio{
+			& .filters{
+				& h5{
+					&:after{		
+					    left: 0;
+					    width: 10px;
+					    height: 10px;
+						
+						margin-left: 5px;
+					    margin-top: -5px;
+						
+						background: $dark-gray;
+						border-radius: 50%;
+					}
+					&:before{
+						left: 0;
+						border-radius: 50%;
+					}
+				}
+				& input{					
+					&:hover{
+						& + h5{
+							color: $secondary-color;
+						}
+					}
+					&:checked{		
+						& + h5{		
+							&:before{
+								border-color:$dark-gray;
+							}				
+						}		
+					}
+				}		
+			}
+		}
+		//inputs checkbox
+		&.input_check{
+			& .filters{							
+				& span{ /*CORES*/
+					display:none;
+					
+					width:2.9rem;
+					height:2.9rem;
+					
+					border:1px solid $primary-color;
+					
+					&:after{						
+						position:absolute;
+						top: 6px;
+						left: 10px;
+						
+						width: 9px;
+						height: 14px;
+								
+						border: solid #3BD572;
+						border-width: 0 3px 3px 0;
+						
+						opacity:0;
+						pointer-events:none;
+						
+						@include transform(rotate(45deg) translateZ(1px));
+					}
+					
+					@include Animationcss(all 0.3s linear);	
+				}
+								
+				& h5{  /*FILTROS*/		
+					&:after{									
+					    left: 6px;
+					    width: 7px;
+					    height: 14px;
+
+					    margin-top: -9px;
+		
+						border: solid $white;
+						border-width: 0 2px 2px 0;
+
+						@include transform(rotate(45deg) translateZ(1px));
+					}
+				}
+				& input{
+					&:hover{
+						& + h5{
+							color: $secondary-color;
+						}
+					}
+					&:checked{		
+						& + h5{		
+							&:before{
+								background:$dark-gray;
+							}	
+						}		
+					}
+				}		
+			}
+		}		
+	}
+
+	@include breakpoint(xxsmall down){
+		display:block;
+		@include positions(fixed);
+		
+		padding-top: 0;		
+		z-index:1000000000;
+		
+		@include transform(translateX(-100%));
+		@include Animationcss(all 0.3s linear);
+								
+		&.active{
+			@include transform(translateX(0%));
+		}						
+		
+		& .listings_filters_bg{		
+			background: $light-gray;
+
+			& .listings_filters_content{	
+				padding:0;	
+				height:100%;
+
+				& .filtersBody{
+					display: block;
+					position:absolute;
+					top:70px;
+					bottom:50px;
+					left:0;
+					
+					padding:0;
+					overflow: auto;
+				}
+
+				& .filtersFoot{
+					position:absolute;
+					bottom:0;
+					width:100%;
+					left:0;
+					padding:0;
+
+					& a{
+						width: 100%;
+					}
+				}
+			}
+		}	
+		& .filters_padd{
+			padding:0 20px;
+			margin-bottom: 10px;
+		}
+		& .filters_divs{
+			padding-top: 20px;
+			
+			& > h3{
+				padding-left: 20px;
+			}
+				
+			& .loja_inpt{
+				&.type1,
+				&.type2{
+					margin-bottom: 0;
+
+					padding:15px 20px;
+					margin-bottom:1px;
+					background: $white;
+
+					&:before{
+						right: 20px !important;
+					}
+				}
+				&.type2{
+					padding-left:4rem;
+				}
+			}
+
+			&.input_icon{
+				position: static;
+			}
+			&.input_radio,
+			&.input_check{
+				& .filters{
+					padding-left: 0px;
+					padding-right: 30px;
+					
+					& h5{
+						&:before{
+							left:auto;
+							right: 0;
+						}
+					}
+				}
+			}
+			&.input_radio{
+				& .filters{
+					padding:15px 20px;
+					margin-bottom:1px;
+					background: $white;
+
+					& h5{
+						&:before,
+						&:after{
+							left: auto;
+							right: 20px;
+						}
+						&:after{									
+						    margin-left: auto;
+						    margin-right: 5px;
+						}
+					}
+				}
+			}
+			//inputs checkbox
+			&.input_check{
+				& .filters{							
+					& h5{  /*FILTROS*/		
+						&:after{									
+						    left: auto;
+						    right: 6px;
+						}
+					}	
+				}
+			}
+
+			& .hidden_filters{								
+				display:block !important;
+			}
+
+			& .hidden_filters_btn{
+				display: none !important;
+			}
+
+			& [native-window]{
+				& > div{
+					& [native-window-head]{
+						& h3{
+							margin-bottom: 0;
+						}
+					}
+					& [native-window-body]{
+						& .filters{
+							margin-bottom: 3rem;
+						}
+					}
+				}
+			}
+		}
+	}
+}

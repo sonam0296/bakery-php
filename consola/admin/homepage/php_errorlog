@@ -1,0 +1,10 @@
+[20-Feb-2021 13:25:48 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'id=1' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/homepage/homepage.php:68
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/homepage/homepage.php(68): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/homepage/homepage.php on line 68
+[20-Feb-2021 13:27:16 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'id=1' at line 1 in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/homepage/homepage.php:67
+Stack trace:
+#0 /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/homepage/homepage.php(67): PDOStatement->execute()
+#1 {main}
+  thrown in /home/customer/www/bbakery.co.uk/public_html/beta/consola/admin/homepage/homepage.php on line 67

@@ -1,0 +1,15 @@
+[21-Jul-2020 22:18:13 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms%') ORDER BY ordem asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php:98
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php(98): PDO->query('SELECT * FROM l...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php on line 98
+[21-Jul-2020 22:18:17 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms%') ORDER BY ordem asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php:98
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php(98): PDO->query('SELECT * FROM l...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php on line 98
+[21-Jul-2020 22:22:51 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'arôms%') ORDER BY ordem asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php:98
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php(98): PDO->query('SELECT * FROM l...')
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/marcas/marcas-list.php on line 98

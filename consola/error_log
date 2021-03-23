@@ -1,0 +1,49 @@
+[25-May-2020 13:51:50 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21
+[25-May-2020 13:52:15 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[28000] [1045] Access denied for user 'netgocio'@'localhost' (using password: YES) in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php:155
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php(155): PDO->__construct('mysql:host=loca...', 'netgocio', 'JH78ekhdk')
+#1 /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php(83): db::getInstance()
+#2 /home/netgpropostas/public_html/naturasaude/consola/index.php(1): require_once('/home/netgpropo...')
+#3 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 155
+[25-May-2020 13:52:26 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[28000] [1045] Access denied for user 'netgocio'@'localhost' (using password: YES) in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php:155
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php(155): PDO->__construct('mysql:host=loca...', 'netgocio', 'JH78ekhdk')
+#1 /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php(83): db::getInstance()
+#2 /home/netgpropostas/public_html/naturasaude/consola/index.php(1): require_once('/home/netgpropo...')
+#3 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 155
+[25-May-2020 13:54:06 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[28000] [1045] Access denied for user 'netgocio'@'localhost' (using password: YES) in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php:155
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php(155): PDO->__construct('mysql:host=loca...', 'netgocio', 'JH78ekhdk')
+#1 /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php(83): db::getInstance()
+#2 /home/netgpropostas/public_html/naturasaude/consola/index.php(1): require_once('/home/netgpropo...')
+#3 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/Connections/connADMIN.php on line 155
+[13-Aug-2020 10:13:10 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21
+[13-Aug-2020 10:13:15 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21
+[13-Aug-2020 10:13:17 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21
+[13-Aug-2020 10:13:19 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21
+[13-Aug-2020 10:13:35 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21
+[13-Aug-2020 10:15:16 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/index.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/index.php on line 21

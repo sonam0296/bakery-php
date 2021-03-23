@@ -1,0 +1,287 @@
+<?php require_once ('Connections/connADMIN.php');?>
+<?php
+
+if (!$query_rsMeta) {$query_rsMeta = "SELECT * FROM metatags".$extensao." WHERE id = :id";
+}
+
+$rsMeta = DB::getInstance()->prepare($query_rsMeta);
+$rsMeta->bindParam(':id', $meta_id, PDO::PARAM_INT, 5);
+$rsMeta->execute();
+$row_rsMeta       = $rsMeta->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsMeta = $rsMeta->rowCount();
+
+$title       = $row_rsMeta["title"];
+$description = $row_rsMeta["description"];
+$keywords    = $row_rsMeta["keywords"];
+
+$query_rsPopUp = "SELECT * FROM config WHERE id='1'";
+$rsPopUp       = DB::getInstance()->prepare($query_rsPopUp);
+$rsPopUp->execute();
+$row_rsPopUp       = $rsPopUp->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsPopUp = $rsPopUp->rowCount();
+$popup             = 1;
+if (!$row_rsPopUp['ativo']) {
+	$popup = 0;
+} else {
+	if (!$row_rsPopUp['imagem_popup'] || !file_exists(ROOTPATH.'imgs/popup/'.$row_rsPopUp['imagem_popup'])) {
+		$popup = 0;
+	}
+
+	if ($row_rsPopUp['tipo_popup'] == 1 && $_SESSION['popup_closed'] == 1) {
+		$popup = 0;
+	}
+}
+
+$ishome = 1;
+if (!$changeMetas) {
+	$changeMetas = 0;
+}
+
+$loader = file_get_contents(ROOTPATH.'imgs/elem/loader.svg');
+
+$no_scripts = 1;
+
+$footer_small = 0;
+
+$mostra_entrada = 0;
+if (!isset($_SESSION['mostra_entrada'])) {
+	$_SESSION['mostra_entrada'] = 1;
+	$mostra_entrada             = 1;
+}
+
+DB::close();
+
+$query_rsP = "SELECT * FROM store_locater WHERE visivel = 1";
+$rsP       = DB::getInstance()->prepare($query_rsP);
+//$rsP->bindParam(':id', $id, PDO::PARAM_INT, 5);
+$rsP->execute();
+$row_rsP       = $rsP->fetchAll();
+$totalRows_rsP = $rsP->rowCount();
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $lang;?>"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame - Remove this if you use the .htaccess -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>
+<?php if ($title) {echo htmlspecialchars($title, ENT_COMPAT, 'UTF-8');} else {echo $Recursos->Resources["pag_title"];}?>
+</title>
+<?php if ($description) {?>
+	<META NAME="description" CONTENT="<?php echo addcslashes(htmlspecialchars($description, ENT_COMPAT, 'UTF-8'), '"\\/');?>" />
+	<?php }?>
+<?php if ($keywords != "") {?>
+	<META NAME="keywords" CONTENT="<?php echo addcslashes(htmlspecialchars($keywords, ENT_COMPAT, 'UTF-8'), '"\\/');?>" />
+	<?php }?>
+<?php include_once ('codigo_antes_head.php');?>
+
+
+<!-- Load Facebook SDK for JavaScript -->
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v8.0'
+          });
+        };
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+ js.id = id;
+
+        js.src = 'https://connect.facebook.net/pt_PT/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+      <!-- Your Chat Plugin code -->
+      <div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="149233181820461"
+  theme_color="#67b868"
+  logged_in_greeting="Olá! Como podemos ajudar?"
+  logged_out_greeting="Olá! Como podemos ajudar?">
+      </div>
+</head>
+<body<?php if ($mostra_entrada == 1) {echo ' class=" mask-visible"'?>>
+	<?php
+
+	session_start();
+}
+
+$body_attr = "";
+if (!isset($_SESSION["popup_shown"])) {
+	$body_attr               = " onload=\"show('popupContainer')\"";
+	$_SESSION["popup_shown"] = true;
+}
+?>
+<script>
+
+function show(id) {
+
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+
+    }
+</script>
+
+<?php if ($_SESSION["store_update_name"] == "" AND $_SESSION["store_name"] == "") {?>
+	<!-- ============== THE POPUP ======================= -->
+	<div id="popupContainer" style="display:block; position:fixed; top:0; left:0; background-color:rgba(0,0,0,0.7); height:100%; width:100%; z-index:999;">
+	    <div id="popup" style="border:2px solid white; font-size:20px; line-height:25px; text-align:center; width:75%; margin:0 auto; background-color:#18af8e; position:relative; top:35%; padding:15px; padding-bottom:0px; border-radius:20px;">
+	      <div class="div_100 contactos_cont contactos_cont_data_page">
+
+	        <div class="row align-left">
+
+	            <div class="small-12 medium-5 column">
+
+	                      <hr>
+	<?php foreach ($row_rsP as $row) {?>
+		               <a class="store_fetch" id="<?php echo $row['id'];?>">
+		<?php if ($row['b_name']) {?>
+			                <div class="contactos_txt textos"><?php echo $row['b_name'];?></div>
+			                <br>
+			<?php }?>
+
+		<?php if ($row['Sreet']) {?>
+			                <div class="contactos_txt textos"><?php echo $row['Sreet'];
+			?>,<br><?php echo $row['city'];
+			?>,<br><?php echo $row['country'];
+			?></div>
+			                <br>
+			<?php }?>
+
+		<?php if ($row['phone']) {?>
+			                <div class="contactos_txt textos"><?php echo $row['phone'];?></div>
+			                <br>
+			<?php }?>
+		                <?php if ($row['email']) {?>
+			                    <div class="contactos_txt textos"><?php echo $row['email'];?></div><br><hr>
+			<?php }?></a>
+		<?php }?>
+	</div>
+	         <button onclick="show('popupContainer')" style="display:inline; position:absolute; top:-30px; left:100%; padding:0 5px 2px 5px; border-radius:50%; border:2px solid black; background:none; font-weight:bold">x</button>
+
+	         <div id="Fechshow">
+
+	         </div>
+	      </div>
+	    </div>
+	</div>
+	</div>
+	<?php }?>
+<!--Preloader-->
+<div class="mask">
+  <div id="loader">
+    <div class="div_100 svg_load">
+<?php echo $loader;?>
+</div>
+  </div>
+</div>
+
+<?php if ($file_to_include && $file_to_include != '404.php' && file_exists(ROOTPATH.'includes/pages/'.$file_to_include)) {?>
+	<div class="mainDiv">
+	  <section class="row1">
+	    <div class="div_table_cell">
+	<?php include_once ('header.php');?>
+	<div class="page-main page-current">
+	<?php if ($file_to_include && file_exists(ROOTPATH.'includes/pages/'.$file_to_include)) {
+		include_once (ROOTPATH."includes/pages/".$file_to_include);
+	} else {
+		include_once (ROOTPATH."includes/pages/404.php");
+	}?>
+	</div>
+	      <div class="page-main page-next" aria-hidden="true"></div>
+	      <div class="page-main page-prev" aria-hidden="true"></div>
+	    </div>
+	  </section>
+	  <section class="row2">
+	    <div class="div_table_cell">
+	<?php include_once ('footer.php');?>
+	</div>
+	  </section>
+	</div>
+	<?php } else {
+	include_once (ROOTPATH."includes/pages/404.php");
+}?>
+<div id="details-modal" class="horizontal is-shape-bg">
+  <div class="content_inner"></div><!--
+   --><div class="shape-wrap">
+    <div class="shape-bg">
+      <div class="div_100" style="height: 100%">
+        <div class="div_table_cell">
+<?php echo $loader;?>
+        </div>
+      </div>
+    </div>
+  </div><!--
+  --><div id="produtos-detail-ajax" class="detail-ajax"<?php if ($url_open) {echo 'data-willopen="'.$url_open.'"';
+}
+?>></div><!--
+  --><div id="noticias-detail-ajax" class="detail-ajax"></div>
+</div>
+
+<div class="loading-transition">
+  <div class="div_100 loading-animation">
+<?php echo $loader;?>
+</div>
+</div>
+
+<?php include_once ('footer_scripts.php');?>
+
+<?php if ($changeMetas == 1) {?>
+	<script type="text/javascript">
+	    $(window).on('load', function() {
+	      handleMetas('', '');
+	    });
+	  </script>
+	<?php }?>
+
+<?php if (isset($_GET['subs']) && $_GET['subs'] == 1) {?>
+	  <script type="text/javascript">
+	    $(window).on('load', function(){
+	      ntg_success("<?php echo $Recursos->Resources["mail_msg_3"];?>");
+
+	      window.history.replaceState('Object', document.title, 'index.php');
+	    });
+	  </script>
+	<?php }?>
+<script type="text/javascript">
+   $(document).on('click', '.store_fetch', function(event) {
+      event.preventDefault();
+
+      var data_id = $(this).attr('id');
+     // var x = document.getElementById("Fechshow");
+      $.ajax({
+        url: 'store_record_multi.php',
+        type: 'post',
+        dataType: 'html',
+        data: {data_id: data_id},
+      })
+      .done(function(html) {
+        console.log("success");
+         console.log(data_id);
+        $("#Fechshow").html(html);
+
+
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+
+    });
+</script>
+
+<?php include_once ('codigo_antes_body.php');?>
+
+
+
+</body>
+</html>

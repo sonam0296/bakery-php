@@ -1,0 +1,274 @@
+$lineHeight_titulos: 1.3;
+$lineHeight_subtitulos: 1.1;
+$lineHeight_textos: 1.4;
+$lineHeight_list_tit: 1.1;
+$lineHeight_list_subtit: 1.2;
+$lineHeight_list_txt: 1.4;
+/*PAGINAS*/
+$lineHeight_paginas_tit: 1.3;
+$lineHeight_paginas_txt: 1.6;
+
+@function getHeightLines($tipo, $lines:4){
+	$lineHeight: 1;
+
+	@if $tipo == titulos{	
+		$lineHeight: $lineHeight_titulos;
+	}
+	@if $tipo == subtitulos{	
+		$lineHeight: $lineHeight_subtitulos;
+	}
+	@if $tipo == textos{
+		$lineHeight: $lineHeight_textos;
+	}
+	@if $tipo == list_tit{		
+		$lineHeight: $lineHeight_list_tit;
+	}
+	@if $tipo == list_subtit{
+		$lineHeight: $lineHeight_list_subtit;
+	}
+	@if $tipo == list_txt{
+		$lineHeight: $lineHeight_list_txt;
+	}
+
+	$height: $lineHeight * $lines;
+
+	@return #{$height}em;
+}
+
+@mixin divOverflow($height, $max-height:auto) {
+	/* DIVS COM OVERFLOW */
+	display:block;
+	overflow: hidden;
+	@if $max-height != auto{
+		max-height:$max-height;
+	}@else{
+		height:$height;
+	}
+}
+@mixin textos($tipo, $color:$primary-color, $size:null, $height: null, $weight: null, $range:null){
+	@if $color==null{
+		$color:$primary-color;
+	}
+
+	@if $tipo == titulos{	
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:36px;
+		}
+		@if $height==null{
+			$height: $lineHeight_titulos;
+		}
+		@if $weight==null{
+			$weight:400;
+		}
+	}
+	@if $tipo == subtitulos{	
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:16px;
+		}
+		@if $height==null{
+			$height: $lineHeight_subtitulos;
+		}
+		@if $weight==null{
+			$weight:600;
+		}	
+	}
+	@if $tipo == textos{
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:14px;
+		}
+		@if $height==null{
+			$height: $lineHeight_textos;
+		}
+		@if $weight==null{
+			$weight:400;
+		}
+	}
+	@if $tipo == list_tit{	
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:24px;
+		}
+		@if $height==null{
+			$height: $lineHeight_list_tit;
+		}
+		@if $weight==null{
+			$weight:600;
+		}
+	}
+	@if $tipo == list_subtit{
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:10px;
+		}
+		@if $height==null{
+			$height: $lineHeight_list_subtit;
+		}
+		@if $weight==null{
+			$weight:600;
+		}
+	}
+	@if $tipo == list_txt{
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:12px;
+		}
+		@if $height==null{
+			$height: $lineHeight_list_txt;
+		}
+		@if $weight==null{
+			$weight:400;
+		}
+	}
+
+	/*PAGINAS*/
+	@if $tipo == paginas_tit{
+		@if $range==null{
+			$range:5;
+		}
+		@if $size==null{
+			$size:22px;
+		}
+		@if $height==null{
+			$height: $lineHeight_paginas_tit;
+		}
+		@if $weight==null{
+			$weight:900;
+		}
+	}
+
+	@if $tipo == paginas_txt{
+		@if $range==null{
+			$range:0;
+		}
+		@if $size==null{
+			$size:20px;
+		}
+		@if $height==null{
+			$height: $lineHeight_paginas_txt;
+		}
+		@if $weight==null{
+			$weight:300;
+		}
+	}
+	
+
+	color:$color;
+	font-size:$size;
+	
+	@if $range>0{
+		font-size: -webkit-calc(( #{$size} - #{$range}px ) + #{$range} * (100vw - #{$globalMedia}px) / (1920 - #{$globalMedia}));
+		font-size: -moz-calc(( #{$size} - #{$range}px ) + #{$range} * (100vw - #{$globalMedia}px) / (1920 - #{$globalMedia}));
+		font-size: calc(( #{$size} - #{$range}px ) + #{$range} * (100vw - #{$globalMedia}px) / (1920 - #{$globalMedia}));
+	}
+	line-height:$height;
+	font-weight:$weight;
+
+	// @media only screen and 
+	// 	(min-device-width : 768px) and (max-device-width : 1024px),
+	// 	(min-device-width : 768px) and (max-device-width : 1024px) and (-webkit-min-device-pixel-ratio: 2),
+	// 	(min-device-width : 768px) and (max-device-width : 1024px) and (-webkit-min-device-pixel-ratio: 1),
+	// 	(min-device-width : 375px) and (max-device-width : 667px),
+	// 	(min-device-width : 375px) and (max-device-width : 812px) and (-webkit-device-pixel-ratio : 3){ 
+	// 		$range: $range - 2;
+	// 		font-size: -webkit-calc(( #{$size} - #{$range}px ) + #{$range} * (100vw - #{$globalMedia}px) / (1920 - #{$globalMedia}));
+	// 		font-size: -moz-calc(( #{$size} - #{$range}px ) + #{$range} * (100vw - #{$globalMedia}px) / (1920 - #{$globalMedia}));
+	// 		font-size: calc(( #{$size} - #{$range}px ) + #{$range} * (100vw - #{$globalMedia}px) / (1920 - #{$globalMedia}));
+	// }
+}
+
+
+.titulos{	
+	@include textos(titulos);
+}
+.subtitulos{	
+	@include textos(subtitulos);
+}
+.textos{	
+	@include textos(textos);
+}
+.list_tit{
+	@include textos(list_tit);
+}
+.list_subtit{	
+	@include textos(list_subtit);
+	
+	& small{
+		font-size: 11px;
+	}
+}
+.list_txt{	
+	@include textos(list_txt);
+}
+
+/*PAGINAS*/
+.paginas_tit{	
+	@include textos(paginas_tit);
+
+	@include breakpoint(xsmall down){
+		font-size: 18px;
+	}
+}
+.paginas_txt{	
+	@include textos(paginas_txt);
+}
+
+.titulos,
+.subtitulos,
+.textos,
+.list_tit,
+.list_subtit,
+.list_txt{
+	&.limited{
+		max-width:$max_width_pag;
+		margin: auto;
+	}
+}
+
+.f-white{
+	color: $white;
+}
+.f-black{
+	color: $black;
+}
+.f-primary{
+	color: $primary-color;
+}
+.f-secondary{
+	color: $secondary-color;
+}
+.uppercase{
+	text-transform: uppercase;
+}
+.lowercase{
+	text-transform: lowercase;
+}
+.regular{
+	font-weight: 400;
+}
+.bold{
+	font-weight: 700;
+}
+.italic{
+	font-style: italic;
+}
+.text-ellipsis{
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

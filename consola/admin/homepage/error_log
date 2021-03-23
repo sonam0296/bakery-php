@@ -1,0 +1,269 @@
+[30-May-2020 13:14:07 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.quem_somos_imagens' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-imagens.php:73
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-imagens.php(73): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-imagens.php on line 73
+[30-May-2020 13:14:19 Europe/Lisbon] PHP Notice:  Undefined variable: contentType in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-upload.php on line 64
+[30-May-2020 13:14:19 Europe/Lisbon] PHP Warning:  rename(../../../imgs/quem-somos/.part,../../../imgs/quem-somos/): Not a directory in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-upload.php on line 102
+[30-May-2020 13:14:31 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.quem_somos_pt' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos.php:47
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos.php(47): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos.php on line 47
+[30-May-2020 13:14:38 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto_header' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php:37
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php(37): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php on line 37
+[30-May-2020 13:15:48 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto1' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(29): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 29
+[30-May-2020 13:19:53 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto_header' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php:25
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php(25): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php on line 25
+[30-May-2020 13:40:24 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto1' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(29): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 29
+[30-May-2020 14:38:56 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'titulo4' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/icones.php:415
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/icones.php(415): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/icones.php on line 415
+[31-May-2020 21:10:59 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto2' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:29
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(29): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 29
+[31-May-2020 21:12:34 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto_header' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php:25
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php(25): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/texto_header.php on line 25
+[31-May-2020 21:23:53 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'texto1' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:49
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(49): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 49
+[31-May-2020 21:41:58 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:35
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(35): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 35
+[31-May-2020 21:43:48 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:37
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(37): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 37
+[31-May-2020 21:44:26 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:37
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(37): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 37
+[31-May-2020 21:44:28 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:37
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(37): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 37
+[31-May-2020 21:45:06 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:37
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(37): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 37
+[31-May-2020 21:49:47 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Cannot pass parameter 2 by reference in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:81
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 81
+[31-May-2020 21:50:33 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Call to a member function rowCount() on array in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:83
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 83
+[31-May-2020 21:50:54 Europe/Lisbon] PHP Parse error:  syntax error, unexpected '.1' (T_DNUMBER) in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 79
+[31-May-2020 21:51:40 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Cannot pass parameter 2 by reference in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:81
+Stack trace:
+#0 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 81
+[31-May-2020 21:52:44 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:82
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(82): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 82
+[31-May-2020 21:53:10 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:82
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(82): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 82
+[31-May-2020 21:53:22 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:82
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(82): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 82
+[23-Jun-2020 11:10:36 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'imagem1' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:132
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(132): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 132
+[29-Jun-2020 07:53:03 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:45
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(45): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 45
+[29-Jun-2020 15:57:40 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:139
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(139): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 139
+[29-Jun-2020 15:57:46 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:139
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(139): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 139
+[29-Jun-2020 17:08:11 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.homepagept' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:155
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(155): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 155
+[29-Jun-2020 17:28:41 Europe/Lisbon] PHP Fatal error:  Cannot declare class Resize, because the name is already in use in /home/netgpropostas/public_html/naturasaude/consola/admin/resize_image.php on line 8
+[29-Jun-2020 17:41:56 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'icone2' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:337
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(337): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 337
+[24-Jul-2020 06:43:55 Europe/Lisbon] PHP Parse error:  syntax error, unexpected end of file, expecting ',' or ';' in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_menu.php on line 65
+[24-Jul-2020 06:47:15 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'netgprop_natura.quem_somos_imagens' doesn't exist in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-imagens.php:73
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-imagens.php(73): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/quem-somos-imagens.php on line 73
+[24-Jul-2020 08:54:49 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'imagem2' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 08:56:31 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'imagem2' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 08:57:32 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ordem' in 'order clause' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 08:58:29 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 09:00:01 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 09:00:22 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 09:03:16 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ordem' in 'order clause' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 09:04:15 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'ordem' in 'order clause' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:89
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(89): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 89
+[24-Jul-2020 11:05:36 Europe/Lisbon] PHP Fatal error:  Uncaught Error: Class 'RecursosCons' not found in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_pages.php:78
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage-image.php(1): include_once()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/inc_pages.php on line 78
+[24-Jul-2020 11:39:33 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[24-Jul-2020 11:49:02 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[24-Jul-2020 12:17:41 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[24-Jul-2020 12:17:45 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[24-Jul-2020 12:18:28 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[27-Jul-2020 06:43:37 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[27-Jul-2020 10:01:45 Europe/Lisbon] PHP Fatal error:  Uncaught ImagickException: delegate failed `'potrace' --svg --output '%o' '%i'' @ error/delegate.c/InvokeDelegate/1897 in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php:362
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php(362): Imagick->writeimages('../../../imgs/h...', true)
+#1 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-edit.php(187): compressImage('../../../imgs/h...', '../../../imgs/h...')
+#2 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/funcoes.php on line 362
+[27-Jul-2020 10:11:35 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:30
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(30): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 30
+[27-Jul-2020 10:12:28 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:30
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(30): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 30
+[27-Jul-2020 10:13:25 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:30
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(30): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 30
+[27-Jul-2020 10:17:36 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:30
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(30): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 30
+[27-Jul-2020 10:19:00 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:31
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(31): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 31
+[27-Jul-2020 10:20:20 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'visivel' in 'field list' in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php:31
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php(31): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/image-list.php on line 31
+[27-Jul-2020 13:04:13 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id=1' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:69
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(69): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 69
+[27-Jul-2020 13:05:34 Europe/Lisbon] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id=1' at line 1 in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php:69
+Stack trace:
+#0 /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php(69): PDOStatement->execute()
+#1 {main}
+  thrown in /home/netgpropostas/public_html/naturasaude/consola/admin/homepage/homepage.php on line 69

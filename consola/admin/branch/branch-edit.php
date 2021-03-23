@@ -1,0 +1,266 @@
+<?php include_once('../inc_pages.php'); ?>
+<?php //ini_set('display_errors', 1);
+
+$menu_sel='clientes';
+$menu_sub_sel="branch";
+
+
+$tab_sel=1;
+$erro = 0;
+
+$tab_sel = 1;
+if(isset($_REQUEST['tab_sel']) && $_REQUEST['tab_sel'] != "" && $_REQUEST['tab_sel'] != 0) $tab_sel=$_REQUEST['tab_sel'];
+
+$id = $_GET['id'];
+
+if((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "frm_noticias")) {
+	$manter = $_POST['manter'];
+	$tab_sel = $_REQUEST['tab_sel'];
+	
+	if($tab_sel == 1) {
+		// Branch List Detail
+		$insertSQL = "UPDATE branch_list SET roll_id=:roll_id, branch_name=:branch_name WHERE id=:id";
+		$rsInsert = DB::getInstance()->prepare($insertSQL);
+		$rsInsert->bindParam(':roll_id', $_POST['roll_id'], PDO::PARAM_INT, 5);
+		$rsInsert->bindParam(':branch_name', $_POST['branch_name'], PDO::PARAM_STR, 5);
+		$rsInsert->bindParam(':id',$id, PDO::PARAM_INT);
+		$rsInsert->execute();
+
+		DB::close();
+		
+		alteraSessions('branch');
+
+		if(!$manter) 
+			header("Location: branch.php?alt=1");
+		else
+			header("Location: branch-edit.php?id=".$id."&alt=1&tab_sel=1");
+	}
+}
+
+/*$query_rsP = "SELECT * FROM roll WHERE id = :id";
+$rsP = DB::getInstance()->prepare($query_rsP);
+$rsP->bindParam(':id', $_GET['id'], PDO::PARAM_INT);	
+$rsP->execute();
+$row_rsP = $rsP->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsP = $rsP->rowCount();
+DB::close();*/
+$query_rsP = "SELECT * FROM branch_list WHERE id = :id";
+$rsP = DB::getInstance()->prepare($query_rsP);
+$rsP->bindParam(':id',$id, PDO::PARAM_INT);	
+$rsP->execute();
+$row_rsP = $rsP->fetch(PDO::FETCH_ASSOC);
+$totalRows_rsP = $rsP->rowCount();
+DB::close();
+
+
+?>
+<?php include_once(ROOTPATH_ADMIN.'inc_head_1.php'); ?>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/jquery.fancybox.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<!-- END PAGE LEVEL STYLES -->
+<?php include_once(ROOTPATH_ADMIN.'inc_head_2.php'); ?>
+<body class="<?php echo $body_info; ?>">
+<?php include_once(ROOTPATH_ADMIN.'inc_topo.php'); ?>
+<div class="clearfix"> </div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+  <?php include_once(ROOTPATH_ADMIN.'inc_menu.php'); ?>
+  <!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <div class="page-content"> 
+      <!-- BEGIN PAGE HEADER-->
+      <h3 class="page-title"> Branch <small><?php echo $RecursosCons->RecursosCons['editar_registo']; ?></small> </h3>
+      <div class="page-bar">
+        <ul class="page-breadcrumb">
+          <li> <i class="fa fa-home"></i> <a href="../index.php"><?php echo $RecursosCons->RecursosCons['home']; ?></a> <i class="fa fa-angle-right"></i> </li>
+          <li> <a href="branch.php">Branch</a> <i class="fa fa-angle-right"></i> </li>
+          <li> <a href="javascript:"><?php echo $RecursosCons->RecursosCons['editar_registo']; ?></a> </li>
+        </ul>
+      </div>
+      <!-- END PAGE HEADER--> 
+      <!-- BEGIN PAGE CONTENT--> 
+      <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h4 class="modal-title"><?php echo $RecursosCons->RecursosCons['eliminar_registo']; ?></h4>
+            </div>
+            <div class="modal-body"> <?php echo $RecursosCons->RecursosCons['msg_elimina_registo']; ?> </div>
+            <div class="modal-footer">
+              <button type="button" class="btn blue" onClick="document.location='roll.php?rem=1&id=<?php echo $row_rsP["id"]; ?>'"><?php echo $RecursosCons->RecursosCons['txt_ok']; ?> </button>
+              <button type="button" class="btn default" data-dismiss="modal"><?php echo $RecursosCons->RecursosCons['txt_cancelar']; ?> </button>
+            </div>
+          </div>
+          <!-- /.modal-content --> 
+        </div>
+        <!-- /.modal-dialog --> 
+      </div>
+      <!-- /.modal --> 
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <div class="row">
+        <div class="col-md-12">
+          <?php include_once(ROOTPATH_ADMIN.'inc_linguas.php'); ?>
+          <form id="frm_noticias" name="frm_noticias" class="form-horizontal form-row-seperated" method="post" role="form" enctype="multipart/form-data">
+            <input type="hidden" name="manter" id="manter" value="0">
+            <input type="hidden" name="tab_sel" id="tab_sel" value="<?php echo $tab_sel; ?>">
+            <input type="hidden" name="img_remover1" id="img_remover1" value="0">
+            <input type="hidden" name="opcao" id="opcao" value="1">
+	          <div class="portlet">
+	            <div class="portlet-title">
+	              <div class="caption"> <i class="fa fa-pencil-square"></i><?php echo $RecursosCons->RecursosCons['noticias']; ?>  - <?php echo $row_rsP["nome"]; ?> </div>
+	              <div class="form-actions actions btn-set">
+	                <button type="button" name="back" class="btn default" onClick="document.location='roll.php'"><i class="fa fa-angle-left"></i> <?php echo $RecursosCons->RecursosCons['voltar']; ?> </button>
+	                <button type="reset" class="btn default"><i class="fa fa-eraser"></i> <?php echo $RecursosCons->RecursosCons['limpar']; ?> </button>
+	                <button type="submit" class="btn green"><i class="fa fa-check"></i> <?php echo $RecursosCons->RecursosCons['guardar']; ?> </button>
+	                <button type="submit" class="btn green" onClick="document.getElementById('manter').value='1';"><i class="fa fa-check-circle"></i> <?php echo $RecursosCons->RecursosCons['guardar_manter']; ?></button>
+	                <a href="#modal_delete" data-toggle="modal" class="btn red"><i class="fa fa-remove"></i> <?php echo $RecursosCons->RecursosCons['eliminar']; ?></a> 
+	              </div>
+	            </div>
+	            <div class="portlet-body">
+	              <div class="tabbable">
+	                <ul class="nav nav-tabs">
+	                  <li <?php if($tab_sel==1) echo "class=\"active\""; ?>> <a href="#tab_general" data-toggle="tab" onClick="document.getElementById('tab_sel').value='1'"> <?php echo $RecursosCons->RecursosCons['tab_detalhes']; ?> </a> </li>
+	                </ul>
+	                <div class="tab-content no-space">
+	                  <div class="tab-pane <?php if($tab_sel==1) echo "active"; ?>" id="tab_general">
+	                    <div class="form-body">
+	                      <div class="alert alert-danger display-hide">
+	                        <button class="close" data-close="alert"></button>
+	                        <?php echo $RecursosCons->RecursosCons['msg_required']; ?> 
+	                      </div>
+	                      <?php if($_GET['alt'] == 1 && $_GET['tab_sel'] == 1) { ?>
+		                      <div class="alert alert-success display-show">
+		                        <button class="close" data-close="alert"></button>
+		                        <?php echo $RecursosCons->RecursosCons['alt']; ?>
+		                      </div>
+		                    <?php } ?>
+		                    <?php if($_GET['env'] == 1) { ?>
+		                      <div class="alert alert-success display-show">
+		                        <button class="close" data-close="alert"></button>
+		                        <?php echo $RecursosCons->RecursosCons['env']; ?>
+		                      </div>
+		                    <?php } ?>
+		                    <?php
+		                    $query_rsP = "SELECT * FROM roll";
+							$rsP = DB::getInstance()->prepare($query_rsP);	
+							$rsP->execute();
+							$totalRows_rsP = $rsP->rowCount();
+							DB::close();
+		                     ?>
+		                    <div class="form-group">
+			                    <label class="col-md-2 control-label" for="roll_id">Role Select: * </label>
+			                    <div class="col-md-3">
+			                      <select class="form-control" name="roll_id" id="roll_id">
+			                        <option value=""><?php echo $RecursosCons->RecursosCons['opt_selecionar']; ?></option>
+			                        <?php if($totalRows_rsP > 0) {
+			                          while($row_rsrole = $rsP->fetch()) { ?>
+			                            <option value="<?php echo $row_rsrole['id']; ?>" <?php if($row_rsP["roll_id"] ==  $row_rsrole["id"]) { echo "selected"; } else { ""; } ?>><?php echo $row_rsrole['roll_name']; ?></option>
+			                          <?php }
+			                        } ?>
+			                      </select>
+			                    </div>
+			                </div>
+			                <div class="form-group">
+			                    <label class="col-md-2 control-label" for="branch_name">Branch Name: * </span> </label>
+			                    <div class="col-md-6">
+			                      <input type="text" class="form-control" name="branch_name" id="branch_name" value="<?php echo $row_rsP['branch_name']; ?>" data-required="1">
+			                    </div>
+			                </div>
+
+			              </div>
+			          </div>
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	          <input type="hidden" name="MM_insert" value="frm_noticias" />
+          </form>
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+  </div>
+  <!-- END CONTENT -->
+  <?php include_once(ROOTPATH_ADMIN.'inc_quick_sidebar.php'); ?>
+</div>
+</div>
+<!-- END CONTAINER -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_1.php'); ?>
+<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/select2/select2.min.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
+<!-- LINGUA PORTUGUESA --> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/fancybox/jquery.fancybox.min.js"></script> 
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/plupload/js/plupload.full.min.js" type="text/javascript"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckeditor/ckeditor.js"></script> 
+<script type="text/javascript" src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.js"></script> 
+<!-- END PAGE LEVEL PLUGINS -->
+<?php include_once(ROOTPATH_ADMIN.'inc_footer_2.php'); ?>
+<script src="<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script> 
+<!-- BEGIN PAGE LEVEL SCRIPTS --> 
+<script src="noticias-validation.js"></script> 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script>
+jQuery(document).ready(function() {    
+   Metronic.init(); // init metronic core components
+   Layout.init(); // init current layout
+   QuickSidebar.init(); // init quick sidebar
+   Demo.init(); // init demo features
+   Noticias.init();
+});
+</script> 
+<script type="text/javascript">
+CKEDITOR.replace('supplier_address',
+{
+	filebrowserBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html',
+	filebrowserImageBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Images',
+	filebrowserFlashBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Flash',
+	filebrowserUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+	filebrowserImageUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+	filebrowserFlashUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+	toolbar : "Basic2",
+	height: "250px"
+});
+
+var wordCountConf1 = {
+  showParagraphs: false,
+  showWordCount: false,
+  showCharCount: true,
+  countSpacesAsChars: true,
+  countHTML: false,
+  maxWordCount: -1,
+  maxCharCount: 150
+}
+
+CKEDITOR.replace('resumo',
+{
+  filebrowserBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html',
+  filebrowserImageBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Images',
+  filebrowserFlashBrowseUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/ckfinder.html?Type=Flash',
+  filebrowserUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+  filebrowserImageUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+  filebrowserFlashUploadUrl : '<?php echo ROOTPATH_HTTP_CONSOLA; ?>assets/global/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+  toolbar : "Basic2",
+  height: "150px",
+  extraPlugins: 'wordcount,notification',
+  wordcount: wordCountConf1
+});
+</script> 
+<script type="text/javascript">
+document.ready=carregaPreview();
+</script>
+</body>
+<!-- END BODY -->
+</html>

@@ -1,0 +1,74 @@
+<?php include_once ('inc_pages.php');?>
+<?php
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/html; charset=UTF-8");
+
+if ($_POST['op'] == 'carregaPreview') {
+
+	$query_rsLinguas = "SELECT * FROM linguas WHERE visivel = 1";
+	$rsLinguas       = DB::getInstance()->prepare($query_rsLinguas);
+	$rsLinguas->execute();
+	$row_rsLinguas       = $rsLinguas->fetchAll();
+	$totalRows_rsLinguas = $rsLinguas->rowCount();
+	DB::close();
+
+	$query_rsP = "SELECT * FROM config WHERE id='1'";
+	$rsP       = DB::getInstance()->prepare($query_rsP);
+	$rsP->execute();
+	$row_rsP       = $rsP->fetch(PDO::FETCH_ASSOC);
+	$totalRows_rsP = $rsP->rowCount();
+	DB::close();
+
+	if ($_POST['blog'] == 1) {
+		if ($totalRows_rsLinguas > 1) {
+			$link = $row_rsP['url_metatags']."blog/".$lg_extensao."/".$_POST['url'];
+			$url  = $row_rsP['url_metatags']."blog/".$lg_extensao."/".$_POST['url'];
+		} else {
+			$link = $row_rsP['url_metatags']."blog/".$_POST['url'];
+			$url  = $row_rsP['url_metatags']."blog/".$_POST['url'];
+		}
+	} else {
+		if ($totalRows_rsLinguas > 1) {
+			$link = $row_rsP['url_metatags'].$lg_extensao."/".$_POST['url'];
+			$url  = $row_rsP['url_metatags'].$lg_extensao."/".$_POST['url'];
+		} else {
+			$link = $row_rsP['url_metatags'].$_POST['url'];
+			$url  = $row_rsP['url_metatags'].$_POST['url'];
+		}
+	}
+	$title       = utf8_decode($_POST['title']);
+	$description = utf8_decode($_POST['description']);
+	$keywords    = trim(utf8_decode($_POST['keywords']));
+
+	if (strlen($title) > 69) {$title = substr($title, 0, 69)."...";
+	}
+
+	if (strlen($description) > 156) {$description = substr($description, 0, 156)."...";
+	}
+
+	$keywords  = explode(",", $keywords);
+	$keywords2 = array();
+	for ($i = 0; $i < count($keywords); $i++) {
+		if (trim($keywords[$i])) {
+			$searchingFor   = "/".trim($keywords[$i])."/i";
+			$replacePattern = "#12345$0#54321";
+			$description    = preg_replace($searchingFor, $replacePattern, $description);
+			$title          = preg_replace($searchingFor, $replacePattern, $title);
+			$url            = preg_replace($searchingFor, $replacePattern, $url);
+		}
+	}
+	$description = str_replace(array("#12345", "#54321"), array("<b>", "</b>"), $description);
+	$title       = str_replace(array("#12345", "#54321"), array("<b>", "</b>"), $title);
+	$url         = str_replace(array("#12345", "#54321"), array("<b>", "</b>"), $url);
+	//$description=str_replace($keywords, $keywords2, $description);
+
+	?>
+	<div class="meta_title"><a href="<?php echo $link;?>" target="_blank"><?php echo $title;
+	?></a></div>
+	<div class="meta_url"><?php echo $url;?></div>
+	<div class="meta_description"><?php echo $description;?></div>
+	<?php
+}
+?>

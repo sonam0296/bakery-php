@@ -1,0 +1,277 @@
+<?php 
+if($row_rsCliente != 0) {
+  $id_cliente = $row_rsCliente['id'];
+  $where_list = "lista.cliente = '$id_cliente'";
+}
+else {
+  $wish_session = $_COOKIE[WISHLIST_SESSION];
+  
+  if($wish_session) {
+    
+    $where_list = "lista.session = '$wish_session'";
+  }
+}
+
+$totalRows_rsFavorito = 0;
+if($where_list) {
+  $query_rsFavorito = "SELECT lista.id FROM lista_desejo AS lista LEFT JOIN l_pecas".$extensao." AS pecas ON lista.produto = pecas.id WHERE ".$where_list." AND lista.produto = '".$produto."' AND pecas.visivel = 1 GROUP BY pecas.id ORDER BY pecas.ordem ASC";
+  $rsFavorito = DB::getInstance()->prepare($query_rsFavorito);
+  $rsFavorito->execute();
+  $row_rsFavorito = $rsFavorito->fetch(PDO::FETCH_ASSOC);
+  $totalRows_rsFavorito = $rsFavorito->rowCount();
+}
+?>
+<div class="column small-12<?php if($menu_sel == "produtos") echo " xxsmall-7 medium-7"; ?>">
+  <div class="div_100 product-detail-info"<?php if($menu_sel != "produtos") echo ' style="padding: 0; margin-bottom: 2rem;"'; ?>>
+  <div class="product-details-cls">
+    <div class="div_100">
+      <h1><?php echo $row_rsProduto['nome']; ?></h1>
+      <?php if($row_rsProduto['ref']) { ?>
+        <h3>Ref. <?php echo $row_rsProduto['ref']; ?></h3>
+      <?php } ?>
+      <?php if($row_rsMarca['nome']) { ?>
+        <h3><strong><?php echo $Recursos->Resources['marca']; ?></strong> <?php echo $row_rsMarca['nome']; ?></h3>
+      <?php } ?>
+      <?php if($row_rsProduto['descricao']) { ?>
+        <div class="descricao_text">
+          <p><?php echo $row_rsProduto['descricao']; ?></p>
+        </div>
+      <?php } ?>
+    </div>  
+    <div class="detalhe_divs">
+      <?php 
+        $reviewsAll = $class_produtos->produtoallrating($row_rsProduto['id']);
+        $produtoRating = $class_produtos->produtoRating($row_rsProduto['id']);
+        $avarage_rating = $produtoRating['avarage_rating'];
+
+      ?>
+      <!-- <div class="star-rating">
+          <?php for ($x = 1; $x <= 5; $x++) {
+              if ($x <= round($avarage_rating)) {
+                  echo '<i class="fa fa-star"></i>';
+              }else{
+                  echo '<i class="fa fa-star-o"></i>'; 
+              }
+          } ?>
+          <b class="text-black ml-2">(<?php echo count($reviewsAll); ?> reviews) </b>
+      </div> -->
+      <?php if($row_rsProduto['descricao']) { ?>
+        <!-- <ul accordion styled id="desc_accordion">
+          <li accordion-item>
+            <a href="javascript:;" class="list_tit" accordion-title><?php echo $Recursos->Resources['descricao']; ?></a>
+            <div class="textos" accordion-content><?php echo $row_rsProduto['short_descricao']; ?></div>
+          </li>
+        </ul> -->
+      <?php } ?> 
+      <?php if(!empty($array_promocao) && $detalhe == 1) { ?>
+        <!-- <div class="div_100 detalhe_promocoes row collapse"> 
+          <?php if($array_promocao['3'] != '') { 
+          
+              $query_rsPaginaCondicoes = "SELECT url FROM paginas".$extensao." WHERE id = '".$array_promocao['3']."' AND visivel = 1";
+              $rsPaginaCondicoes = DB::getInstance()->prepare($query_rsPaginaCondicoes);
+              $rsPaginaCondicoes->execute();
+              $row_rsPaginaCondicoes = $rsPaginaCondicoes->fetch(PDO::FETCH_ASSOC);
+              $totalRows_rsPaginaCondicoes = $rsPaginaCondicoes->rowCount();
+
+              if($totalRows_rsPaginaCondicoes > 0) { ?>
+                <div class="column">
+                  <div class="row collapse">
+                    <div class="column detalhe_promocoes_pagina">
+                      <a href="<?php echo ROOTPATH_HTTP.$row_rsPaginaCondicoes['url']; ?>" target="_blank" class="button invert2"><?php echo $Recursos->Resources["promocao_link"]; ?></a>
+                    </div>
+                  </div>
+
+                </div>
+              <?php }
+            } ?>
+          
+        </div> -->
+      <?php } ?>
+    </div>
+
+      
+      <div class="detalhe_quantidade"> 
+        <div class="detalhe_preco" id="conteudo_preco_<?php echo $row_rsProduto['id']; ?>">
+          <?php echo $class_produtos->precoProduto($row_rsProduto['id']); ?>
+          <?php echo $class_produtos->labelsProduto($row_rsProduto['id'], 2, 'detalhe'); ?>
+          <input name="preco_final" id="preco_final_<?php echo $row_rsProduto['id']; ?>" type="hidden" value="<?php echo $class_produtos->precoProduto($row_rsProduto['id'], 0); ?>" />
+        </div>
+
+        <!-- <div class="row collapse">
+          <div class="column detalhe_promocoes_tit">
+            <?php if($array_promocao['1'] != '') echo $array_promocao['1']; else echo $Recursos->Resources['promocao_titulo']; ?>
+          </div>
+        </div> -->
+        <?php if($array_promocao['0'] != '') { ?>
+          <div class="row collapse">
+            <div class="column detalhe_promocoes_datas">
+                <?php echo $array_promocao['0']; ?>
+            </div>
+          </div>
+        <?php }
+        if($array_promocao['2'] != '') { ?>
+          <!-- <div class="row collapse">
+            <div class="column detalhe_promocoes_txt">
+              <?php echo $array_promocao['2']; ?>
+            </div>
+          </div> -->
+        <?php } ?>
+
+        
+      </div>
+    
+    
+    </div>
+        <div class="bg-wrap">
+
+        <div class="filter-wraps">
+            <div id="prod_opc_1_<?php echo $produto; ?>"><?php echo $class_produtos->tamanhosProduto($row_rsProduto["id"]); ?></div>
+            <div id="prod_opc_2_<?php echo $produto; ?>" style="display: none;"></div>
+            <div id="prod_opc_3_<?php echo $produto; ?>" style="display: none;"></div>
+            <div id="prod_opc_4_<?php echo $produto; ?>" style="display: none;"></div>
+            <div id="prod_opc_5_<?php echo $produto; ?>" style="display: none;"></div>
+
+      <?php 
+      $query_rsMess = "SELECT * FROM l_pecas_en where id =".$produto;
+      $rsMess = DB::getInstance()->prepare($query_rsMess);
+      $rsMess->execute();
+      $totalRows_rsMess = $rsMess->fetch(PDO::FETCH_ASSOC);
+      DB::close();
+      ?>
+
+      <?php if($totalRows_rsMess["message_text"] == 1) { ?>
+        <div class="tamanhos_divs">
+          <label>Message: &nbsp;</label>   
+          <input type="text" name="message_text" id="message_text" value="" placeholder="Enter Message" required>
+        </div>
+      <?php } ?>  
+
+        <div class="tamanhos_divs">
+        <!-- <label class="list_tit" for="quantidades"><?php echo $Recursos->Resources["cart_qtd"]; ?></label> -->
+        <!--
+        -->
+        <?php 
+          $query_rsRole = "SELECT * FROM roll";
+          $rsRole = DB::getInstance()->prepare($query_rsRole);
+          $rsRole->execute();
+          $totalRows_rsRoll = $rsRole->fetchAll();
+          DB::close();
+
+          $query_rs_supp = "SELECT * FROM l_pecas_en where id =".$produto;
+          $rsP_supp = DB::getInstance()->prepare($query_rs_supp); 
+          $rsP_supp->execute();
+          $totalRows_rsP_supp = $rsP_supp->rowCount();
+          $row_rsP_supp = $rsP_supp->fetch(PDO::FETCH_ASSOC);
+
+
+          $row_rsCliente = User::getInstance()->isLogged();
+          foreach ($totalRows_rsRoll as $role) { 
+
+          if($row_rsCliente["roll"] == $role['roll_name'] && $row_rsP_supp['stock'] != 0){
+
+          $product_qulity = 'product_qulity_'.$role['roll_name'];
+          $product_qulityy = $row_rsP_supp['stock'];
+        ?>
+          
+        <p>For <?php echo $row_rsCliente["roll"]; ?>  <?php echo $product_qulityy;?> Qtn</p>
+
+        <div class="select_holder icon-down">
+          <select name="quantidades" id="qtd_<?php echo $produto; ?>" required data-produto="<?php echo $produto; ?>">
+              <option><?php echo $Recursos->Resources["cart_qtd"]; ?></option>
+            <?php for($i = 1; $i <= $product_qulityy; $i++) { ?>
+              <option value="<?php echo $i; ?>" <?php if($i == $quantidade) echo "selected"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <?php } } ?>    
+      </div>
+
+      </div>
+
+      <div class="tamanhos_divs">
+         <?php 
+      if(!$row_rsCliente && $row_rsP_supp['stock'] != 0){
+
+          $product_qulity = 'product_qulity_'.$role['roll_name'];
+          $product_qulityy = $row_rsP_supp['stock']; ?>
+
+           <div class="select_holder icon-down">
+          <select name="quantidades" id="qtd_<?php echo $produto; ?>" required data-produto="<?php echo $produto; ?>">
+              <option><?php echo $Recursos->Resources["cart_qtd"]; ?></option>
+            <?php for($i = 1; $i <= $product_qulityy; $i++) { ?>
+              <option value="<?php echo $i; ?>" <?php if($i == $quantidade) echo "selected"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+          </select>
+        </div>
+
+        <?php }
+      ?>
+      </div>
+
+      <div class="detalhe_quantidade">
+
+        <?php if(!empty($array_promocao) && $detalhe != 1) { ?>
+          <div class="div_100 detalhe_divs_promocoes row collapse">
+            <div class="column detalhe_promocoes_datas">
+              <?php echo $array_promocao['0']; ?>
+              <a href="<?php echo $row_rsProduto['url']; ?>" class="detalhe_promocoes_link"><?php echo $Recursos->Resources['promocoes_ver_mais']; ?></a>
+            </div>
+          </div>
+        <?php } ?>
+ 
+        <?php if($row_rsP_supp['nao_limitar_stock'] == 0 && $row_rsP_supp['stock'] == 0 && 'product_qulity_'.$role['roll_name'] == 0 ) { ?>
+
+          <h1>Out Of Stock</h1>
+
+        <?php } else if($row_rsProduto['enquiry_type'] == 1){ ?>
+            <a href="javascript:;" class="adiciona_carrinho button-big invert2 popup" id="<?php echo $row_rsProduto['id']; ?>" data-product="<?php echo $row_rsProduto['id']; ?>">Make Enquiry</a>
+
+        <?php } else if($row_rsProduto['enquiry_type'] != ""){ ?>
+            <a href="javascript:;" class="detalhe_adiciona adiciona_carrinho button-big invert2" data-product="<?php echo $row_rsProduto['id']; ?>">Add To Cart</a>
+       
+         <?php } ?> 
+          <!-- <div class="stock list_txt" id="conteudo_stock"><?php echo $class_produtos->stockProduto($row_rsProduto['id'], 0, 0, 0, 0, 0, 3); ?></div>  --> 
+         
+      </div>
+
+      <div class="share-fav detalhe_quantidade">
+        <a href="javascript:;" class="favoritos text-center<?php if($totalRows_rsFavorito > 0) echo " icon-favoritos2 active"; else echo " icon-favoritos"; ?>" onClick="adiciona_favoritos(<?php echo $row_rsProduto['id']; ?>, this, event);"><?php echo $Recursos->Resources["add_favoritos"]; ?></a>
+      <div class="share_section text-left" id="share">
+        <?php
+        $sharePos = "bottom";
+        $shareClass = "shareInvert"; //shareInvert
+        $shareTitulo = $Recursos->Resources["partilhar"];
+        $shareNome = urlencode(utf8_encode($row_rsProduto["nome"]));
+        $shareDesc = urlencode(str_replace(utf8_encode('"'), "'", $row_rsProduto["descricao"]));
+        $shareUrl = ROOTPATH_HTTP.$row_rsProduto["url"];
+        if($countLang > 1) {
+          $shareUrl = ROOTPATH_HTTP.$lang."/".$row_rsProduto["url"];
+        }
+        $shareImg = ROOTPATH_HTTP."/imgs/produtos/".$row_rsProduto["imagem1"];
+        include_once(ROOTPATH.'includes/share-list.php');
+        ?>
+      </div>
+      </div>
+
+    </div>
+      <?php if (!empty($row_rsProduto['marca'])): ?>
+        <div class="productBrand">
+          <?php $produtomarca = $class_produtos->get_brand($row_rsProduto['marca']); ?>
+          <?php if (!empty($produtomarca)): ?>
+            <a href="javascript:;" title="">
+              <?php if (!empty($new_array[3])): ?>
+                <?php $produtomarca_image = ROOTPATH_HTTP."imgs/marcas/".$produtomarca[3]; ?> 
+              <?php else: ?>
+                <?php $produtomarca_image = ROOTPATH_HTTP."imgs/elem/geral.svg"; ?>
+              <?php endif ?>
+              <img width="80" src="<?php echo $produtomarca_image; ?>" alt="<?php echo $produtomarca[1]; ?>">        
+            </a>
+          <?php endif ?>
+        </div>
+      <?php endif ?>
+      
+  </div>
+</div>
+    <div id="animatedModal" class="animated-modal text-center p-5">
+
+ </div>

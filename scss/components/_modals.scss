@@ -1,0 +1,136 @@
+[ntgmodal]{
+	display: flex;
+	@include positions(fixed);
+
+	align-items: center;
+	justify-content: center;
+	
+	//background:$modal-overlay;
+
+	overflow: hidden;
+	z-index: $modal-zindex;
+	
+	// opacity: 0;
+	// visibility: hidden;
+	pointer-events:none;
+
+	[ntgmodal-content]{
+		display: block;
+		position: relative;
+		flex:none;
+		width: 100%;
+		max-height: 90%;
+
+		overflow-y: auto;
+
+		background: $modal-background;
+		border-radius: $modal-radius;
+
+		& [ntgmodalHeader]{
+			padding: $modal-padding-header;
+			border-bottom: 1px solid $modal-border-color;
+			
+			& > h4{
+				@include displayInline(middle);
+				width: calc(100% - 20px);
+			}
+			& > div{
+				@include displayInline(middle);
+				width: 20px;
+
+				& .close-button{
+					position: relative;
+					@include displayInline(middle);
+
+					width: 20px; 
+					line-height: 20px;
+					right: auto;
+					top: auto;
+				}
+			}
+		}
+		& [ntgmodalBody]{
+			display: block;
+			padding: $modal-padding-body;
+
+			& .reveal_txt{
+				display: block;
+			}
+		}
+
+		& [ntgmodalFooter]{
+			text-align: right;
+			padding: $modal-padding-footer;
+			border-top: 1px solid $modal-border-color;
+		}
+	} 
+
+	&[ntgmodal-size="small"] [ntgmodal-content]{
+		max-width: 30%;
+		height: auto;
+	}
+	&[ntgmodal-size="medium"] [ntgmodal-content]{
+		max-width: 50%;
+		height: auto;
+	}
+	&[ntgmodal-size="large"] [ntgmodal-content]{
+		max-width: 75%;
+		height: auto;
+	}
+	&[ntgmodal-size="full"] [ntgmodal-content]{
+		top: 0;
+		left: 0;
+		height: 100%;
+		max-height: 100%;
+
+		border-radius: 0;
+	}
+
+	&[ntgmodal-animation-in="fade"]{
+		opacity: 0;
+	}
+	&[ntgmodal-animation-in="slideDown"]{
+		@include transform(translateY(-100vh));
+	}
+	&[ntgmodal-animation-in="slideUp"]{
+		@include transform(translateY(100vh));
+	}
+	&[ntgmodal-animation-in="slideLeft"]{
+		@include transform(translateX(-100vw));
+	}
+	&[ntgmodal-animation-in="slideRight"]{
+		@include transform(translateX(100vw));
+	}
+	&[ntgmodal-animation-in="scale"]{
+		@include transform(scale(0.6));
+	}
+
+	&[ntgmodal-opened]{
+		// opacity: 1;
+		// visibility: visible;
+		pointer-events:auto;
+	}
+
+	@include breakpoint(medium down){
+		&[ntgmodal-size="small"] [ntgmodal-content]{
+			max-width: 50%;
+		}
+		&[ntgmodal-size="medium"] [ntgmodal-content]{
+			max-width: 70%;
+		}
+		&[ntgmodal-size="large"] [ntgmodal-content]{
+			max-width: 90%;
+		}
+	}
+	@include breakpoint(xxsmall down){
+		&[ntgmodal-size="small"] [ntgmodal-content]{
+			max-width: 80%;
+		}
+		&[ntgmodal-size="medium"] [ntgmodal-content]{
+			max-width: 85%;
+		}
+		&[ntgmodal-size="large"] [ntgmodal-content]{
+			max-width: 90%;
+		}
+	}
+}
